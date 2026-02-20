@@ -74,7 +74,7 @@ public class JwtSecurityWebConfig {
 
                         // Authentication
                         .requestMatchers("/api/user/register", "/api/user/login").permitAll()
-
+                        .requestMatchers(HttpMethod.POST, "/api/chat").permitAll()
                         // Public GET requests
                         .requestMatchers(HttpMethod.GET, "/api/products", "/api/products/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/categories", "/api/categories/**").permitAll()

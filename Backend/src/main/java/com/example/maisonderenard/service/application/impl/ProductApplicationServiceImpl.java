@@ -78,6 +78,12 @@ public class ProductApplicationServiceImpl implements ProductApplicationService 
         product.setQuantity(createProductDto.getQuantity());
         product.setImageUrl(createProductDto.getImageUrl());
         product.setCategory(category);
+        product.setColor(createProductDto.getColor());
+        product.setSeason(createProductDto.getSeason());
+        product.setMaterial(createProductDto.getMaterial());
+        product.setGender(createProductDto.getGender());
+        product.setStyle(createProductDto.getStyle());
+        product.setSize(createProductDto.getSize());
 
         Product savedProduct = productService.save(product);
         return mapToDisplayDto(savedProduct);
@@ -95,6 +101,12 @@ public class ProductApplicationServiceImpl implements ProductApplicationService 
         product.setQuantity(createProductDto.getQuantity());
         product.setImageUrl(createProductDto.getImageUrl());
         product.setCategory(category);
+        product.setColor(createProductDto.getColor());
+        product.setSeason(createProductDto.getSeason());
+        product.setMaterial(createProductDto.getMaterial());
+        product.setGender(createProductDto.getGender());
+        product.setStyle(createProductDto.getStyle());
+        product.setSize(createProductDto.getSize());
 
         return productService.update(id, product)
                 .map(this::mapToDisplayDto);
@@ -147,7 +159,13 @@ public class ProductApplicationServiceImpl implements ProductApplicationService 
                 product.getQuantity(),
                 product.getImageUrl(),
                 product.getCategory().getId(),
-                product.getCategory().getName()
+                product.getCategory().getName(),
+                product.getColor(),
+                product.getSeason(),
+                product.getMaterial(),
+                product.getGender(),
+                product.getStyle(),
+                product.getSize()
         );
     }
 
@@ -165,7 +183,13 @@ public class ProductApplicationServiceImpl implements ProductApplicationService 
                 product.getPrice(),
                 product.getQuantity(),
                 product.getImageUrl(),
-                categoryDto
+                categoryDto,
+                product.getColor(),
+                product.getSeason(),
+                product.getMaterial(),
+                product.getGender(),
+                product.getStyle(),
+                product.getSize()
         );
     }
 

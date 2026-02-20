@@ -33,6 +33,24 @@ public class Product {
     @Column(length = 1000)
     private String imageUrl;
 
+    @Column
+    private String color;
+
+    @Column
+    private String season;
+
+    @Column
+    private String material;
+
+    @Column
+    private String gender;
+
+    @Column
+    private String style;
+
+    @Column
+    private String size;
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -102,4 +120,22 @@ public class Product {
     public void setCategory(Category category) {
         this.category = category;
     }
+
+    public String getColor() { return color; }
+    public void setColor(String color) { this.color = color; }
+
+    public String getSeason() { return season; }
+    public void setSeason(String season) { this.season = season; }
+
+    public String getMaterial() { return material; }
+    public void setMaterial(String material) { this.material = material; }
+
+    public String getGender() { return gender; }
+    public void setGender(String gender) { this.gender = gender; }
+
+    public String getStyle() { return style; }
+    public void setStyle(String style) { this.style = style; }
+
+    public String getSize() { return size; }
+    public void setSize(String size) { this.size = size; }
 }

@@ -52,6 +52,12 @@ public class ProductServiceImpl implements ProductService {
                     existingProduct.setQuantity(product.getQuantity());
                     existingProduct.setImageUrl(product.getImageUrl());
                     existingProduct.setCategory(product.getCategory());
+                    existingProduct.setColor(product.getColor());
+                    existingProduct.setSeason(product.getSeason());
+                    existingProduct.setMaterial(product.getMaterial());
+                    existingProduct.setGender(product.getGender());
+                    existingProduct.setStyle(product.getStyle());
+                    existingProduct.setSize(product.getSize());
                     return productRepository.save(existingProduct);
                 });
     }

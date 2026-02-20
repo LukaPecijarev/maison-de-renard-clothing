@@ -79,7 +79,13 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
                 product.getQuantity(),
                 product.getImageUrl(),
                 product.getCategory().getId(),
-                product.getCategory().getName()
+                product.getCategory().getName(),
+                product.getColor(),
+                product.getSeason(),
+                product.getMaterial(),
+                product.getGender(),
+                product.getStyle(),
+                product.getSize()
         );
     }
 }

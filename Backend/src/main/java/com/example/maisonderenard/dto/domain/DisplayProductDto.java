@@ -16,4 +16,10 @@ public class DisplayProductDto {
     private String imageUrl;
     private Long categoryId;
     private String categoryName;
+    private String color;
+    private String season;
+    private String material;
+    private String gender;
+    private String style;
+    private String size;
 }

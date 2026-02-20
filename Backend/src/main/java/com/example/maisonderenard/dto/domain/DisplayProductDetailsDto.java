@@ -15,4 +15,10 @@ public class DisplayProductDetailsDto {
     private Integer quantity;
     private String imageUrl;
     private DisplayCategoryDto category;
+    private String color;
+    private String season;
+    private String material;
+    private String gender;
+    private String style;
+    private String size;
 }
