@@ -212,7 +212,7 @@ const Header = () => {
                         {/* Navigation Links - Center */}
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
                             <Button
-                                onClick={() => navigate('/products?season=fw2025')}
+                                onClick={() => navigate('/products?category=5')}
                                 sx={{
                                     color: '#8b6f47', // ✅ Soft autumn brown
                                     fontSize: '0.875rem',
@@ -242,7 +242,7 @@ const Header = () => {
                                     },
                                 }}
                             >
-                                Fall/Winter 2025-2026
+                                Spring/Summer 2026
                             </Button>
                             <Button
                                 onClick={() => navigate('/products?category=4')}

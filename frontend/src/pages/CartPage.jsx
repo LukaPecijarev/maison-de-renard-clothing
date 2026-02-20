@@ -22,7 +22,6 @@ const CartPage = () => {
     const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
 
-    // Redirect if not authenticated
     React.useEffect(() => {
         if (!isAuthenticated()) {
             navigate('/login');
@@ -34,7 +33,6 @@ const CartPage = () => {
     };
 
     const handleCheckout = () => {
-        // ✅ Navigate to checkout page
         navigate('/checkout');
     };
 
@@ -49,8 +47,21 @@ const CartPage = () => {
     const cartItems = order?.products || [];
     const isEmpty = cartItems.length === 0;
 
-    // Calculate total
-    const total = cartItems.reduce((sum, item) => sum + item.price, 0);
+    const getDiscountedPrice = (item) => {
+        const discountMatch = item.description?.match(/DISCOUNT:(\d+)/);
+        if (discountMatch) {
+            const discount = parseInt(discountMatch[1]);
+            return item.price * (1 - discount / 100);
+        }
+        return item.price;
+    };
+
+    const getDiscount = (item) => {
+        const discountMatch = item.description?.match(/DISCOUNT:(\d+)/);
+        return discountMatch ? parseInt(discountMatch[1]) : 0;
+    };
+
+    const total = cartItems.reduce((sum, item) => sum + getDiscountedPrice(item), 0);
 
     return (
         <Box sx={{ backgroundColor: '#f5f1e8', minHeight: '100vh', py: 8 }}>
@@ -58,15 +69,10 @@ const CartPage = () => {
                 {/* Header */}
                 <Box sx={{ textAlign: 'center', mb: 6 }}>
                     <ShoppingCartIcon sx={{ fontSize: 50, color: '#2c2c2c', mb: 2 }} />
-                    <Typography
-                        variant="h3"
-                        sx={{
-                            fontFamily: '"Cormorant Garamond", serif',
-                            fontWeight: 300,
-                            letterSpacing: '0.1em',
-                            color: '#2c2c2c',
-                        }}
-                    >
+                    <Typography variant="h3" sx={{
+                        fontFamily: '"Cormorant Garamond", serif',
+                        fontWeight: 300, letterSpacing: '0.1em', color: '#2c2c2c',
+                    }}>
                         Shopping Cart
                     </Typography>
                 </Box>
@@ -74,31 +80,19 @@ const CartPage = () => {
                 {isEmpty ? (
                     <Box sx={{ textAlign: 'center', py: 8 }}>
                         <ShoppingCartIcon sx={{ fontSize: 120, color: 'rgba(44, 44, 44, 0.3)', mb: 3 }} />
-                        <Typography
-                            variant="h5"
-                            sx={{
-                                fontFamily: '"Cormorant Garamond", serif',
-                                color: '#666',
-                                mb: 4,
-                            }}
-                        >
+                        <Typography variant="h5" sx={{
+                            fontFamily: '"Cormorant Garamond", serif', color: '#666', mb: 4,
+                        }}>
                             Your cart is empty
                         </Typography>
                         <Button
                             variant="outlined"
                             onClick={() => navigate('/')}
                             sx={{
-                                color: '#2c2c2c',
-                                borderColor: '#e6ccb2',
-                                px: 6,
-                                py: 1.5,
-                                fontSize: '0.9rem',
-                                fontWeight: 400,
+                                color: '#2c2c2c', borderColor: '#e6ccb2',
+                                px: 6, py: 1.5, fontSize: '0.9rem', fontWeight: 400,
                                 letterSpacing: '0.1em',
-                                '&:hover': {
-                                    borderColor: '#d4b896',
-                                    backgroundColor: 'rgba(230, 204, 178, 0.1)',
-                                },
+                                '&:hover': { borderColor: '#d4b896', backgroundColor: 'rgba(230, 204, 178, 0.1)' },
                             }}
                         >
                             CONTINUE SHOPPING
@@ -109,21 +103,16 @@ const CartPage = () => {
                         {/* Cart Items */}
                         <Box>
                             {cartItems.map((item) => {
-                                // Parse first image from imageUrl
                                 const images = item.imageUrl ? item.imageUrl.split(',').map(url => url.trim()) : [];
                                 const imageUrl = images[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500';
+                                const discount = getDiscount(item);
+                                const discountedPrice = getDiscountedPrice(item);
 
                                 return (
-                                    <Card
-                                        key={item.id}
-                                        sx={{
-                                            display: 'flex',
-                                            mb: 3,
-                                            backgroundColor: '#ffffff',
-                                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-                                            borderRadius: '4px',
-                                        }}
-                                    >
+                                    <Card key={item.id} sx={{
+                                        display: 'flex', mb: 3, backgroundColor: '#ffffff',
+                                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)', borderRadius: '4px',
+                                    }}>
                                         <CardMedia
                                             component="img"
                                             sx={{ width: 180, objectFit: 'cover' }}
@@ -131,46 +120,39 @@ const CartPage = () => {
                                             alt={item.name}
                                         />
                                         <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', p: 3 }}>
-                                            <Typography
-                                                variant="h6"
-                                                sx={{
-                                                    fontFamily: '"Lato", sans-serif',
-                                                    fontWeight: 400,
-                                                    fontSize: '1.1rem',
-                                                    mb: 1,
-                                                }}
-                                            >
+                                            <Typography variant="h6" sx={{
+                                                fontFamily: '"Lato", sans-serif',
+                                                fontWeight: 400, fontSize: '1.1rem', mb: 1,
+                                            }}>
                                                 {item.name}
                                             </Typography>
-                                            <Typography
-                                                variant="body2"
-                                                sx={{
-                                                    color: '#666',
-                                                    mb: 2,
-                                                    fontSize: '0.9rem',
-                                                }}
-                                            >
-                                                {item.description?.substring(0, 100)}...
+                                            <Typography variant="body2" sx={{ color: '#666', mb: 2, fontSize: '0.9rem' }}>
+                                                {item.description?.replace(/DISCOUNT:\d+\s?/, '').substring(0, 100)}...
                                             </Typography>
                                             <Box sx={{ mt: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                <Typography
-                                                    variant="h6"
-                                                    sx={{
+                                                <Box>
+                                                    {discount > 0 && (
+                                                        <Typography sx={{
+                                                            fontFamily: '"Cormorant Garamond", serif',
+                                                            fontSize: '1rem', color: '#999',
+                                                            textDecoration: 'line-through',
+                                                        }}>
+                                                            €{item.price.toFixed(0)}
+                                                        </Typography>
+                                                    )}
+                                                    <Typography variant="h6" sx={{
                                                         fontFamily: '"Cormorant Garamond", serif',
                                                         fontSize: '1.3rem',
-                                                        color: '#2c2c2c',
-                                                    }}
-                                                >
-                                                    €{item.price.toFixed(0)}
-                                                </Typography>
+                                                        color: discount > 0 ? '#d32f2f' : '#2c2c2c',
+                                                    }}>
+                                                        €{discountedPrice.toFixed(0)}
+                                                    </Typography>
+                                                </Box>
                                                 <IconButton
                                                     onClick={() => handleRemoveItem(item.id)}
                                                     sx={{
                                                         color: '#666',
-                                                        '&:hover': {
-                                                            color: '#d32f2f',
-                                                            backgroundColor: 'rgba(211, 47, 47, 0.08)',
-                                                        },
+                                                        '&:hover': { color: '#d32f2f', backgroundColor: 'rgba(211, 47, 47, 0.08)' },
                                                     }}
                                                 >
                                                     <DeleteIcon />
@@ -184,25 +166,15 @@ const CartPage = () => {
 
                         {/* Order Summary */}
                         <Box>
-                            <Card
-                                sx={{
-                                    p: 4,
-                                    position: 'sticky',
-                                    top: 100,
-                                    backgroundColor: '#ffffff',
-                                    boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-                                    borderRadius: '4px',
-                                }}
-                            >
-                                <Typography
-                                    variant="h5"
-                                    sx={{
-                                        fontFamily: '"Cormorant Garamond", serif',
-                                        fontWeight: 400,
-                                        letterSpacing: '0.05em',
-                                        mb: 3,
-                                    }}
-                                >
+                            <Card sx={{
+                                p: 4, position: 'sticky', top: 100,
+                                backgroundColor: '#ffffff',
+                                boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)', borderRadius: '4px',
+                            }}>
+                                <Typography variant="h5" sx={{
+                                    fontFamily: '"Cormorant Garamond", serif',
+                                    fontWeight: 400, letterSpacing: '0.05em', mb: 3,
+                                }}>
                                     Order Summary
                                 </Typography>
                                 <Divider sx={{ my: 2, borderColor: '#e6ccb2' }} />
@@ -229,63 +201,40 @@ const CartPage = () => {
                                 <Divider sx={{ my: 2, borderColor: '#e6ccb2' }} />
 
                                 <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 4 }}>
-                                    <Typography
-                                        variant="h6"
-                                        sx={{
-                                            fontFamily: '"Cormorant Garamond", serif',
-                                            fontSize: '1.3rem',
-                                        }}
-                                    >
+                                    <Typography variant="h6" sx={{
+                                        fontFamily: '"Cormorant Garamond", serif', fontSize: '1.3rem',
+                                    }}>
                                         Total
                                     </Typography>
-                                    <Typography
-                                        variant="h6"
-                                        sx={{
-                                            fontFamily: '"Cormorant Garamond", serif',
-                                            fontSize: '1.3rem',
-                                            color: '#2c2c2c',
-                                        }}
-                                    >
+                                    <Typography variant="h6" sx={{
+                                        fontFamily: '"Cormorant Garamond", serif',
+                                        fontSize: '1.3rem', color: '#2c2c2c',
+                                    }}>
                                         €{total.toFixed(0)}
                                     </Typography>
                                 </Box>
 
                                 <Button
-                                    variant="contained"
-                                    fullWidth
-                                    size="large"
+                                    variant="contained" fullWidth size="large"
                                     onClick={handleCheckout}
                                     sx={{
-                                        backgroundColor: '#2c2c2c',
-                                        color: '#ffffff',
-                                        py: 1.5,
-                                        mb: 2,
-                                        fontSize: '0.9rem',
-                                        fontWeight: 400,
+                                        backgroundColor: '#2c2c2c', color: '#ffffff',
+                                        py: 1.5, mb: 2, fontSize: '0.9rem', fontWeight: 400,
                                         letterSpacing: '0.1em',
-                                        '&:hover': {
-                                            backgroundColor: '#1a1a1a',
-                                        },
+                                        '&:hover': { backgroundColor: '#1a1a1a' },
                                     }}
                                 >
                                     PROCEED TO CHECKOUT
                                 </Button>
 
                                 <Button
-                                    variant="outlined"
-                                    fullWidth
+                                    variant="outlined" fullWidth
                                     onClick={() => navigate('/')}
                                     sx={{
-                                        color: '#2c2c2c',
-                                        borderColor: '#e6ccb2',
-                                        py: 1.5,
-                                        fontSize: '0.9rem',
-                                        fontWeight: 400,
+                                        color: '#2c2c2c', borderColor: '#e6ccb2',
+                                        py: 1.5, fontSize: '0.9rem', fontWeight: 400,
                                         letterSpacing: '0.1em',
-                                        '&:hover': {
-                                            borderColor: '#d4b896',
-                                            backgroundColor: 'rgba(230, 204, 178, 0.1)',
-                                        },
+                                        '&:hover': { borderColor: '#d4b896', backgroundColor: 'rgba(230, 204, 178, 0.1)' },
                                     }}
                                 >
                                     CONTINUE SHOPPING

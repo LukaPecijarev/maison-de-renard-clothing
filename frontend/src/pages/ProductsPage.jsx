@@ -299,7 +299,7 @@ const ProductsPage = () => {
                         {searchQuery ? `Search Results for "${searchQuery}"` : (categoryData?.name || 'Products')}
                     </Typography>
 
-                    {/* Category Description */}
+                    {/* Category Description right bellow the title for category */}
                     {categoryData?.description && !searchQuery && (
                         <Typography
                             variant="body1"
@@ -411,14 +411,16 @@ const ProductsPage = () => {
                     aria-label="add product"
                     sx={{
                         position: 'fixed',
-                        bottom: 32,
-                        right: 32,
+                        bottom: 27,
+                        left: 32,
                         backgroundColor: '#d4b896',
                         color: '#2c2c2c',
                         width: 64,
                         height: 64,
+                        boxShadow: 'none',
                         '&:hover': {
                             backgroundColor: '#c4a886',
+                            boxShadow: 'none',
                         },
                     }}
                     onClick={() => navigate('/products/add')}

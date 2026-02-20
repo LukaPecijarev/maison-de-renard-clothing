@@ -38,7 +38,7 @@ const useProducts = (categoryId = null) => {
         };
     }, [categoryId]);
 
-    const fetchProducts = () => {
+    const fetchProducts = () => { // i call this when i want to refresh after add/del/edit functions
         setLoading(true);
 
         const fetchCall = categoryId

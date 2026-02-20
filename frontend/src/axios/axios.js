@@ -25,9 +25,8 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401) {
-            // Unauthorized - clear token and redirect to login
-            localStorage.removeItem('jwtToken'); // ✅ Changed from 'token'
+        if (error.response?.status === 401 || error.response?.status === 403) {
+            localStorage.removeItem('jwtToken');
             localStorage.removeItem('username');
             localStorage.removeItem('role');
             window.location.href = '/login';
