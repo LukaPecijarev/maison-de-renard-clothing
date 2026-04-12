@@ -41,8 +41,13 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
         Order order = orderService.findPendingOrderByUsername(username)
                 .orElseThrow(() -> new OrderNotFoundException(username));
 
-        Order confirmedOrder = orderService.confirmOrder(order);
-        return mapToDto(confirmedOrder);
+        // Зачувај ги податоците ПРЕД бришење
+        DisplayOrderDto dto = mapToDto(order);
+
+        // Потврди и избриши
+        orderService.confirmOrder(order);
+
+        return dto;
     }
 
     @Override

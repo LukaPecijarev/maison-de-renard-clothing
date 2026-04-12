@@ -11,6 +11,7 @@ import java.util.List;
 public class ChatRequestDto {
     private String message;
     private List<ChatMessageDto> conversationHistory;
+    private List<String> viewedProducts;
 
     @Data
     @AllArgsConstructor
