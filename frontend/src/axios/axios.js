@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 // Request interceptor - add JWT token to every request
 axiosInstance.interceptors.request.use(
     (config) => {
-        const token = localStorage.getItem('jwtToken'); // ✅ Changed from 'token' to 'jwtToken'
+        const token = localStorage.getItem('jwtToken');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -25,7 +25,8 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => response,
     (error) => {
-        if (error.response?.status === 401 || error.response?.status === 403) {
+        const isChat = error.config?.url?.includes('/chat');
+        if (!isChat && (error.response?.status === 401 || error.response?.status === 403)) {
             localStorage.removeItem('jwtToken');
             localStorage.removeItem('username');
             localStorage.removeItem('role');

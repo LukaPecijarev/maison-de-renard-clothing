@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, Typography, Box, Button, CircularProgress, Snackbar, Alert } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import useProductDetails from '../hooks/useProductDetails';
 import useOrder from '../hooks/useOrder';
 import useAuth from '../hooks/useAuth';
+
 
 const ProductDetailsPage = () => {
     const { id } = useParams();
@@ -16,6 +17,26 @@ const ProductDetailsPage = () => {
     const [selectedSize, setSelectedSize] = useState(null);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
+
+    useEffect(() => {
+        if (product) {
+            const token = localStorage.getItem('jwtToken');
+            if (token) {
+                const viewed = JSON.parse(localStorage.getItem('viewedProducts') || '[]');
+                const filtered = viewed.filter(p => p.id !== product.id);
+                const updated = [
+                    {
+                        id: product.id,
+                        name: product.name,
+                        imageUrl: product.imageUrl,
+                        price: product.price
+                    },
+                    ...filtered
+                ].slice(0, 10);
+                localStorage.setItem('viewedProducts', JSON.stringify(updated));
+            }
+        }
+    }, [product]);
     if (loading) {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh', backgroundColor: '#f5f1e8' }}>

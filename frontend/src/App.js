@@ -13,6 +13,7 @@ import SpecialOffersPage from './pages/SpecialOffersPage';
 import CheckoutPage from './pages/CheckoutPage';
 import ChatBot from './components/ChatBot';
 import ProductDetailsPage from './pages/ProductDetailsPage';
+import OrderHistoryPage from './pages/OrderHistoryPage';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
               <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/cart" element={<CartPage />} />
               <Route path="/products/:id" element={<ProductDetailsPage />} />
+              <Route path="/order-history" element={<OrderHistoryPage />} />
             </Routes>
           </Layout>
           <ChatBot />

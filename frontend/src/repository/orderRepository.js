@@ -8,10 +8,10 @@ const orderRepository = {
         return await axiosInstance.get('/orders/history');
     },
     confirmPendingOrder: async () => {
-        return await axiosInstance.put('/orders/pending/confirm');
+        return await axiosInstance.get('/orders/pending/confirm'); // PUT → GET
     },
     cancelPendingOrder: async () => {
-        return await axiosInstance.put('/orders/pending/cancel');
+        return await axiosInstance.get('/orders/pending/cancel'); // PUT → GET
     },
 };
 

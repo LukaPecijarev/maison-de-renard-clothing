@@ -6,19 +6,15 @@ const useOrder = () => {
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(false);
 
-    // Check authentication directly without using useAuth hook
     const isAuthenticated = () => {
         const token = localStorage.getItem('jwtToken');
         return !!token;
     };
 
-    console.log('🛒 CartPage - order:', order);
-    console.log('🛒 CartPage - loading:', loading);
-    console.log('🛒 CartPage - cartItems:', order?.products);
-
     const fetchPendingOrder = useCallback(() => {
         if (!isAuthenticated()) {
             setOrder(null);
+            localStorage.setItem('cartCount', '0');
             setLoading(false);
             return;
         }
@@ -27,22 +23,26 @@ const useOrder = () => {
         orderRepository
             .findPending()
             .then((response) => {
-                console.log('📦 Cart data:', response.data);
                 setOrder(response.data);
+                // Зачувај cartCount во localStorage за Header
+                const count = response.data?.products?.length || 0;
+                localStorage.setItem('cartCount', String(count));
+                // Dispatch event за да го слушне Header
+                window.dispatchEvent(new Event('cartUpdated'));
                 setLoading(false);
             })
             .catch((error) => {
                 console.error('Error fetching order:', error);
                 setOrder(null);
+                localStorage.setItem('cartCount', '0');
                 setLoading(false);
             });
     }, []);
 
     const addToCart = useCallback(async (productId) => {
         try {
-            console.log('➕ Adding product to cart:', productId);
             await productRepository.addToCart(productId);
-            await fetchPendingOrder(); // Refresh cart
+            await fetchPendingOrder();
             return true;
         } catch (error) {
             console.error('Error adding to cart:', error);
@@ -52,9 +52,8 @@ const useOrder = () => {
 
     const removeFromCart = useCallback(async (productId) => {
         try {
-            console.log('➖ Removing product from cart:', productId);
             await productRepository.removeFromCart(productId);
-            await fetchPendingOrder(); // Refresh cart
+            await fetchPendingOrder();
             return true;
         } catch (error) {
             console.error('Error removing from cart:', error);
@@ -62,21 +61,23 @@ const useOrder = () => {
         }
     }, [fetchPendingOrder]);
 
-    const confirmOrder = useCallback(() => {
-        orderRepository
-            .confirmPendingOrder()
-            .then(() => {
-                fetchPendingOrder();
-            })
-            .catch((error) => console.error('Error confirming order:', error));
+    const confirmOrder = useCallback(async () => {
+        try {
+            await orderRepository.confirmPendingOrder();
+            localStorage.setItem('cartCount', '0');
+            window.dispatchEvent(new Event('cartUpdated'));
+            await fetchPendingOrder();
+            return true;
+        } catch (error) {
+            console.error('Error confirming order:', error);
+            return false;
+        }
     }, [fetchPendingOrder]);
 
     const cancelOrder = useCallback(() => {
         orderRepository
             .cancelPendingOrder()
-            .then(() => {
-                fetchPendingOrder();
-            })
+            .then(() => fetchPendingOrder())
             .catch((error) => console.error('Error cancelling order:', error));
     }, [fetchPendingOrder]);
 

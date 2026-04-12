@@ -5,6 +5,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SendIcon from '@mui/icons-material/Send';
 import SmartToyOutlinedIcon from '@mui/icons-material/SmartToyOutlined';
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import axiosInstance from '../axios/axios';
 
 const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(() => {
@@ -86,21 +87,20 @@ const ChatBot = () => {
         setLoading(true);
 
         try {
-            // Подготви conversation history (без products, само role и content)
             const conversationHistory = messages
                 .filter(m => m.role !== 'system')
                 .map(m => ({ role: m.role, content: m.content }));
 
-            const response = await fetch('http://localhost:8080/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    message: currentInput,
-                    conversationHistory: conversationHistory,
-                }),
+            // Земи ги прегледаните производи од localStorage
+            const viewedProducts = JSON.parse(localStorage.getItem('viewedProducts') || '[]');
+
+            const response = await axiosInstance.post('/chat', {
+                message: currentInput,
+                conversationHistory: conversationHistory,
+                viewedProducts: viewedProducts.map(p => p.name),
             });
 
-            const data = await response.json();
+            const data = response.data;
 
             const assistantMessage = {
                 role: 'assistant',
