@@ -8,6 +8,7 @@ import com.example.maisonderenard.repository.SoldProductRepository;
 import com.example.maisonderenard.service.application.ProductApplicationService;
 import com.example.maisonderenard.service.domain.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/chat")
 @RequiredArgsConstructor
@@ -165,13 +167,18 @@ public class ChatController {
                 - May 1 (±7 days) = Spring → recommend Spring/Summer collection
                 """ + giftAndPersonalizedRules + """
                 
-                SMART RECOMMENDATIONS:
-                When a user asks broadly, ask 1-2 follow-up questions:
+                SMART RECOMMENDATIONS - VERY IMPORTANT:
+                A request is BROAD if it only names a gender/category (e.g. "recommend women's products",
+                "покажи ми нешто за мажи") without an occasion, season, budget, or style. For BROAD requests,
+                you MUST ask 1-2 follow-up questions BEFORE recommending anything - do not treat "for women"
+                or "for men" alone as specific enough. Only skip straight to recommending when the user has
+                already given an occasion, season, budget, style, or specific item type.
+                Pick 1-2 relevant questions:
                 - "За која прилика барате? (секојдневно, формално, спортско)"
                 - "Која сезона ве интересира? (лето, зима, пролет)"
                 - "Дали барате горен или долен дел? (блуза, јакна, панталони, обувки)"
                 - "Имате ли преференца за материјал? (кашмир, волна, кожа, памук)"
-                
+
                 ADMIN ANALYTICS - You can answer questions like:
                 - "Која категорија се продава најмногу?"
                 - "Кои производи беа најпопуларни неодамна?"
@@ -222,8 +229,13 @@ public class ChatController {
                 If the user mentions their birthday, recommend something special as a luxury treat.
                 """ + giftAndPersonalizedRules + """
                 
-                SMART RECOMMENDATIONS:
-                When a user asks broadly, ask 1-2 follow-up questions:
+                SMART RECOMMENDATIONS - VERY IMPORTANT:
+                A request is BROAD if it only names a gender/category (e.g. "recommend women's products",
+                "покажи ми нешто за мажи") without an occasion, season, budget, or style. For BROAD requests,
+                you MUST ask 1-2 follow-up questions BEFORE recommending anything - do not treat "for women"
+                or "for men" alone as specific enough. Only skip straight to recommending when the user has
+                already given an occasion, season, budget, style, or specific item type.
+                Pick 1-2 relevant questions:
                 - "За која прилика барате? (секојдневно, формално, спортско)"
                 - "Која сезона ве интересира? (лето, зима, пролет)"
                 - "Дали барате горен или долен дел? (блуза, јакна, панталони, обувки)"
@@ -263,7 +275,7 @@ public class ChatController {
         messages.add(Map.of("role", "user", "content", request.getMessage()));
 
         Map<String, Object> body = new HashMap<>();
-        body.put("model", "claude-sonnet-4-20250514");
+        body.put("model", "claude-sonnet-4-5-20250929");
         body.put("max_tokens", 1024);
         body.put("system", systemPrompt);
         body.put("messages", messages);
@@ -299,6 +311,7 @@ public class ChatController {
 
             return ResponseEntity.ok(result);
         } catch (Exception e) {
+            log.error("Anthropic chat request failed", e);
             Map<String, Object> error = new HashMap<>();
             error.put("reply", "Извинете, моментално не можам да одговорам. Обидете се повторно!");
             error.put("products", List.of());
