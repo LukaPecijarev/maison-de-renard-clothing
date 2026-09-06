@@ -241,7 +241,10 @@ const ProductDetailsPage = () => {
                             </IconButton>
                         </Box>
 
-                        {/* Size Selector */}
+                        {/* Size Selector - hidden entirely for one-size items (no
+                            product.size on record) rather than showing every
+                            option crossed out, which read as "nothing in stock" */}
+                        {availableSizes.length > 0 && (
                         <Box sx={{ borderTop: '1px solid rgba(212, 184, 150, 0.3)', pt: 3, mb: 3 }}>
                             <Typography sx={{
                                 fontFamily: '"Lato", sans-serif', fontSize: '0.85rem',
@@ -322,6 +325,7 @@ const ProductDetailsPage = () => {
                                 </Box>
                             </Box>
                         </Box>
+                        )}
 
                         {/* Product Details */}
                         <Box sx={{ borderTop: '1px solid rgba(212, 184, 150, 0.3)', pt: 3 }}>
