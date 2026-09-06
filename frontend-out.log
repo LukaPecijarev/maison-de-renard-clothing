@@ -2736,3 +2736,149 @@ src\components\layout\Header.jsx
   Line 95:8:  React Hook useEffect has a missing dependency: 'searchQuery'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
 
 webpack compiled with 1 warning
+Compiling...
+Failed to compile.
+
+[eslint] 
+src\pages\ProductDetailsPage.js
+Syntax error: Unexpected token, expected "," (329:24) (329:24)
+WARNING in [eslint] 
+src\components\layout\Header.jsx
+  Line 74:8:  React Hook useEffect has a missing dependency: 'quotes.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 95:8:  React Hook useEffect has a missing dependency: 'searchQuery'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+
+ERROR in ./src/pages/ProductDetailsPage.js
+Module build failed (from ./node_modules/babel-loader/lib/index.js):
+SyntaxError: C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\src\pages\ProductDetailsPage.js: Unexpected token, expected "," (329:24)
+
+  327 |                         </Box>
+  328 |
+> 329 |                         {/* Product Details */}
+      |                         ^
+  330 |                         <Box sx={{ borderTop: '1px solid rgba(212, 184, 150, 0.3)', pt: 3 }}>
+  331 |                             <Typography sx={{
+  332 |                                 fontFamily: '"Lato", sans-serif', fontSize: '0.85rem',
+    at constructor (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:367:19)
+    at FlowParserMixin.raise (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:6630:19)
+    at FlowParserMixin.unexpected (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:6650:16)
+    at FlowParserMixin.expect (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:6930:12)
+    at FlowParserMixin.parseParenAndDistinguishExpression (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:11669:14)
+    at FlowParserMixin.parseParenAndDistinguishExpression (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:3624:18)
+    at FlowParserMixin.parseExprAtom (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:11335:23)
+    at FlowParserMixin.parseExprAtom (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:4797:20)
+    at FlowParserMixin.parseExprSubscripts (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:11085:23)
+    at FlowParserMixin.parseUpdate (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:11070:21)
+    at FlowParserMixin.parseMaybeUnary (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:11050:23)
+    at FlowParserMixin.parseMaybeUnaryOrPrivate (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10903:61)
+    at FlowParserMixin.parseExprOpBaseRightExpr (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10990:34)
+    at FlowParserMixin.parseExprOpRightExpr (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10985:21)
+    at FlowParserMixin.parseExprOp (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10951:27)
+    at FlowParserMixin.parseExprOp (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10957:21)
+    at FlowParserMixin.parseExprOps (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10912:17)
+    at FlowParserMixin.parseMaybeConditional (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10885:23)
+    at FlowParserMixin.parseMaybeAssign (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10835:21)
+    at FlowParserMixin.parseMaybeAssign (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:3582:18)
+    at FlowParserMixin.parseExpressionBase (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10788:23)
+    at C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10784:39
+    at FlowParserMixin.allowInAnd (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:12436:12)
+    at FlowParserMixin.parseExpression (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10784:17)
+    at FlowParserMixin.jsxParseExpressionContainer (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:4665:31)
+    at FlowParserMixin.jsxParseElementAt (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:4744:36)
+    at FlowParserMixin.jsxParseElementAt (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:4731:32)
+    at FlowParserMixin.jsxParseElementAt (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:4731:32)
+    at FlowParserMixin.jsxParseElementAt (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:4731:32)
+    at FlowParserMixin.jsxParseElement (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:4782:17)
+    at FlowParserMixin.parseExprAtom (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:4792:19)
+    at FlowParserMixin.parseExprSubscripts (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:11085:23)
+    at FlowParserMixin.parseUpdate (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:11070:21)
+    at FlowParserMixin.parseMaybeUnary (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:11050:23)
+    at FlowParserMixin.parseMaybeUnaryOrPrivate (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10903:61)
+    at FlowParserMixin.parseExprOps (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10908:23)
+    at FlowParserMixin.parseMaybeConditional (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10885:23)
+    at FlowParserMixin.parseMaybeAssign (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10835:21)
+    at C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:3531:39
+    at FlowParserMixin.tryParse (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:6938:20)
+    at FlowParserMixin.parseMaybeAssign (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:3531:18)
+    at C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10804:39
+    at FlowParserMixin.allowInAnd (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:12436:12)
+    at FlowParserMixin.parseMaybeAssignAllowIn (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:10804:17)
+    at FlowParserMixin.parseMaybeAssignAllowInOrVoidPattern (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:12503:17)
+    at FlowParserMixin.parseParenAndDistinguishExpression (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:11683:28)
+    at FlowParserMixin.parseParenAndDistinguishExpression (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:3624:18)
+    at FlowParserMixin.parseExprAtom (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:11335:23)
+    at FlowParserMixin.parseExprAtom (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:4797:20)
+    at FlowParserMixin.parseExprSubscripts (C:\Users\38972\Desktop\Timski\MaisonDeRenard\frontend\node_modules\@babel\parser\lib\index.js:11085:23)
+
+ERROR in [eslint] 
+src\pages\ProductDetailsPage.js
+  Line 329:24:  Parsing error: Unexpected token, expected "," (329:24)
+
+webpack compiled with 2 errors and 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\layout\Header.jsx
+  Line 74:8:  React Hook useEffect has a missing dependency: 'quotes.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 95:8:  React Hook useEffect has a missing dependency: 'searchQuery'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src\components\layout\Header.jsx
+  Line 74:8:  React Hook useEffect has a missing dependency: 'quotes.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 95:8:  React Hook useEffect has a missing dependency: 'searchQuery'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\layout\Header.jsx
+  Line 74:8:  React Hook useEffect has a missing dependency: 'quotes.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 95:8:  React Hook useEffect has a missing dependency: 'searchQuery'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src\components\layout\Header.jsx
+  Line 74:8:  React Hook useEffect has a missing dependency: 'quotes.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 95:8:  React Hook useEffect has a missing dependency: 'searchQuery'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\layout\Header.jsx
+  Line 74:8:  React Hook useEffect has a missing dependency: 'quotes.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 95:8:  React Hook useEffect has a missing dependency: 'searchQuery'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src\components\layout\Header.jsx
+  Line 74:8:  React Hook useEffect has a missing dependency: 'quotes.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 95:8:  React Hook useEffect has a missing dependency: 'searchQuery'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint] 
+src\components\layout\Header.jsx
+  Line 74:8:  React Hook useEffect has a missing dependency: 'quotes.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 95:8:  React Hook useEffect has a missing dependency: 'searchQuery'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint] 
+src\components\layout\Header.jsx
+  Line 74:8:  React Hook useEffect has a missing dependency: 'quotes.length'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 95:8:  React Hook useEffect has a missing dependency: 'searchQuery'. Either include it or remove the dependency array    react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning

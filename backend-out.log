@@ -91601,3 +91601,2797 @@ Hibernate:
         categories c1_0 
     where
         c1_0.id=?
+2026-09-06T16:33:44.758+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/3
+2026-09-06T16:33:44.758+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/2
+2026-09-06T16:33:44.758+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T16:33:46.072+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/1
+2026-09-06T16:33:46.072+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T16:33:47.522+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/2
+2026-09-06T16:33:47.528+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/2
+2026-09-06T16:33:48.094+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/3
+2026-09-06T16:33:48.094+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/3
+2026-09-06T16:34:47.195+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/3
+2026-09-06T16:34:47.195+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/2
+2026-09-06T16:34:47.195+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T16:34:48.592+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/1
+2026-09-06T16:34:48.600+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T16:35:11.074+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/2
+2026-09-06T16:35:11.074+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/2
+2026-09-06T16:35:11.632+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/3
+2026-09-06T16:35:11.632+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/3
+2026-09-06T16:35:12.521+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/2
+2026-09-06T16:35:12.523+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/2
+2026-09-06T16:36:00.520+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/2
+2026-09-06T16:36:00.520+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/3
+2026-09-06T16:36:00.520+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T16:36:01.264+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/1
+2026-09-06T16:36:01.266+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T16:44:55.908+02:00  INFO 70368 --- [Maison de Renard] [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 59 class path changes (0 additions, 58 deletions, 1 modification)
+2026-09-06T16:44:55.916+02:00  INFO 70368 --- [Maison de Renard] [      Thread-11] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-09-06T16:44:55.929+02:00  INFO 70368 --- [Maison de Renard] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-09-06T16:44:55.935+02:00  INFO 70368 --- [Maison de Renard] [      Thread-11] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T16:44:55.940+02:00  INFO 70368 --- [Maison de Renard] [      Thread-11] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown initiated...
+2026-09-06T16:44:55.941+02:00  INFO 70368 --- [Maison de Renard] [      Thread-11] com.zaxxer.hikari.HikariDataSource       : HikariPool-3 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2026-09-06T16:44:56.095+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Starting MaisonDeRenardApplication using Java 25.0.2 with PID 70368 (C:\Users\38972\Desktop\Timski\MaisonDeRenard\Backend\target\classes started by 38972 in C:\Users\38972\Desktop\Timski\MaisonDeRenard\Backend)
+2026-09-06T16:44:56.095+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Running with Spring Boot v3.5.6, Spring v6.2.11
+2026-09-06T16:44:56.096+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : No active profile set, falling back to 1 default profile: "default"
+2026-09-06T16:44:56.377+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-06T16:44:56.387+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 7 ms. Found 0 JPA repository interfaces.
+2026-09-06T16:44:56.639+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-09-06T16:44:56.644+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-06T16:44:56.646+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-09-06T16:44:56.676+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-06T16:44:56.677+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 577 ms
+2026-09-06T16:44:56.770+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-06T16:44:56.774+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-09-06T16:44:56.798+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-06T16:44:56.802+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Starting...
+2026-09-06T16:44:56.873+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-4 - Added connection org.postgresql.jdbc.PgConnection@143167f1
+2026-09-06T16:44:56.874+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Start completed.
+2026-09-06T16:44:56.897+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-06T16:44:56.904+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-4)']
+	Database driver: undefined/unknown
+	Database version: 18.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-06T16:44:56.956+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-06T16:44:56.958+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T16:44:57.062+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-06T16:44:57.552+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 89d42f44-b04d-4631-be44-c9416dc4e65a
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-09-06T16:44:57.555+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-09-06T16:44:57.587+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CsrfFilter, LogoutFilter, UsernamePasswordAuthenticationFilter, DefaultResourcesFilter, DefaultLoginPageGeneratingFilter, DefaultLogoutPageGeneratingFilter, BasicAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-09-06T16:44:57.622+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-09-06T16:44:57.644+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-09-06T16:44:57.651+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Started MaisonDeRenardApplication in 1.619 seconds (process running for 107710.564)
+2026-09-06T16:44:57.654+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+   SpringBootWebSecurityConfiguration.SecurityFilterChainConfiguration matched:
+      - AllNestedConditions 2 matched 0 did not; NestedCondition on DefaultWebSecurityCondition.Beans @ConditionalOnMissingBean (types: org.springframework.security.web.SecurityFilterChain; SearchStrategy: all) did not find any beans; NestedCondition on DefaultWebSecurityCondition.Classes @ConditionalOnClass found required classes 'org.springframework.security.web.SecurityFilterChain', 'org.springframework.security.config.annotation.web.builders.HttpSecurity' (DefaultWebSecurityCondition)
+
+   SpringBootWebSecurityConfiguration.WebSecurityEnablerConfiguration matched:
+      - @ConditionalOnClass found required class 'org.springframework.security.config.annotation.web.configuration.EnableWebSecurity' (OnClassCondition)
+      - @ConditionalOnMissingBean (names: springSecurityFilterChain; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   UserDetailsServiceAutoConfiguration matched:
+      - @ConditionalOnClass found required class 'org.springframework.security.authentication.AuthenticationManager' (OnClassCondition)
+      - found 'session' scope (OnWebApplicationCondition)
+      - AnyNestedCondition 1 matched 2 did not; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.PasswordConfigured @ConditionalOnProperty (spring.security.user.password) did not find property 'spring.security.user.password'; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.NameConfigured @ConditionalOnProperty (spring.security.user.name) did not find property 'spring.security.user.name'; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.MissingAlternative @ConditionalOnMissingClass did not find unwanted classes 'org.springframework.security.oauth2.client.registration.ClientRegistrationRepository', 'org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector', 'org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository' (UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured)
+      - @ConditionalOnBean (types: org.springframework.security.config.ObjectPostProcessor; SearchStrategy: all) found beans 'objectPostProcessor', 'webAuthorizationManagerPostProcessor', 'filterChainDecoratorPostProcessor', 'authenticationManagerPostProcessor'; @ConditionalOnMissingBean (types: org.springframework.security.authentication.AuthenticationManager,org.springframework.security.authentication.AuthenticationProvider,org.springframework.security.core.userdetails.UserDetailsService,org.springframework.security.authentication.AuthenticationManagerResolver,?; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+
+Negative matches:
+-----------------
+
+    None
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-09-06T16:44:59.482+02:00  INFO 70368 --- [Maison de Renard] [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 58 class path changes (58 additions, 0 deletions, 0 modifications)
+2026-09-06T16:44:59.484+02:00  INFO 70368 --- [Maison de Renard] [      Thread-15] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-09-06T16:44:59.490+02:00  INFO 70368 --- [Maison de Renard] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-09-06T16:44:59.492+02:00  INFO 70368 --- [Maison de Renard] [      Thread-15] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T16:44:59.494+02:00  INFO 70368 --- [Maison de Renard] [      Thread-15] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown initiated...
+2026-09-06T16:44:59.495+02:00  INFO 70368 --- [Maison de Renard] [      Thread-15] com.zaxxer.hikari.HikariDataSource       : HikariPool-4 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2026-09-06T16:44:59.562+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Starting MaisonDeRenardApplication using Java 25.0.2 with PID 70368 (C:\Users\38972\Desktop\Timski\MaisonDeRenard\Backend\target\classes started by 38972 in C:\Users\38972\Desktop\Timski\MaisonDeRenard\Backend)
+2026-09-06T16:44:59.562+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Running with Spring Boot v3.5.6, Spring v6.2.11
+2026-09-06T16:44:59.562+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : No active profile set, falling back to 1 default profile: "default"
+2026-09-06T16:44:59.712+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-06T16:44:59.741+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 27 ms. Found 5 JPA repository interfaces.
+2026-09-06T16:44:59.827+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-09-06T16:44:59.828+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-06T16:44:59.828+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-09-06T16:44:59.840+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-06T16:44:59.840+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 276 ms
+2026-09-06T16:44:59.869+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-06T16:44:59.871+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-09-06T16:44:59.877+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-06T16:44:59.878+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Starting...
+2026-09-06T16:44:59.914+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-5 - Added connection org.postgresql.jdbc.PgConnection@32358ca
+2026-09-06T16:44:59.914+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Start completed.
+2026-09-06T16:44:59.921+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-06T16:44:59.922+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-5)']
+	Database driver: undefined/unknown
+	Database version: 18.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-06T16:45:00.067+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-06T16:45:00.325+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T16:45:00.385+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] c.e.m.web.filters.JwtFilter              : Filter 'jwtFilter' configured for use
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.password,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.password,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        categories c1_0
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.name=?
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.name=?
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2026-09-06T16:45:00.587+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] o.s.s.a.h.RoleHierarchyImpl              : buildRolesReachableInOneOrMoreStepsMap() - From role ROLE_ADMIN one can reach [ROLE_CUSTOMER] in one or more steps.
+2026-09-06T16:45:00.595+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-06T16:45:00.683+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-09-06T16:45:00.724+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-09-06T16:45:00.842+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-09-06T16:45:00.863+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-09-06T16:45:00.866+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Started MaisonDeRenardApplication in 1.323 seconds (process running for 107713.779)
+2026-09-06T16:45:00.868+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+    None
+
+
+Negative matches:
+-----------------
+
+   SpringBootWebSecurityConfiguration.SecurityFilterChainConfiguration:
+      Did not match:
+         - AllNestedConditions 1 matched 1 did not; NestedCondition on DefaultWebSecurityCondition.Beans @ConditionalOnMissingBean (types: org.springframework.security.web.SecurityFilterChain; SearchStrategy: all) found beans of type 'org.springframework.security.web.SecurityFilterChain' securityFilterChain; NestedCondition on DefaultWebSecurityCondition.Classes @ConditionalOnClass found required classes 'org.springframework.security.web.SecurityFilterChain', 'org.springframework.security.config.annotation.web.builders.HttpSecurity' (DefaultWebSecurityCondition)
+
+   SpringBootWebSecurityConfiguration.WebSecurityEnablerConfiguration:
+      Did not match:
+         - @ConditionalOnMissingBean (names: springSecurityFilterChain; SearchStrategy: all) found beans named springSecurityFilterChain (OnBeanCondition)
+      Matched:
+         - @ConditionalOnClass found required class 'org.springframework.security.config.annotation.web.configuration.EnableWebSecurity' (OnClassCondition)
+
+   UserDetailsServiceAutoConfiguration:
+      Did not match:
+         - @ConditionalOnMissingBean (types: org.springframework.security.authentication.AuthenticationManager,org.springframework.security.authentication.AuthenticationProvider,org.springframework.security.core.userdetails.UserDetailsService,org.springframework.security.authentication.AuthenticationManagerResolver,?; SearchStrategy: all) found beans of type 'org.springframework.security.core.userdetails.UserDetailsService' customUserDetailsService (OnBeanCondition)
+      Matched:
+         - @ConditionalOnClass found required class 'org.springframework.security.authentication.AuthenticationManager' (OnClassCondition)
+         - found 'session' scope (OnWebApplicationCondition)
+         - AnyNestedCondition 1 matched 2 did not; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.PasswordConfigured @ConditionalOnProperty (spring.security.user.password) did not find property 'spring.security.user.password'; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.NameConfigured @ConditionalOnProperty (spring.security.user.name) did not find property 'spring.security.user.name'; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.MissingAlternative @ConditionalOnMissingClass did not find unwanted classes 'org.springframework.security.oauth2.client.registration.ClientRegistrationRepository', 'org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector', 'org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository' (UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured)
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-09-06T17:03:32.474+02:00  INFO 70368 --- [Maison de Renard] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-06T17:03:32.475+02:00  INFO 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-09-06T17:03:32.478+02:00  INFO 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-09-06T17:03:32.482+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/6
+2026-09-06T17:03:32.485+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:03:32.486+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/6
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:03:32.537+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/6
+2026-09-06T17:03:32.540+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:03:32.541+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/6
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:03:35.825+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/5
+2026-09-06T17:03:35.825+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/5
+2026-09-06T17:03:35.829+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:03:35.829+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:03:35.830+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/5
+2026-09-06T17:03:35.831+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/5
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:03:35.854+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/5
+2026-09-06T17:03:35.856+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:03:35.858+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/5
+2026-09-06T17:03:35.859+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/5
+2026-09-06T17:03:35.860+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:03:35.862+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/5
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:03:38.068+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T17:03:38.068+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/1
+2026-09-06T17:03:38.069+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:03:38.069+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:03:38.069+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/1
+2026-09-06T17:03:38.070+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/1
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:03:51.585+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/5
+2026-09-06T17:03:51.587+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:03:51.588+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/5
+2026-09-06T17:03:51.588+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/5
+2026-09-06T17:03:51.589+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:03:51.589+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/5
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:04:02.345+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/4
+2026-09-06T17:04:02.345+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/4
+2026-09-06T17:04:02.352+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:04:02.352+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:04:02.353+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/4
+2026-09-06T17:04:02.353+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/4
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:24:50.152+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/1
+2026-09-06T17:24:50.152+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T17:24:50.155+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:24:50.155+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:24:50.155+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/1
+2026-09-06T17:24:50.155+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/1
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:24:51.491+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/4
+2026-09-06T17:24:51.491+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/4
+2026-09-06T17:24:51.493+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:24:51.493+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:24:51.493+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/4
+2026-09-06T17:24:51.494+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/4
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:41:20.767+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/2
+2026-09-06T17:41:20.767+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/2
+2026-09-06T17:41:20.768+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:20.768+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:20.769+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/2
+2026-09-06T17:41:20.769+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/2
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:41:22.632+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T17:41:22.632+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/1
+2026-09-06T17:41:22.633+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:22.633+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:22.633+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/1
+2026-09-06T17:41:22.633+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/1
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:41:24.758+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/6
+2026-09-06T17:41:24.761+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:24.764+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/6
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:41:24.784+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/6
+2026-09-06T17:41:24.785+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:24.787+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/6
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:41:31.560+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/products/54/details
+2026-09-06T17:41:31.566+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:31.567+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/products/54/details
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        c1_0.id,
+        c1_0.description,
+        c1_0.name,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        p1_0.id=?
+2026-09-06T17:41:31.588+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/products/54/details
+2026-09-06T17:41:31.590+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:31.591+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/products/54/details
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        c1_0.id,
+        c1_0.description,
+        c1_0.name,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        p1_0.id=?
+2026-09-06T17:41:33.460+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/6
+2026-09-06T17:41:33.461+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:33.461+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/6
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:41:33.470+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/6
+2026-09-06T17:41:33.471+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:33.472+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/6
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:41:36.365+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/5
+2026-09-06T17:41:36.365+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/5
+2026-09-06T17:41:36.366+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:36.366+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:36.367+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/5
+2026-09-06T17:41:36.368+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/5
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:41:36.381+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/5
+2026-09-06T17:41:36.383+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:41:36.383+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/5
+2026-09-06T17:41:36.383+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/5
+2026-09-06T17:41:36.384+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:41:36.384+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/5
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:45:04.511+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/6
+2026-09-06T17:45:04.513+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:45:04.513+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/6
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:45:04.531+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/6
+2026-09-06T17:45:04.533+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:45:04.534+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/6
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:46:03.535+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/5
+2026-09-06T17:46:03.535+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/5
+2026-09-06T17:46:03.543+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:46:03.543+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:46:03.543+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/5
+2026-09-06T17:46:03.544+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/5
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T17:46:03.555+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/5
+2026-09-06T17:46:03.557+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:46:03.558+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/5
+2026-09-06T17:46:03.558+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/5
+2026-09-06T17:46:03.559+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T17:46:03.559+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/5
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T18:08:00.055+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/6
+2026-09-06T18:08:00.058+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T18:08:00.058+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/6
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T18:08:00.098+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/6
+2026-09-06T18:08:00.099+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T18:08:00.100+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/6
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T18:37:42.733+02:00  INFO 70368 --- [Maison de Renard] [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 58 class path changes (0 additions, 58 deletions, 0 modifications)
+2026-09-06T18:37:42.751+02:00  INFO 70368 --- [Maison de Renard] [      Thread-19] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-09-06T18:37:42.772+02:00  INFO 70368 --- [Maison de Renard] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-09-06T18:37:42.789+02:00  INFO 70368 --- [Maison de Renard] [      Thread-19] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T18:37:42.806+02:00  INFO 70368 --- [Maison de Renard] [      Thread-19] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown initiated...
+2026-09-06T18:37:42.814+02:00  INFO 70368 --- [Maison de Renard] [      Thread-19] com.zaxxer.hikari.HikariDataSource       : HikariPool-5 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2026-09-06T18:37:43.268+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Starting MaisonDeRenardApplication using Java 25.0.2 with PID 70368 (C:\Users\38972\Desktop\Timski\MaisonDeRenard\Backend\target\classes started by 38972 in C:\Users\38972\Desktop\Timski\MaisonDeRenard\Backend)
+2026-09-06T18:37:43.268+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Running with Spring Boot v3.5.6, Spring v6.2.11
+2026-09-06T18:37:43.269+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : No active profile set, falling back to 1 default profile: "default"
+2026-09-06T18:37:43.673+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-06T18:37:43.683+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 9 ms. Found 0 JPA repository interfaces.
+2026-09-06T18:37:43.914+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-09-06T18:37:43.919+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-06T18:37:43.920+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-09-06T18:37:43.959+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-06T18:37:43.960+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 687 ms
+2026-09-06T18:37:44.046+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-06T18:37:44.051+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-09-06T18:37:44.076+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-06T18:37:44.080+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Starting...
+2026-09-06T18:37:44.149+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-6 - Added connection org.postgresql.jdbc.PgConnection@76086ea7
+2026-09-06T18:37:44.150+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Start completed.
+2026-09-06T18:37:44.167+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-06T18:37:44.169+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-6)']
+	Database driver: undefined/unknown
+	Database version: 18.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-06T18:37:44.202+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-06T18:37:44.203+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T18:37:44.259+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-06T18:37:44.506+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: cc54bc18-1756-45f9-953e-676fb9a1d450
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-09-06T18:37:44.507+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-09-06T18:37:44.527+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CsrfFilter, LogoutFilter, UsernamePasswordAuthenticationFilter, DefaultResourcesFilter, DefaultLoginPageGeneratingFilter, DefaultLogoutPageGeneratingFilter, BasicAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-09-06T18:37:44.557+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-09-06T18:37:44.572+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-09-06T18:37:44.577+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Started MaisonDeRenardApplication in 1.401 seconds (process running for 114477.489)
+2026-09-06T18:37:44.579+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+   SpringBootWebSecurityConfiguration.SecurityFilterChainConfiguration matched:
+      - AllNestedConditions 2 matched 0 did not; NestedCondition on DefaultWebSecurityCondition.Beans @ConditionalOnMissingBean (types: org.springframework.security.web.SecurityFilterChain; SearchStrategy: all) did not find any beans; NestedCondition on DefaultWebSecurityCondition.Classes @ConditionalOnClass found required classes 'org.springframework.security.web.SecurityFilterChain', 'org.springframework.security.config.annotation.web.builders.HttpSecurity' (DefaultWebSecurityCondition)
+
+   SpringBootWebSecurityConfiguration.WebSecurityEnablerConfiguration matched:
+      - @ConditionalOnClass found required class 'org.springframework.security.config.annotation.web.configuration.EnableWebSecurity' (OnClassCondition)
+      - @ConditionalOnMissingBean (names: springSecurityFilterChain; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   UserDetailsServiceAutoConfiguration matched:
+      - @ConditionalOnClass found required class 'org.springframework.security.authentication.AuthenticationManager' (OnClassCondition)
+      - found 'session' scope (OnWebApplicationCondition)
+      - AnyNestedCondition 1 matched 2 did not; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.PasswordConfigured @ConditionalOnProperty (spring.security.user.password) did not find property 'spring.security.user.password'; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.NameConfigured @ConditionalOnProperty (spring.security.user.name) did not find property 'spring.security.user.name'; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.MissingAlternative @ConditionalOnMissingClass did not find unwanted classes 'org.springframework.security.oauth2.client.registration.ClientRegistrationRepository', 'org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector', 'org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository' (UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured)
+      - @ConditionalOnBean (types: org.springframework.security.config.ObjectPostProcessor; SearchStrategy: all) found beans 'objectPostProcessor', 'webAuthorizationManagerPostProcessor', 'filterChainDecoratorPostProcessor', 'authenticationManagerPostProcessor'; @ConditionalOnMissingBean (types: org.springframework.security.authentication.AuthenticationManager,org.springframework.security.authentication.AuthenticationProvider,org.springframework.security.core.userdetails.UserDetailsService,org.springframework.security.authentication.AuthenticationManagerResolver,?; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+
+Negative matches:
+-----------------
+
+    None
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-09-06T18:37:46.402+02:00  INFO 70368 --- [Maison de Renard] [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 58 class path changes (58 additions, 0 deletions, 0 modifications)
+2026-09-06T18:37:46.404+02:00  INFO 70368 --- [Maison de Renard] [      Thread-23] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-09-06T18:37:46.413+02:00  INFO 70368 --- [Maison de Renard] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-09-06T18:37:46.415+02:00  INFO 70368 --- [Maison de Renard] [      Thread-23] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T18:37:46.416+02:00  INFO 70368 --- [Maison de Renard] [      Thread-23] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown initiated...
+2026-09-06T18:37:46.417+02:00  INFO 70368 --- [Maison de Renard] [      Thread-23] com.zaxxer.hikari.HikariDataSource       : HikariPool-6 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2026-09-06T18:37:46.533+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Starting MaisonDeRenardApplication using Java 25.0.2 with PID 70368 (C:\Users\38972\Desktop\Timski\MaisonDeRenard\Backend\target\classes started by 38972 in C:\Users\38972\Desktop\Timski\MaisonDeRenard\Backend)
+2026-09-06T18:37:46.533+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Running with Spring Boot v3.5.6, Spring v6.2.11
+2026-09-06T18:37:46.533+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : No active profile set, falling back to 1 default profile: "default"
+2026-09-06T18:37:46.793+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-06T18:37:46.833+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 38 ms. Found 5 JPA repository interfaces.
+2026-09-06T18:37:46.992+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-09-06T18:37:46.993+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-06T18:37:46.994+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-09-06T18:37:47.019+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-06T18:37:47.021+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 486 ms
+2026-09-06T18:37:47.078+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-06T18:37:47.082+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-09-06T18:37:47.093+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-06T18:37:47.094+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Starting...
+2026-09-06T18:37:47.145+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-7 - Added connection org.postgresql.jdbc.PgConnection@6fd960ff
+2026-09-06T18:37:47.145+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Start completed.
+2026-09-06T18:37:47.155+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-06T18:37:47.157+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-7)']
+	Database driver: undefined/unknown
+	Database version: 18.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-06T18:37:47.391+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-06T18:37:47.692+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T18:37:47.793+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] c.e.m.web.filters.JwtFilter              : Filter 'jwtFilter' configured for use
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.password,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.password,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        categories c1_0
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.name=?
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.name=?
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2026-09-06T18:37:48.072+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] o.s.s.a.h.RoleHierarchyImpl              : buildRolesReachableInOneOrMoreStepsMap() - From role ROLE_ADMIN one can reach [ROLE_CUSTOMER] in one or more steps.
+2026-09-06T18:37:48.085+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-06T18:37:48.241+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-09-06T18:37:48.309+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-09-06T18:37:48.448+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-09-06T18:37:48.463+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-09-06T18:37:48.466+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Started MaisonDeRenardApplication in 1.972 seconds (process running for 114481.378)
+2026-09-06T18:37:48.467+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+    None
+
+
+Negative matches:
+-----------------
+
+   SpringBootWebSecurityConfiguration.SecurityFilterChainConfiguration:
+      Did not match:
+         - AllNestedConditions 1 matched 1 did not; NestedCondition on DefaultWebSecurityCondition.Beans @ConditionalOnMissingBean (types: org.springframework.security.web.SecurityFilterChain; SearchStrategy: all) found beans of type 'org.springframework.security.web.SecurityFilterChain' securityFilterChain; NestedCondition on DefaultWebSecurityCondition.Classes @ConditionalOnClass found required classes 'org.springframework.security.web.SecurityFilterChain', 'org.springframework.security.config.annotation.web.builders.HttpSecurity' (DefaultWebSecurityCondition)
+
+   SpringBootWebSecurityConfiguration.WebSecurityEnablerConfiguration:
+      Did not match:
+         - @ConditionalOnMissingBean (names: springSecurityFilterChain; SearchStrategy: all) found beans named springSecurityFilterChain (OnBeanCondition)
+      Matched:
+         - @ConditionalOnClass found required class 'org.springframework.security.config.annotation.web.configuration.EnableWebSecurity' (OnClassCondition)
+
+   UserDetailsServiceAutoConfiguration:
+      Did not match:
+         - @ConditionalOnMissingBean (types: org.springframework.security.authentication.AuthenticationManager,org.springframework.security.authentication.AuthenticationProvider,org.springframework.security.core.userdetails.UserDetailsService,org.springframework.security.authentication.AuthenticationManagerResolver,?; SearchStrategy: all) found beans of type 'org.springframework.security.core.userdetails.UserDetailsService' customUserDetailsService (OnBeanCondition)
+      Matched:
+         - @ConditionalOnClass found required class 'org.springframework.security.authentication.AuthenticationManager' (OnClassCondition)
+         - found 'session' scope (OnWebApplicationCondition)
+         - AnyNestedCondition 1 matched 2 did not; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.PasswordConfigured @ConditionalOnProperty (spring.security.user.password) did not find property 'spring.security.user.password'; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.NameConfigured @ConditionalOnProperty (spring.security.user.name) did not find property 'spring.security.user.name'; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.MissingAlternative @ConditionalOnMissingClass did not find unwanted classes 'org.springframework.security.oauth2.client.registration.ClientRegistrationRepository', 'org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector', 'org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository' (UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured)
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-09-06T18:46:42.580+02:00  INFO 70368 --- [Maison de Renard] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-06T18:46:42.581+02:00  INFO 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-09-06T18:46:42.583+02:00  INFO 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2026-09-06T18:46:42.586+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/5
+2026-09-06T18:46:42.589+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T18:46:42.590+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/5
+2026-09-06T18:46:42.595+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/5
+2026-09-06T18:46:42.596+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T18:46:42.597+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/5
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T18:46:42.626+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/5
+2026-09-06T18:46:42.627+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T18:46:42.627+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/5
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T18:46:42.651+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/5
+2026-09-06T18:46:42.653+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T18:46:42.653+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/5
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T19:11:00.387+02:00  INFO 70368 --- [Maison de Renard] [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 58 class path changes (0 additions, 58 deletions, 0 modifications)
+2026-09-06T19:11:00.390+02:00  INFO 70368 --- [Maison de Renard] [      Thread-27] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-09-06T19:11:00.398+02:00  INFO 70368 --- [Maison de Renard] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-09-06T19:11:00.400+02:00  INFO 70368 --- [Maison de Renard] [      Thread-27] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T19:11:00.401+02:00  INFO 70368 --- [Maison de Renard] [      Thread-27] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown initiated...
+2026-09-06T19:11:00.402+02:00  INFO 70368 --- [Maison de Renard] [      Thread-27] com.zaxxer.hikari.HikariDataSource       : HikariPool-7 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2026-09-06T19:11:00.507+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Starting MaisonDeRenardApplication using Java 25.0.2 with PID 70368 (C:\Users\38972\Desktop\Timski\MaisonDeRenard\Backend\target\classes started by 38972 in C:\Users\38972\Desktop\Timski\MaisonDeRenard\Backend)
+2026-09-06T19:11:00.507+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Running with Spring Boot v3.5.6, Spring v6.2.11
+2026-09-06T19:11:00.508+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : No active profile set, falling back to 1 default profile: "default"
+2026-09-06T19:11:00.683+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-06T19:11:00.688+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 4 ms. Found 0 JPA repository interfaces.
+2026-09-06T19:11:00.884+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-09-06T19:11:00.889+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-06T19:11:00.890+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-09-06T19:11:00.923+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-06T19:11:00.924+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 414 ms
+2026-09-06T19:11:00.994+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-06T19:11:00.999+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-09-06T19:11:01.011+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-06T19:11:01.014+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Starting...
+2026-09-06T19:11:01.081+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-8 - Added connection org.postgresql.jdbc.PgConnection@189611ae
+2026-09-06T19:11:01.082+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Start completed.
+2026-09-06T19:11:01.097+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-06T19:11:01.098+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-8)']
+	Database driver: undefined/unknown
+	Database version: 18.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-06T19:11:01.134+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-06T19:11:01.135+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T19:11:01.197+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-06T19:11:01.556+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] .s.s.UserDetailsServiceAutoConfiguration : 
+
+Using generated security password: 83b50e3d-9f41-4090-82bc-28f82ecf6ec5
+
+This generated password is for development use only. Your security configuration must be updated before running your application in production.
+
+2026-09-06T19:11:01.561+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name inMemoryUserDetailsManager
+2026-09-06T19:11:01.591+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CsrfFilter, LogoutFilter, UsernamePasswordAuthenticationFilter, DefaultResourcesFilter, DefaultLoginPageGeneratingFilter, DefaultLogoutPageGeneratingFilter, BasicAuthenticationFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-09-06T19:11:01.607+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-09-06T19:11:01.619+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-09-06T19:11:01.622+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Started MaisonDeRenardApplication in 1.153 seconds (process running for 116474.534)
+2026-09-06T19:11:01.623+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+   SpringBootWebSecurityConfiguration.SecurityFilterChainConfiguration matched:
+      - AllNestedConditions 2 matched 0 did not; NestedCondition on DefaultWebSecurityCondition.Beans @ConditionalOnMissingBean (types: org.springframework.security.web.SecurityFilterChain; SearchStrategy: all) did not find any beans; NestedCondition on DefaultWebSecurityCondition.Classes @ConditionalOnClass found required classes 'org.springframework.security.web.SecurityFilterChain', 'org.springframework.security.config.annotation.web.builders.HttpSecurity' (DefaultWebSecurityCondition)
+
+   SpringBootWebSecurityConfiguration.WebSecurityEnablerConfiguration matched:
+      - @ConditionalOnClass found required class 'org.springframework.security.config.annotation.web.configuration.EnableWebSecurity' (OnClassCondition)
+      - @ConditionalOnMissingBean (names: springSecurityFilterChain; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+   UserDetailsServiceAutoConfiguration matched:
+      - @ConditionalOnClass found required class 'org.springframework.security.authentication.AuthenticationManager' (OnClassCondition)
+      - found 'session' scope (OnWebApplicationCondition)
+      - AnyNestedCondition 1 matched 2 did not; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.PasswordConfigured @ConditionalOnProperty (spring.security.user.password) did not find property 'spring.security.user.password'; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.NameConfigured @ConditionalOnProperty (spring.security.user.name) did not find property 'spring.security.user.name'; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.MissingAlternative @ConditionalOnMissingClass did not find unwanted classes 'org.springframework.security.oauth2.client.registration.ClientRegistrationRepository', 'org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector', 'org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository' (UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured)
+      - @ConditionalOnBean (types: org.springframework.security.config.ObjectPostProcessor; SearchStrategy: all) found beans 'objectPostProcessor', 'webAuthorizationManagerPostProcessor', 'filterChainDecoratorPostProcessor', 'authenticationManagerPostProcessor'; @ConditionalOnMissingBean (types: org.springframework.security.authentication.AuthenticationManager,org.springframework.security.authentication.AuthenticationProvider,org.springframework.security.core.userdetails.UserDetailsService,org.springframework.security.authentication.AuthenticationManagerResolver,?; SearchStrategy: all) did not find any beans (OnBeanCondition)
+
+
+Negative matches:
+-----------------
+
+    None
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-09-06T19:11:03.444+02:00  INFO 70368 --- [Maison de Renard] [   File Watcher] rtingClassPathChangeChangedEventListener : Restarting due to 58 class path changes (58 additions, 0 deletions, 0 modifications)
+2026-09-06T19:11:03.448+02:00  INFO 70368 --- [Maison de Renard] [      Thread-31] o.s.b.w.e.tomcat.GracefulShutdown        : Commencing graceful shutdown. Waiting for active requests to complete
+2026-09-06T19:11:03.471+02:00  INFO 70368 --- [Maison de Renard] [tomcat-shutdown] o.s.b.w.e.tomcat.GracefulShutdown        : Graceful shutdown complete
+2026-09-06T19:11:03.477+02:00  INFO 70368 --- [Maison de Renard] [      Thread-31] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T19:11:03.480+02:00  INFO 70368 --- [Maison de Renard] [      Thread-31] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Shutdown initiated...
+2026-09-06T19:11:03.485+02:00  INFO 70368 --- [Maison de Renard] [      Thread-31] com.zaxxer.hikari.HikariDataSource       : HikariPool-8 - Shutdown completed.
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.6)
+
+2026-09-06T19:11:03.669+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Starting MaisonDeRenardApplication using Java 25.0.2 with PID 70368 (C:\Users\38972\Desktop\Timski\MaisonDeRenard\Backend\target\classes started by 38972 in C:\Users\38972\Desktop\Timski\MaisonDeRenard\Backend)
+2026-09-06T19:11:03.670+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Running with Spring Boot v3.5.6, Spring v6.2.11
+2026-09-06T19:11:03.671+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : No active profile set, falling back to 1 default profile: "default"
+2026-09-06T19:11:03.903+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-06T19:11:03.941+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 35 ms. Found 5 JPA repository interfaces.
+2026-09-06T19:11:04.098+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port 8080 (http)
+2026-09-06T19:11:04.099+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-09-06T19:11:04.099+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.46]
+2026-09-06T19:11:04.118+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2026-09-06T19:11:04.118+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 444 ms
+2026-09-06T19:11:04.170+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-06T19:11:04.173+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-09-06T19:11:04.181+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-06T19:11:04.182+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Starting...
+2026-09-06T19:11:04.227+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.pool.HikariPool        : HikariPool-9 - Added connection org.postgresql.jdbc.PgConnection@5c1b1768
+2026-09-06T19:11:04.228+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] com.zaxxer.hikari.HikariDataSource       : HikariPool-9 - Start completed.
+2026-09-06T19:11:04.237+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] org.hibernate.orm.deprecation            : HHH90000025: PostgreSQLDialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-06T19:11:04.239+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [Connecting through datasource 'HikariDataSource (HikariPool-9)']
+	Database driver: undefined/unknown
+	Database version: 18.2
+	Autocommit mode: undefined/unknown
+	Isolation level: undefined/unknown
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-09-06T19:11:04.448+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-06T19:11:04.718+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-06T19:11:04.804+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] c.e.m.web.filters.JwtFilter              : Filter 'jwtFilter' configured for use
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.password,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+Hibernate: 
+    select
+        u1_0.id,
+        u1_0.email,
+        u1_0.password,
+        u1_0.role,
+        u1_0.username 
+    from
+        users u1_0 
+    where
+        u1_0.username=?
+Hibernate: 
+    select
+        count(*) 
+    from
+        categories c1_0
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.name=?
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.name=?
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+Hibernate: 
+    select
+        p1_0.id 
+    from
+        products p1_0 
+    where
+        p1_0.name=? 
+    fetch
+        first ? rows only
+2026-09-06T19:11:05.290+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] o.s.s.a.h.RoleHierarchyImpl              : buildRolesReachableInOneOrMoreStepsMap() - From role ROLE_ADMIN one can reach [ROLE_CUSTOMER] in one or more steps.
+2026-09-06T19:11:05.310+02:00  WARN 70368 --- [Maison de Renard] [  restartedMain] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-06T19:11:05.524+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-09-06T19:11:05.586+02:00 DEBUG 70368 --- [Maison de Renard] [  restartedMain] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with filters: DisableEncodeUrlFilter, WebAsyncManagerIntegrationFilter, SecurityContextHolderFilter, HeaderWriterFilter, CorsFilter, LogoutFilter, JwtFilter, RequestCacheAwareFilter, SecurityContextHolderAwareRequestFilter, AnonymousAuthenticationFilter, SessionManagementFilter, ExceptionTranslationFilter, AuthorizationFilter
+2026-09-06T19:11:05.766+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.d.a.OptionalLiveReloadServer       : LiveReload server is running on port 35729
+2026-09-06T19:11:05.780+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port 8080 (http) with context path '/'
+2026-09-06T19:11:05.783+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] c.e.m.MaisonDeRenardApplication          : Started MaisonDeRenardApplication in 2.162 seconds (process running for 116478.696)
+2026-09-06T19:11:05.784+02:00  INFO 70368 --- [Maison de Renard] [  restartedMain] .ConditionEvaluationDeltaLoggingListener : Condition evaluation delta:
+
+
+==========================
+CONDITION EVALUATION DELTA
+==========================
+
+
+Positive matches:
+-----------------
+
+    None
+
+
+Negative matches:
+-----------------
+
+   SpringBootWebSecurityConfiguration.SecurityFilterChainConfiguration:
+      Did not match:
+         - AllNestedConditions 1 matched 1 did not; NestedCondition on DefaultWebSecurityCondition.Beans @ConditionalOnMissingBean (types: org.springframework.security.web.SecurityFilterChain; SearchStrategy: all) found beans of type 'org.springframework.security.web.SecurityFilterChain' securityFilterChain; NestedCondition on DefaultWebSecurityCondition.Classes @ConditionalOnClass found required classes 'org.springframework.security.web.SecurityFilterChain', 'org.springframework.security.config.annotation.web.builders.HttpSecurity' (DefaultWebSecurityCondition)
+
+   SpringBootWebSecurityConfiguration.WebSecurityEnablerConfiguration:
+      Did not match:
+         - @ConditionalOnMissingBean (names: springSecurityFilterChain; SearchStrategy: all) found beans named springSecurityFilterChain (OnBeanCondition)
+      Matched:
+         - @ConditionalOnClass found required class 'org.springframework.security.config.annotation.web.configuration.EnableWebSecurity' (OnClassCondition)
+
+   UserDetailsServiceAutoConfiguration:
+      Did not match:
+         - @ConditionalOnMissingBean (types: org.springframework.security.authentication.AuthenticationManager,org.springframework.security.authentication.AuthenticationProvider,org.springframework.security.core.userdetails.UserDetailsService,org.springframework.security.authentication.AuthenticationManagerResolver,?; SearchStrategy: all) found beans of type 'org.springframework.security.core.userdetails.UserDetailsService' customUserDetailsService (OnBeanCondition)
+      Matched:
+         - @ConditionalOnClass found required class 'org.springframework.security.authentication.AuthenticationManager' (OnClassCondition)
+         - found 'session' scope (OnWebApplicationCondition)
+         - AnyNestedCondition 1 matched 2 did not; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.PasswordConfigured @ConditionalOnProperty (spring.security.user.password) did not find property 'spring.security.user.password'; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.NameConfigured @ConditionalOnProperty (spring.security.user.name) did not find property 'spring.security.user.name'; NestedCondition on UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured.MissingAlternative @ConditionalOnMissingClass did not find unwanted classes 'org.springframework.security.oauth2.client.registration.ClientRegistrationRepository', 'org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector', 'org.springframework.security.saml2.provider.service.registration.RelyingPartyRegistrationRepository' (UserDetailsServiceAutoConfiguration.MissingAlternativeOrUserPropertiesConfigured)
+
+
+Exclusions:
+-----------
+
+    None
+
+
+Unconditional classes:
+----------------------
+
+    None
+
+
+
+2026-09-06T19:11:09.314+02:00  INFO 70368 --- [Maison de Renard] [nio-8080-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-09-06T19:11:09.314+02:00  INFO 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-09-06T19:11:09.316+02:00  INFO 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2026-09-06T19:11:09.320+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T19:11:09.320+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/3
+2026-09-06T19:11:09.320+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/2
+2026-09-06T19:11:09.322+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:11:09.322+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:11:09.322+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:11:09.324+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/1
+2026-09-06T19:11:09.324+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/3
+2026-09-06T19:11:09.324+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/2
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T19:11:09.403+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T19:11:09.402+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/3
+2026-09-06T19:11:09.403+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/2
+2026-09-06T19:11:09.410+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:11:09.410+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:11:09.410+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/1
+2026-09-06T19:11:09.410+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:11:09.411+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/2
+2026-09-06T19:11:09.411+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/3
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T19:11:12.210+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/1
+2026-09-06T19:11:12.212+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:11:12.213+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/1
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T19:11:12.225+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T19:11:12.226+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:11:12.227+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/1
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+2026-09-06T19:11:12.238+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/1
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T19:11:12.240+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:11:12.241+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/1
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T19:11:12.251+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T19:11:12.252+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:11:12.252+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/1
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T19:11:14.515+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Securing GET /api/products/19/details
+2026-09-06T19:11:14.519+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:11:14.520+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-1] o.s.security.web.FilterChainProxy        : Secured GET /api/products/19/details
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        c1_0.id,
+        c1_0.description,
+        c1_0.name,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        p1_0.id=?
+2026-09-06T19:11:14.569+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/products/19/details
+2026-09-06T19:11:14.570+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:11:14.571+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/products/19/details
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        c1_0.id,
+        c1_0.description,
+        c1_0.name,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        p1_0.id=?
+2026-09-06T19:33:09.943+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/1
+2026-09-06T19:33:09.943+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T19:33:09.956+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:33:09.956+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:33:09.957+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/1
+2026-09-06T19:33:09.957+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-8] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/1
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+2026-09-06T19:33:10.065+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Securing GET /api/categories/1
+2026-09-06T19:33:10.066+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:33:10.067+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-9] o.s.security.web.FilterChainProxy        : Secured GET /api/categories/1
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T19:33:10.106+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T19:33:10.107+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:33:10.107+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-3] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/1
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T19:33:11.739+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T19:33:11.739+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/3
+2026-09-06T19:33:11.739+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/2
+2026-09-06T19:33:11.741+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:33:11.741+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:33:11.741+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:33:11.742+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-4] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/2
+2026-09-06T19:33:11.742+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-5] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/3
+2026-09-06T19:33:11.742+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/1
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T19:33:11.771+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/1
+2026-09-06T19:33:11.771+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/2
+2026-09-06T19:33:11.771+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/3
+2026-09-06T19:33:11.773+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:33:11.773+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:33:11.773+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:33:11.773+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/1
+2026-09-06T19:33:11.774+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-6] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/2
+2026-09-06T19:33:11.774+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/3
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
+2026-09-06T19:57:33.426+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/Men
+2026-09-06T19:57:33.428+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:57:33.428+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/Men
+2026-09-06T19:57:33.451+02:00  WARN 70368 --- [Maison de Renard] [nio-8080-exec-2] .w.s.m.s.DefaultHandlerExceptionResolver : Resolved [org.springframework.web.method.annotation.MethodArgumentTypeMismatchException: Method parameter 'categoryId': Failed to convert value of type 'java.lang.String' to required type 'java.lang.Long'; For input string: "Men"]
+2026-09-06T19:57:33.455+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.security.web.FilterChainProxy        : Securing GET /error
+2026-09-06T19:57:33.456+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:57:33.458+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-2] o.s.s.w.a.Http403ForbiddenEntryPoint     : Pre-authenticated entry point called. Rejecting access
+2026-09-06T19:57:33.504+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Securing GET /api/categories
+2026-09-06T19:57:33.504+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:57:33.505+02:00 DEBUG 70368 --- [Maison de Renard] [io-8080-exec-10] o.s.security.web.FilterChainProxy        : Secured GET /api/categories
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0
+2026-09-06T19:57:41.504+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Securing GET /api/products/category/2
+2026-09-06T19:57:41.504+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.s.w.a.AnonymousAuthenticationFilter  : Set SecurityContextHolder to anonymous SecurityContext
+2026-09-06T19:57:41.505+02:00 DEBUG 70368 --- [Maison de Renard] [nio-8080-exec-7] o.s.security.web.FilterChainProxy        : Secured GET /api/products/category/2
+Hibernate: 
+    select
+        p1_0.id,
+        p1_0.category_id,
+        p1_0.color,
+        p1_0.description,
+        p1_0.gender,
+        p1_0.image_url,
+        p1_0.material,
+        p1_0.name,
+        p1_0.price,
+        p1_0.quantity,
+        p1_0.season,
+        p1_0.size,
+        p1_0.style 
+    from
+        products p1_0 
+    left join
+        categories c1_0 
+            on c1_0.id=p1_0.category_id 
+    where
+        c1_0.id=?
+Hibernate: 
+    select
+        c1_0.id,
+        c1_0.description,
+        c1_0.name 
+    from
+        categories c1_0 
+    where
+        c1_0.id=?
