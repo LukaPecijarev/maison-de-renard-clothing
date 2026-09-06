@@ -57,7 +57,7 @@ const ProductsPage = () => {
         } else if (seasonParam) {
             // Set default category data for season
             setCategoryData({
-                name: 'Fall/Winter 2025-2026',
+                name: 'Fall/Winter 2026/2027',
                 description: 'Discover our latest Fall/Winter collection featuring timeless pieces crafted from the finest materials.'
             });
         }

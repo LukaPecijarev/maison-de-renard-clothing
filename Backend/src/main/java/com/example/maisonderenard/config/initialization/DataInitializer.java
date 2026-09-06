@@ -72,7 +72,7 @@ public class DataInitializer {
                 "Maison de Renard's curated selection of gifts embodies timeless elegance and understated luxury. From exquisitely crafted scarves and cashmere accessories to refined leather pieces and delicate silks, each item is designed to delight the senses and leave a lasting impression. Thoughtfully presented, these treasures reflect the Maison's dedication to artistry, making every gift a gesture of refined taste and enduring sophistication.");
         Category essentials = new Category(null, "Essentials",
                 "Timeless wardrobe staples for everyday elegance.");
-        Category fallWinter = new Category(null, "Fall/Winter 2025",
+        Category fallWinter = new Category(null, "Fall/Winter 2026/2027",
                 "Discover our latest Fall/Winter collection featuring timeless pieces crafted from the finest materials.");
         Category specialOffers = new Category(null, "Special Offers",
                 "Exclusive selections at exceptional value — timeless luxury made accessible for a limited time.");

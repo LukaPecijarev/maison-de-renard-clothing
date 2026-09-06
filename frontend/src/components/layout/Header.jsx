@@ -29,7 +29,7 @@ const Header = () => {
     const { isAuthenticated, logout } = useAuth();
 
     const navLinks = [
-        { label: 'Spring/Summer 2026', to: '/products?category=5' },
+        { label: 'Fall/Winter 2026/2027', to: '/products?category=5' },
         { label: 'Essentials', to: '/products?category=4' },
         { label: 'Women', to: '/products?category=1' },
         { label: 'Men', to: '/products?category=2' },
@@ -295,7 +295,7 @@ const Header = () => {
                                     '&::after': { ...navButtonSx['&::after'], backgroundColor: '#a0826d' },
                                     '&:hover': { backgroundColor: 'transparent', color: '#6d5d3b' },
                                 }}>
-                                    Spring/Summer 2026
+                                    Fall/Winter 2026/2027
                                 </Button>
                                 <Button onClick={() => navigate('/products?category=4')} sx={navButtonSx}>
                                     Essentials
