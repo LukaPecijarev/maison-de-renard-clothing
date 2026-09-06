@@ -8,10 +8,9 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import axiosInstance from '../axios/axios';
 
 const ChatBot = () => {
-    const [isOpen, setIsOpen] = useState(() => {
-        const saved = localStorage.getItem('chatbotOpen');
-        return saved ? JSON.parse(saved) : false;
-    });
+    // Always starts open on a fresh page load/refresh, rather than
+    // remembering whether it was closed last time.
+    const [isOpen, setIsOpen] = useState(true);
 
     const [messages, setMessages] = useState(() => {
         const saved = localStorage.getItem('chatbotMessages');
@@ -29,10 +28,6 @@ const ChatBot = () => {
     const [isAnimating, setIsAnimating] = useState(false);
     const [isClosing, setIsClosing] = useState(false);
     const messagesEndRef = useRef(null);
-
-    useEffect(() => {
-        localStorage.setItem('chatbotOpen', JSON.stringify(isOpen));
-    }, [isOpen]);
 
     useEffect(() => {
         localStorage.setItem('chatbotMessages', JSON.stringify(messages));
@@ -138,10 +133,10 @@ const ChatBot = () => {
                     onClick={handleToggleChat}
                     sx={{
                         position: 'fixed',
-                        bottom: 24,
-                        right: 24,
-                        width: 64,
-                        height: 64,
+                        bottom: { xs: 16, sm: 24 },
+                        right: { xs: 16, sm: 24 },
+                        width: { xs: 56, sm: 64 },
+                        height: { xs: 56, sm: 64 },
                         backgroundColor: '#d4b896',
                         color: '#ffffff',
                         boxShadow: '0 6px 24px rgba(212, 184, 150, 0.45)',
@@ -168,14 +163,17 @@ const ChatBot = () => {
                     elevation={8}
                     sx={{
                         position: 'fixed',
-                        bottom: 24,
-                        right: 24,
-                        width: 380,
-                        height: 550,
+                        bottom: { xs: 0, sm: 24 },
+                        right: { xs: 0, sm: 24 },
+                        left: { xs: 0, sm: 'auto' },
+                        top: { xs: 56, sm: 'auto' },
+                        width: { xs: '100%', sm: 350 },
+                        height: { xs: 'calc(100% - 56px)', sm: 490 },
+                        maxHeight: { xs: 'calc(100% - 56px)', sm: 490 },
                         display: 'flex',
                         flexDirection: 'column',
                         backgroundColor: '#ffffff',
-                        borderRadius: '20px',
+                        borderRadius: { xs: '20px 20px 0 0', sm: '20px' },
                         overflow: 'hidden',
                         boxShadow: '0 12px 40px rgba(0, 0, 0, 0.15)',
                         border: '1px solid rgba(212, 184, 150, 0.25)',
@@ -197,49 +195,49 @@ const ChatBot = () => {
                     <Box sx={{
                         background: 'linear-gradient(135deg, #d4b896 0%, #c4a886 100%)',
                         color: '#ffffff',
-                        p: 2,
+                        p: 1.25,
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
                     }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                            <SmartToyOutlinedIcon sx={{ fontSize: 24 }} />
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <SmartToyOutlinedIcon sx={{ fontSize: 20 }} />
                             <Box>
                                 <Typography sx={{
                                     fontFamily: '"Cormorant Garamond", serif',
-                                    fontSize: '1.1rem', fontWeight: 500, letterSpacing: '0.05em',
+                                    fontSize: '0.95rem', fontWeight: 500, letterSpacing: '0.05em',
                                 }}>
                                     Maison Assistant
                                 </Typography>
                                 <Typography sx={{
                                     fontFamily: '"Lato", sans-serif',
-                                    fontSize: '0.7rem', opacity: 0.9, letterSpacing: '0.05em',
+                                    fontSize: '0.65rem', opacity: 0.9, letterSpacing: '0.05em',
                                 }}>
                                     Powered by Claude AI
                                 </Typography>
                             </Box>
                         </Box>
-                        <Box sx={{ display: 'flex', gap: 0.5 }}>
+                        <Box sx={{ display: 'flex', gap: 0.25 }}>
                             <Tooltip title="Clear Chat" placement="bottom">
-                                <IconButton onClick={handleClearChat} sx={{
+                                <IconButton size="small" onClick={handleClearChat} sx={{
                                     color: '#ffffff',
                                     '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
                                 }}>
-                                    <DeleteOutlineIcon sx={{ fontSize: 20 }} />
+                                    <DeleteOutlineIcon sx={{ fontSize: 18 }} />
                                 </IconButton>
                             </Tooltip>
-                            <IconButton onClick={handleToggleChat} sx={{
+                            <IconButton size="small" onClick={handleToggleChat} sx={{
                                 color: '#ffffff',
                                 '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
                             }}>
-                                <CloseIcon />
+                                <CloseIcon sx={{ fontSize: 18 }} />
                             </IconButton>
                         </Box>
                     </Box>
 
                     {/* Messages */}
                     <Box sx={{
-                        flex: 1, overflowY: 'auto', p: 2,
+                        flex: 1, overflowY: 'auto', p: 1.5,
                         backgroundColor: '#f5f1e8',
                         display: 'flex', flexDirection: 'column', gap: 1.5,
                     }}>
@@ -248,8 +246,8 @@ const ChatBot = () => {
                                 <Box sx={{ display: 'flex', justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start' }}>
                                     <Box sx={{
                                         maxWidth: '75%',
-                                        p: 1.5,
-                                        borderRadius: message.role === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+                                        p: 1.1,
+                                        borderRadius: message.role === 'user' ? '16px 16px 4px 16px' : '16px 16px 16px 4px',
                                         backgroundColor: message.role === 'user' ? '#d4b896' : '#ffffff',
                                         color: message.role === 'user' ? '#ffffff' : '#2c2c2c',
                                         boxShadow: '0 2px 12px rgba(0, 0, 0, 0.08)',
@@ -257,7 +255,7 @@ const ChatBot = () => {
                                     }}>
                                         <Typography sx={{
                                             fontFamily: '"Lato", sans-serif',
-                                            fontSize: '0.875rem', lineHeight: 1.6, whiteSpace: 'pre-wrap',
+                                            fontSize: '0.8rem', lineHeight: 1.5, whiteSpace: 'pre-wrap',
                                         }}>
                                             {message.content}
                                         </Typography>
@@ -335,12 +333,13 @@ const ChatBot = () => {
 
                     {/* Input */}
                     <Box sx={{
-                        p: 2, backgroundColor: '#ffffff',
+                        p: 1.25, backgroundColor: '#ffffff',
                         borderTop: '1px solid rgba(212, 184, 150, 0.15)',
                         display: 'flex', gap: 1,
                     }}>
                         <TextField
                             fullWidth multiline maxRows={3}
+                            size="small"
                             value={input}
                             onChange={(e) => setInput(e.target.value)}
                             onKeyPress={handleKeyPress}
@@ -349,7 +348,7 @@ const ChatBot = () => {
                             sx={{
                                 '& .MuiOutlinedInput-root': {
                                     fontFamily: '"Lato", sans-serif',
-                                    fontSize: '0.875rem', borderRadius: '16px',
+                                    fontSize: '0.8rem', borderRadius: '14px',
                                     '& fieldset': { borderColor: 'rgba(212, 184, 150, 0.25)', borderWidth: '1.5px' },
                                     '&:hover fieldset': { borderColor: '#d4b896' },
                                     '&.Mui-focused fieldset': { borderColor: '#c4a886', borderWidth: '2px' },
@@ -361,7 +360,7 @@ const ChatBot = () => {
                             disabled={!input.trim() || loading}
                             sx={{
                                 backgroundColor: '#d4b896', color: '#ffffff',
-                                width: 48, height: 48,
+                                width: 40, height: 40,
                                 '&:hover': { backgroundColor: '#c4a886', transform: 'scale(1.05)' },
                                 '&.Mui-disabled': {
                                     backgroundColor: 'rgba(212, 184, 150, 0.3)',
@@ -369,7 +368,7 @@ const ChatBot = () => {
                                 },
                             }}
                         >
-                            <SendIcon />
+                            <SendIcon sx={{ fontSize: 20 }} />
                         </IconButton>
                     </Box>
                 </Paper>

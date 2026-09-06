@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, Button, CircularProgress, Snackbar, Alert } from '@mui/material';
+import { Container, Typography, Box, Button, IconButton, Skeleton, Snackbar, Alert } from '@mui/material';
 import { useParams, useNavigate } from 'react-router-dom';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import useProductDetails from '../hooks/useProductDetails';
 import useOrder from '../hooks/useOrder';
 import useAuth from '../hooks/useAuth';
+import useWishlist from '../hooks/useWishlist';
+import RecentlyViewed from '../components/RecentlyViewed';
+import ProductImageZoom from '../components/ProductImageZoom';
 
 
 const ProductDetailsPage = () => {
@@ -12,35 +17,47 @@ const ProductDetailsPage = () => {
     const navigate = useNavigate();
     const { isAuthenticated } = useAuth();
     const { addToCart } = useOrder();
+    const { isInWishlist, toggleWishlist } = useWishlist();
     const { product, loading } = useProductDetails(id);
     const [selectedImage, setSelectedImage] = useState(0);
     const [selectedSize, setSelectedSize] = useState(null);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
 
-
     useEffect(() => {
         if (product) {
-            const token = localStorage.getItem('jwtToken');
-            if (token) {
-                const viewed = JSON.parse(localStorage.getItem('viewedProducts') || '[]');
-                const filtered = viewed.filter(p => p.id !== product.id);
-                const updated = [
-                    {
-                        id: product.id,
-                        name: product.name,
-                        imageUrl: product.imageUrl,
-                        price: product.price
-                    },
-                    ...filtered
-                ].slice(0, 10);
-                localStorage.setItem('viewedProducts', JSON.stringify(updated));
-            }
+            const viewed = JSON.parse(localStorage.getItem('viewedProducts') || '[]');
+            const filtered = viewed.filter(p => p.id !== product.id);
+            const updated = [
+                {
+                    id: product.id,
+                    name: product.name,
+                    imageUrl: product.imageUrl,
+                    price: product.price
+                },
+                ...filtered
+            ].slice(0, 10);
+            localStorage.setItem('viewedProducts', JSON.stringify(updated));
         }
     }, [product]);
+
     if (loading) {
+        const skeletonSx = { backgroundColor: 'rgba(212, 184, 150, 0.15)' };
         return (
-            <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh', backgroundColor: '#f5f1e8' }}>
-                <CircularProgress sx={{ color: '#2c2c2c' }} />
+            <Box sx={{ backgroundColor: '#f5f1e8', minHeight: '100vh', py: 6 }}>
+                <Container maxWidth="lg">
+                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 6 }}>
+                        <Skeleton variant="rectangular" sx={{ width: '100%', aspectRatio: '3/4', ...skeletonSx }} />
+                        <Box>
+                            <Skeleton variant="text" width="30%" sx={{ mb: 2, ...skeletonSx }} />
+                            <Skeleton variant="text" width="65%" height={56} sx={{ mb: 3, ...skeletonSx }} />
+                            <Skeleton variant="text" width="20%" height={40} sx={{ mb: 4, ...skeletonSx }} />
+                            <Skeleton variant="text" width="100%" sx={skeletonSx} />
+                            <Skeleton variant="text" width="100%" sx={skeletonSx} />
+                            <Skeleton variant="text" width="80%" sx={{ mb: 4, ...skeletonSx }} />
+                            <Skeleton variant="rectangular" height={56} sx={skeletonSx} />
+                        </Box>
+                    </Box>
+                </Container>
             </Box>
         );
     }
@@ -104,10 +121,9 @@ const ProductDetailsPage = () => {
                     <Box>
                         <Box sx={{
                             width: '100%', aspectRatio: '3/4',
-                            overflow: 'hidden', mb: 2, backgroundColor: '#ffffff',
+                            overflow: 'hidden', mb: 2, backgroundColor: '#faf6ee',
                         }}>
-                            <Box component="img" src={mainImage} alt={product.name}
-                                 sx={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                            <ProductImageZoom src={mainImage} alt={product.name} />
                         </Box>
 
                         {images.length > 1 && (
@@ -177,25 +193,53 @@ const ProductDetailsPage = () => {
                             {product.description?.replace(/DISCOUNT:\d+\s?/, '')}
                         </Typography>
 
-                        {/* Add to Cart Button */}
-                        <Button
-                            variant="contained" size="large" fullWidth
-                            startIcon={<ShoppingBagOutlinedIcon />}
-                            onClick={handleAddToCart}
-                            disabled={availableSizes.length > 0 && !selectedSize}
-                            sx={{
-                                backgroundColor: '#2c2c2c', color: '#ffffff',
-                                py: 1.8, fontSize: '0.9rem', fontWeight: 400,
-                                letterSpacing: '0.1em', fontFamily: '"Lato", sans-serif', mb: 3,
-                                '&:hover': { backgroundColor: '#1a1a1a' },
-                                '&.Mui-disabled': {
-                                    backgroundColor: 'rgba(44, 44, 44, 0.3)',
-                                    color: 'rgba(255, 255, 255, 0.5)',
-                                },
-                            }}
-                        >
-                            {availableSizes.length > 0 && !selectedSize ? 'SELECT A SIZE' : 'ADD TO CART'}
-                        </Button>
+                        {/* Add to Cart Button + Wishlist Toggle */}
+                        <Box sx={{ display: 'flex', gap: 1.5, mb: 3 }}>
+                            <Button
+                                variant="outlined" size="large" fullWidth
+                                startIcon={<ShoppingBagOutlinedIcon />}
+                                onClick={handleAddToCart}
+                                disabled={availableSizes.length > 0 && !selectedSize}
+                                sx={{
+                                    color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
+                                    py: 1.8, fontSize: '0.9rem', fontWeight: 400,
+                                    letterSpacing: '0.12em', fontFamily: '"Lato", sans-serif',
+                                    backgroundColor: 'transparent',
+                                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                                    position: 'relative', overflow: 'hidden', borderRadius: '6px',
+                                    '&::before': {
+                                        content: '""', position: 'absolute', top: 0, left: '-100%',
+                                        width: '100%', height: '100%', backgroundColor: '#f5ebe0',
+                                        transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
+                                    },
+                                    '&:hover': {
+                                        color: '#22223b', borderColor: '#f5ebe0',
+                                        transform: 'translateY(-2px)',
+                                        boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
+                                    },
+                                    '&:hover::before': { left: 0 },
+                                    '&.Mui-disabled': {
+                                        color: 'rgba(34, 34, 59, 0.35)',
+                                        borderColor: 'rgba(230, 184, 162, 0.4)',
+                                    },
+                                }}
+                            >
+                                {availableSizes.length > 0 && !selectedSize ? 'SELECT A SIZE' : 'ADD TO CART'}
+                            </Button>
+                            <IconButton
+                                onClick={() => toggleWishlist(product)}
+                                sx={{
+                                    border: '1px solid rgba(44, 44, 44, 0.2)',
+                                    borderRadius: '4px',
+                                    width: 56, height: 56, flexShrink: 0,
+                                    '&:hover': { backgroundColor: 'rgba(211, 47, 47, 0.06)' },
+                                }}
+                            >
+                                {isInWishlist(product.id)
+                                    ? <FavoriteIcon sx={{ color: '#d32f2f' }} />
+                                    : <FavoriteBorderIcon sx={{ color: '#2c2c2c' }} />}
+                            </IconButton>
+                        </Box>
 
                         {/* Size Selector */}
                         <Box sx={{ borderTop: '1px solid rgba(212, 184, 150, 0.3)', pt: 3, mb: 3 }}>
@@ -310,6 +354,10 @@ const ProductDetailsPage = () => {
                         </Box>
                     </Box>
                 </Box>
+            </Container>
+
+            <Container maxWidth="lg" sx={{ mt: 8 }}>
+                <RecentlyViewed excludeId={product.id} />
             </Container>
 
             <Snackbar

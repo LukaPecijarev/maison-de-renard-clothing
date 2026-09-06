@@ -1,7 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Container, Button } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
+
+const footerLinkSx = {
+    color: '#ffffff',
+    textDecoration: 'none',
+    fontSize: '0.875rem',
+    cursor: 'pointer',
+    '&:hover': { opacity: 0.8 },
+};
 
 const Footer = () => {
+    const [email, setEmail] = useState('');
+    const [subscribed, setSubscribed] = useState(false);
+
+    const handleSubscribe = (e) => {
+        e.preventDefault();
+        if (!/^\S+@\S+\.\S+$/.test(email)) return;
+        // No newsletter backend exists yet - this just gives the shopper
+        // a confirmation instead of silently doing nothing on submit.
+        setSubscribed(true);
+        setEmail('');
+    };
+
     return (
         <Box sx={{ backgroundColor: '#f5f1e8', pt: 6, pb: 4 }}>
             <Container maxWidth="xl">
@@ -44,44 +65,88 @@ const Footer = () => {
                             >
                                 Subscribe to receive updates on new arrivals and exclusive offers.
                             </Typography>
-                            <Box
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    borderBottom: '1px solid rgba(255, 255, 255, 0.5)',
-                                    pb: 1,
-                                    mb: 2,
-                                }}
-                            >
-                                <input
-                                    type="email"
-                                    placeholder="Your email address"
-                                    style={{
-                                        flex: 1,
-                                        border: 'none',
-                                        outline: 'none',
-                                        backgroundColor: 'transparent',
-                                        color: '#ffffff',
-                                        fontSize: '0.875rem',
-                                        fontFamily: '"Lato", sans-serif',
-                                    }}
-                                />
-                                <Button
+                            {subscribed ? (
+                                <Typography
                                     sx={{
-                                        minWidth: 'auto',
-                                        p: 0,
-                                        color: '#ffffff',
-                                        fontSize: '1.5rem',
+                                        fontSize: '0.875rem',
+                                        mb: 2,
+                                        py: 1,
+                                        fontFamily: '"Cormorant Garamond", serif',
+                                        fontStyle: 'italic',
+                                        opacity: 0,
+                                        animation: 'footerFadeIn 0.5s ease forwards',
+                                        '@keyframes footerFadeIn': {
+                                            from: { opacity: 0, transform: 'translateY(4px)' },
+                                            to: { opacity: 1, transform: 'translateY(0)' },
+                                        },
                                     }}
                                 >
-                                    →
-                                </Button>
-                            </Box>
+                                    Thank you — you're on the list.
+                                </Typography>
+                            ) : (
+                                <Box
+                                    component="form"
+                                    onSubmit={handleSubscribe}
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        borderBottom: '1px solid rgba(255, 255, 255, 0.5)',
+                                        pb: 1,
+                                        mb: 2,
+                                    }}
+                                >
+                                    <input
+                                        type="email"
+                                        className="footer-newsletter-input"
+                                        placeholder="Your email address"
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
+                                        required
+                                        style={{
+                                            flex: 1,
+                                            border: 'none',
+                                            outline: 'none',
+                                            backgroundColor: 'transparent',
+                                            color: '#ffffff',
+                                            fontSize: '0.875rem',
+                                            fontFamily: '"Lato", sans-serif',
+                                        }}
+                                    />
+                                    <Button
+                                        type="submit"
+                                        sx={{
+                                            minWidth: 'auto',
+                                            p: 0,
+                                            color: '#ffffff',
+                                            fontSize: '1.5rem',
+                                            transition: 'transform 0.2s ease',
+                                            '&:hover': { transform: 'translateX(4px)', backgroundColor: 'transparent' },
+                                        }}
+                                    >
+                                        →
+                                    </Button>
+                                </Box>
+                            )}
                             <style>
                                 {`
                                     input::placeholder {
                                         color: rgba(255, 255, 255, 0.7);
                                         opacity: 1;
+                                    }
+                                    /* Chrome/Edge paint autofilled inputs with an opaque
+                                       background no matter what we set inline - this keeps
+                                       the field transparent even once the browser fills it. */
+                                    .footer-newsletter-input:-webkit-autofill,
+                                    .footer-newsletter-input:-webkit-autofill:hover,
+                                    .footer-newsletter-input:-webkit-autofill:focus {
+                                        -webkit-text-fill-color: #ffffff;
+                                        /* A transparent shadow can't paint over the browser's
+                                           forced autofill background - it has to be an opaque
+                                           color matching the panel behind it (#a67c6d) so the
+                                           field still reads as "transparent" against it. */
+                                        -webkit-box-shadow: 0 0 0px 1000px #a67c6d inset;
+                                        box-shadow: 0 0 0px 1000px #a67c6d inset;
+                                        transition: background-color 9999s ease-in-out 0s;
                                     }
                                 `}
                             </style>
@@ -110,30 +175,10 @@ const Footer = () => {
                                 Get in touch
                             </Typography>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                                <Typography
-                                    component="a"
-                                    href="/contact"
-                                    sx={{
-                                        color: '#ffffff',
-                                        textDecoration: 'none',
-                                        fontSize: '0.875rem',
-                                        cursor: 'pointer',
-                                        '&:hover': { opacity: 0.8 },
-                                    }}
-                                >
+                                <Typography component={RouterLink} to="/contact" sx={footerLinkSx}>
                                     Contacts
                                 </Typography>
-                                <Typography
-                                    component="a"
-                                    href="/faq"
-                                    sx={{
-                                        color: '#ffffff',
-                                        textDecoration: 'none',
-                                        fontSize: '0.875rem',
-                                        cursor: 'pointer',
-                                        '&:hover': { opacity: 0.8 },
-                                    }}
-                                >
+                                <Typography component={RouterLink} to="/faq" sx={footerLinkSx}>
                                     FAQ
                                 </Typography>
                             </Box>
@@ -153,43 +198,13 @@ const Footer = () => {
                                 Company
                             </Typography>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                                <Typography
-                                    component="a"
-                                    href="/about"
-                                    sx={{
-                                        color: '#ffffff',
-                                        textDecoration: 'none',
-                                        fontSize: '0.875rem',
-                                        cursor: 'pointer',
-                                        '&:hover': { opacity: 0.8 },
-                                    }}
-                                >
+                                <Typography component={RouterLink} to="/about" sx={footerLinkSx}>
                                     Our Story
                                 </Typography>
-                                <Typography
-                                    component="a"
-                                    href="/craftsmanship"
-                                    sx={{
-                                        color: '#ffffff',
-                                        textDecoration: 'none',
-                                        fontSize: '0.875rem',
-                                        cursor: 'pointer',
-                                        '&:hover': { opacity: 0.8 },
-                                    }}
-                                >
+                                <Typography component={RouterLink} to="/craftsmanship" sx={footerLinkSx}>
                                     Craftsmanship
                                 </Typography>
-                                <Typography
-                                    component="a"
-                                    href="/sustainability"
-                                    sx={{
-                                        color: '#ffffff',
-                                        textDecoration: 'none',
-                                        fontSize: '0.875rem',
-                                        cursor: 'pointer',
-                                        '&:hover': { opacity: 0.8 },
-                                    }}
-                                >
+                                <Typography component={RouterLink} to="/sustainability" sx={footerLinkSx}>
                                     Sustainability
                                 </Typography>
                             </Box>
@@ -209,43 +224,13 @@ const Footer = () => {
                                 Services
                             </Typography>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                                <Typography
-                                    component="a"
-                                    href="/services"
-                                    sx={{
-                                        color: '#ffffff',
-                                        textDecoration: 'none',
-                                        fontSize: '0.875rem',
-                                        cursor: 'pointer',
-                                        '&:hover': { opacity: 0.8 },
-                                    }}
-                                >
+                                <Typography component={RouterLink} to="/services" sx={footerLinkSx}>
                                     All services
                                 </Typography>
-                                <Typography
-                                    component="a"
-                                    href="/returns"
-                                    sx={{
-                                        color: '#ffffff',
-                                        textDecoration: 'none',
-                                        fontSize: '0.875rem',
-                                        cursor: 'pointer',
-                                        '&:hover': { opacity: 0.8 },
-                                    }}
-                                >
+                                <Typography component={RouterLink} to="/returns" sx={footerLinkSx}>
                                     Return & exchange
                                 </Typography>
-                                <Typography
-                                    component="a"
-                                    href="/shipping"
-                                    sx={{
-                                        color: '#ffffff',
-                                        textDecoration: 'none',
-                                        fontSize: '0.875rem',
-                                        cursor: 'pointer',
-                                        '&:hover': { opacity: 0.8 },
-                                    }}
-                                >
+                                <Typography component={RouterLink} to="/shipping" sx={footerLinkSx}>
                                     Delivery & shipping
                                 </Typography>
                             </Box>
@@ -265,43 +250,13 @@ const Footer = () => {
                                 Legal & Cookies
                             </Typography>
                             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5 }}>
-                                <Typography
-                                    component="a"
-                                    href="/compliance"
-                                    sx={{
-                                        color: '#ffffff',
-                                        textDecoration: 'none',
-                                        fontSize: '0.875rem',
-                                        cursor: 'pointer',
-                                        '&:hover': { opacity: 0.8 },
-                                    }}
-                                >
+                                <Typography component={RouterLink} to="/compliance" sx={footerLinkSx}>
                                     Compliance
                                 </Typography>
-                                <Typography
-                                    component="a"
-                                    href="/legal"
-                                    sx={{
-                                        color: '#ffffff',
-                                        textDecoration: 'none',
-                                        fontSize: '0.875rem',
-                                        cursor: 'pointer',
-                                        '&:hover': { opacity: 0.8 },
-                                    }}
-                                >
+                                <Typography component={RouterLink} to="/legal" sx={footerLinkSx}>
                                     Legal
                                 </Typography>
-                                <Typography
-                                    component="a"
-                                    href="/privacy"
-                                    sx={{
-                                        color: '#ffffff',
-                                        textDecoration: 'none',
-                                        fontSize: '0.875rem',
-                                        cursor: 'pointer',
-                                        '&:hover': { opacity: 0.8 },
-                                    }}
-                                >
+                                <Typography component={RouterLink} to="/privacy" sx={footerLinkSx}>
                                     Privacy & Cookie notice
                                 </Typography>
                             </Box>
@@ -319,7 +274,7 @@ const Footer = () => {
                             borderTop: '1px solid rgba(255, 255, 255, 0.2)',
                         }}
                     >
-                        © 2025 Maison de Renard. All rights reserved.
+                        © {new Date().getFullYear()} Maison de Renard. All rights reserved.
                     </Typography>
                 </Box>
             </Container>

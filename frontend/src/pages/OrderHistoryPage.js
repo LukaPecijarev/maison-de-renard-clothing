@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Container, Typography, Box, CircularProgress, Divider } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import orderRepository from '../repository/orderRepository';
+import OrderStatusStepper from '../components/OrderStatusStepper';
+import Reveal from '../components/Reveal';
 
 const OrderHistoryPage = () => {
     const [orders, setOrders] = useState([]);
@@ -50,22 +52,27 @@ const OrderHistoryPage = () => {
                         No orders yet.
                     </Typography>
                 ) : (
-                    orders.map((order) => (
-                        <Box key={order.id} sx={{
-                            backgroundColor: '#ffffff',
+                    orders.map((order, index) => (
+                        <Reveal key={order.id} delay={index * 0.06}>
+                        <Box sx={{
+                            backgroundColor: '#fdfbf5',
                             mb: 3, p: 3,
                             boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
                             borderRadius: '4px',
                         }}>
                             {/* Order Header */}
-                            <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+                            <Box sx={{
+                                display: 'flex', flexDirection: { xs: 'column', sm: 'row' },
+                                justifyContent: 'space-between', alignItems: { xs: 'flex-start', sm: 'center' },
+                                gap: 1, mb: 2,
+                            }}>
                                 <Typography sx={{
                                     fontFamily: '"Cormorant Garamond", serif',
                                     fontSize: '1.2rem', color: '#2c2c2c',
                                 }}>
                                     Order #{order.id}
                                 </Typography>
-                                <Box sx={{ display: 'flex', gap: 3 }}>
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 3 }}>
                                     <Typography sx={{
                                         fontSize: '0.85rem', color: '#666',
                                         fontFamily: '"Lato", sans-serif',
@@ -88,6 +95,10 @@ const OrderHistoryPage = () => {
                                         €{order.totalPrice?.toFixed(0)}
                                     </Typography>
                                 </Box>
+                            </Box>
+
+                            <Box sx={{ mb: 3 }}>
+                                <OrderStatusStepper status={order.status} />
                             </Box>
 
                             <Divider sx={{ mb: 2, borderColor: 'rgba(212, 184, 150, 0.3)' }} />
@@ -127,6 +138,7 @@ const OrderHistoryPage = () => {
                                 );
                             })}
                         </Box>
+                        </Reveal>
                     ))
                 )}
             </Container>

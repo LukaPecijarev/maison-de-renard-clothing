@@ -88,13 +88,26 @@ const RegisterPage = () => {
                                        value={formData.confirmPassword} onChange={handleChange}
                                        required sx={fieldSx} />
 
-                            <Button type="submit" fullWidth variant="contained"
+                            <Button type="submit" fullWidth variant="outlined"
                                     sx={{
-                                        backgroundColor: '#2c2c2c', color: '#ffffff',
+                                        color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
+                                        backgroundColor: 'transparent',
                                         py: 1.8, fontSize: '0.85rem', fontWeight: 500,
                                         letterSpacing: '0.15em', textTransform: 'uppercase',
                                         fontFamily: '"Lato", sans-serif', mt: 1,
-                                        '&:hover': { backgroundColor: '#1a1a1a' },
+                                        position: 'relative', overflow: 'hidden', borderRadius: '6px',
+                                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                                        '&::before': {
+                                            content: '""', position: 'absolute', top: 0, left: '-100%',
+                                            width: '100%', height: '100%', backgroundColor: '#f5ebe0',
+                                            transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
+                                        },
+                                        '&:hover': {
+                                            color: '#22223b', borderColor: '#f5ebe0',
+                                            transform: 'translateY(-2px)',
+                                            boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
+                                        },
+                                        '&:hover::before': { left: 0 },
                                     }}>
                                 CREATE ACCOUNT
                             </Button>

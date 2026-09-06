@@ -1,19 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import { AppBar, Toolbar, Typography, Box, Button, InputBase, Badge } from '@mui/material';
+import {
+    AppBar, Toolbar, Typography, Box, Button, InputBase, Badge,
+    IconButton, Drawer, List, ListItemButton, ListItemText, Divider,
+    useMediaQuery,
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
+import MenuIcon from '@mui/icons-material/Menu';
 import useAuth from '../../hooks/useAuth';
 
 const Header = () => {
     const navigate = useNavigate();
+    const theme = useTheme();
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [searchParams, setSearchParams] = useSearchParams();
     const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
     const [cartCount, setCartCount] = useState(
         parseInt(localStorage.getItem('cartCount') || '0')
     );
+    const [wishlistCount, setWishlistCount] = useState(
+        JSON.parse(localStorage.getItem('wishlist') || '[]').length
+    );
+    const [mobileOpen, setMobileOpen] = useState(false);
     const { isAuthenticated, logout } = useAuth();
+
+    const navLinks = [
+        { label: 'Spring/Summer 2026', to: '/products?category=5' },
+        { label: 'Essentials', to: '/products?category=4' },
+        { label: 'Women', to: '/products?category=1' },
+        { label: 'Men', to: '/products?category=2' },
+        { label: 'Gifts', to: '/products?category=3' },
+        { label: 'Special Offers', to: '/special-offers' },
+    ];
+
+    const handleNavigate = (to) => {
+        setMobileOpen(false);
+        navigate(to);
+    };
 
     const [currentQuote, setCurrentQuote] = useState(0);
     const quotes = [
@@ -29,6 +56,14 @@ const Header = () => {
         };
         window.addEventListener('cartUpdated', updateCount);
         return () => window.removeEventListener('cartUpdated', updateCount);
+    }, []);
+
+    useEffect(() => {
+        const updateWishlistCount = () => {
+            setWishlistCount(JSON.parse(localStorage.getItem('wishlist') || '[]').length);
+        };
+        window.addEventListener('wishlistUpdated', updateWishlistCount);
+        return () => window.removeEventListener('wishlistUpdated', updateWishlistCount);
     }, []);
 
     useEffect(() => {
@@ -61,7 +96,7 @@ const Header = () => {
 
     const navButtonSx = {
         color: '#2c2c2c',
-        fontSize: '0.875rem',
+        fontSize: '0.78rem',
         fontFamily: '"Lato", sans-serif',
         letterSpacing: '0.05em',
         textTransform: 'uppercase',
@@ -82,6 +117,24 @@ const Header = () => {
         '&:hover::after': { width: '80%' },
     };
 
+    // Shared count-badge look for the wishlist/cart icons: a muted wine tone
+    // (rather than a stock alert-red) with a soft glow so it reads as a
+    // considered accent instead of an error/warning indicator.
+    const countBadgeSx = {
+        '& .MuiBadge-badge': {
+            backgroundColor: '#9c4a4a',
+            color: '#f5f1e8',
+            fontFamily: '"Cormorant Garamond", serif',
+            fontStyle: 'italic',
+            fontSize: '0.62rem',
+            fontWeight: 700,
+            minWidth: '14px',
+            height: '14px',
+            border: '1.5px solid #f5f1e8',
+            boxShadow: '0 2px 5px rgba(156, 74, 74, 0.45)',
+        },
+    };
+
     return (
         <Box>
             {/* Rotating Quotes Banner */}
@@ -92,6 +145,7 @@ const Header = () => {
                 position: 'relative',
                 height: '45px',
                 width: '100%',
+                px: 2,
             }}>
                 <Box sx={{
                     position: 'relative',
@@ -107,7 +161,7 @@ const Header = () => {
                         return (
                             <Typography key={index} sx={{
                                 position: 'absolute',
-                                fontSize: '0.875rem',
+                                fontSize: { xs: '0.7rem', sm: '0.875rem' },
                                 letterSpacing: '0.05em',
                                 fontFamily: '"Lato", sans-serif',
                                 color: '#2c2c2c',
@@ -142,151 +196,277 @@ const Header = () => {
                 {/* Logo */}
                 <Toolbar sx={{
                     display: 'flex',
-                    justifyContent: 'center',
+                    justifyContent: isMobile ? 'space-between' : 'center',
                     alignItems: 'center',
                     py: 2,
+                    px: { xs: 2, md: 3 },
                 }}>
+                    {isMobile && (
+                        <IconButton onClick={() => setMobileOpen(true)} sx={{ color: '#2c2c2c' }} aria-label="Open menu">
+                            <MenuIcon />
+                        </IconButton>
+                    )}
+
                     <Box sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: 2,
+                        gap: { xs: 1, md: 2 },
                         cursor: 'pointer',
                     }} onClick={() => navigate('/')}>
                         <Box component="img" src="/logo.png" alt="Maison de Renard"
-                             sx={{ height: 50, width: 'auto' }} />
+                             sx={{ height: { xs: 36, md: 50 }, width: 'auto' }} />
                         <Typography variant="h5" sx={{
                             fontFamily: '"Tangerine", cursive',
-                            fontSize: '2.5rem',
+                            fontSize: { xs: '1.6rem', md: '2.5rem' },
                             color: '#2c2c2c',
                             fontWeight: 400,
+                            whiteSpace: 'nowrap',
                         }}>
                             Maison de Renard
                         </Typography>
                     </Box>
-                </Toolbar>
 
-                {/* Navigation Bar */}
-                <Box sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    py: 1.5,
-                    px: 4,
-                    borderTop: '1px solid #e0d5c7',
-                }}>
-                    <Box sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 3,
-                        marginLeft: '-78px',
-                    }}>
-                        {/* Search */}
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                            <SearchIcon sx={{ fontSize: 16, color: '#2c2c2c', mr: 1 }} />
-                            <InputBase
-                                placeholder="Search..."
-                                value={searchQuery}
-                                onChange={(e) => setSearchQuery(e.target.value)}
-                                sx={{
-                                    width: '150px',
-                                    fontSize: '0.875rem',
-                                    fontFamily: '"Lato", sans-serif',
-                                    color: '#2c2c2c',
-                                    '& input': { padding: '4px 0' },
-                                }}
-                            />
-                        </Box>
-
-                        {/* Navigation Links */}
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0 }}>
-                            <Button onClick={() => navigate('/products?category=5')} sx={{
-                                ...navButtonSx,
-                                color: '#8b6f47',
-                                fontWeight: 500,
-                                '&::after': { ...navButtonSx['&::after'], backgroundColor: '#a0826d' },
-                                '&:hover': { backgroundColor: 'transparent', color: '#6d5d3b' },
-                            }}>
-                                Spring/Summer 2026
-                            </Button>
-                            <Button onClick={() => navigate('/products?category=4')} sx={navButtonSx}>
-                                Essentials
-                            </Button>
-                            <Button onClick={() => navigate('/products?category=1')} sx={navButtonSx}>
-                                Women
-                            </Button>
-                            <Button onClick={() => navigate('/products?category=2')} sx={navButtonSx}>
-                                Men
-                            </Button>
-                            <Button onClick={() => navigate('/products?category=3')} sx={navButtonSx}>
-                                Gifts
-                            </Button>
-                            <Button onClick={() => navigate('/special-offers')} sx={{
-                                ...navButtonSx,
-                                color: '#c62828',
-                                fontWeight: 500,
-                                '&::after': { ...navButtonSx['&::after'], backgroundColor: '#d32f2f' },
-                                '&:hover': { backgroundColor: 'transparent', color: '#d32f2f' },
-                            }}>
-                                Special Offers
-                            </Button>
-                        </Box>
-
-                        {/* Icons */}
-                        <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
-                            {/* Cart */}
-                            <Button onClick={() => navigate('/cart')} sx={{
-                                color: '#2c2c2c', minWidth: 'auto', p: 0.5,
-                                '&:hover': { backgroundColor: 'transparent' },
-                            }}>
-                                <Badge badgeContent={cartCount} sx={{
-                                    '& .MuiBadge-badge': {
-                                        backgroundColor: '#d32f2f', color: '#ffffff',
-                                        fontSize: '0.7rem', minWidth: '18px', height: '18px',
-                                    }
-                                }}>
+                    {isMobile && (
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                            <IconButton onClick={() => navigate('/wishlist')} sx={{ color: '#2c2c2c' }}>
+                                <Badge badgeContent={wishlistCount} sx={countBadgeSx}>
+                                    <FavoriteBorderIcon />
+                                </Badge>
+                            </IconButton>
+                            <IconButton onClick={() => navigate('/cart')} sx={{ color: '#2c2c2c' }}>
+                                <Badge badgeContent={cartCount} sx={countBadgeSx}>
                                     <ShoppingCartIcon />
                                 </Badge>
-                            </Button>
+                            </IconButton>
+                            <IconButton
+                                onClick={() => navigate(isAuthenticated() ? '/order-history' : '/login')}
+                                sx={{ color: '#2c2c2c' }}
+                            >
+                                <PersonIcon />
+                            </IconButton>
+                        </Box>
+                    )}
+                </Toolbar>
 
-                            {/* Person / Logout */}
-                            {isAuthenticated() ? (
-                                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                                    <Button onClick={() => navigate('/order-history')} sx={{
-                                        color: '#2c2c2c', minWidth: 'auto', p: 0.5,
-                                        '&:hover': { backgroundColor: 'transparent' },
-                                    }}>
-                                        <PersonIcon />
-                                    </Button>
-                                    <Button onClick={() => {
-                                        logout();
-                                        localStorage.setItem('cartCount', '0');
-                                        window.dispatchEvent(new Event('cartUpdated'));
-                                        navigate('/');
-                                    }} sx={{
-                                        color: '#8b7355',
-                                        fontSize: '0.75rem',
-                                        fontFamily: '"Lato", sans-serif',
-                                        letterSpacing: '0.08em',
-                                        textTransform: 'uppercase',
-                                        minWidth: 'auto',
-                                        p: 0.5,
-                                        '&:hover': { backgroundColor: 'transparent', color: '#2c2c2c' },
-                                    }}>
-                                        Logout
-                                    </Button>
-                                </Box>
-                            ) : (
-                                <Button onClick={() => navigate('/login')} sx={{
+                {/* Navigation Bar - desktop only, mobile uses the drawer instead */}
+                {!isMobile && (
+                    <Box sx={{
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        py: 1.5,
+                        px: 4,
+                        borderTop: '1px solid #e0d5c7',
+                        flexWrap: 'wrap',
+                    }}>
+                        <Box sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            flexWrap: 'wrap',
+                            justifyContent: 'center',
+                            gap: { md: 2, lg: 3 },
+                        }}>
+                            {/* Search */}
+                            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                <SearchIcon sx={{ fontSize: 16, color: '#2c2c2c', mr: 1 }} />
+                                <InputBase
+                                    placeholder="Search..."
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    sx={{
+                                        width: '150px',
+                                        fontSize: '1rem',
+                                        fontFamily: '"Cormorant Garamond", serif',
+                                        fontStyle: 'italic',
+                                        letterSpacing: '0.02em',
+                                        color: '#2c2c2c',
+                                        '& input': { padding: '4px 0' },
+                                        '& input::placeholder': { color: '#8b7355', opacity: 1 },
+                                    }}
+                                />
+                            </Box>
+
+                            {/* Navigation Links */}
+                            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 0 }}>
+                                <Button onClick={() => navigate('/products?category=5')} sx={{
+                                    ...navButtonSx,
+                                    color: '#8b6f47',
+                                    fontWeight: 500,
+                                    '&::after': { ...navButtonSx['&::after'], backgroundColor: '#a0826d' },
+                                    '&:hover': { backgroundColor: 'transparent', color: '#6d5d3b' },
+                                }}>
+                                    Spring/Summer 2026
+                                </Button>
+                                <Button onClick={() => navigate('/products?category=4')} sx={navButtonSx}>
+                                    Essentials
+                                </Button>
+                                <Button onClick={() => navigate('/products?category=1')} sx={navButtonSx}>
+                                    Women
+                                </Button>
+                                <Button onClick={() => navigate('/products?category=2')} sx={navButtonSx}>
+                                    Men
+                                </Button>
+                                <Button onClick={() => navigate('/products?category=3')} sx={navButtonSx}>
+                                    Gifts
+                                </Button>
+                                <Button onClick={() => navigate('/special-offers')} sx={{
+                                    ...navButtonSx,
+                                    color: '#c62828',
+                                    fontWeight: 500,
+                                    '&::after': { ...navButtonSx['&::after'], backgroundColor: '#d32f2f' },
+                                    '&:hover': { backgroundColor: 'transparent', color: '#d32f2f' },
+                                }}>
+                                    Special Offers
+                                </Button>
+                            </Box>
+
+                            {/* Icons */}
+                            <Box sx={{ display: 'flex', gap: 1.5, alignItems: 'center' }}>
+                                {/* Wishlist */}
+                                <Button onClick={() => navigate('/wishlist')} sx={{
                                     color: '#2c2c2c', minWidth: 'auto', p: 0.5,
                                     '&:hover': { backgroundColor: 'transparent' },
                                 }}>
-                                    <PersonIcon />
+                                    <Badge badgeContent={wishlistCount} sx={countBadgeSx}>
+                                        <FavoriteBorderIcon />
+                                    </Badge>
                                 </Button>
-                            )}
+
+                                {/* Cart */}
+                                <Button onClick={() => navigate('/cart')} sx={{
+                                    color: '#2c2c2c', minWidth: 'auto', p: 0.5,
+                                    '&:hover': { backgroundColor: 'transparent' },
+                                }}>
+                                    <Badge badgeContent={cartCount} sx={countBadgeSx}>
+                                        <ShoppingCartIcon />
+                                    </Badge>
+                                </Button>
+
+                                {/* Person / Logout */}
+                                {isAuthenticated() ? (
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                        <Button onClick={() => navigate('/order-history')} sx={{
+                                            color: '#2c2c2c', minWidth: 'auto', p: 0.5,
+                                            '&:hover': { backgroundColor: 'transparent' },
+                                        }}>
+                                            <PersonIcon />
+                                        </Button>
+                                        <Button onClick={() => {
+                                            logout();
+                                            localStorage.setItem('cartCount', '0');
+                                            window.dispatchEvent(new Event('cartUpdated'));
+                                            navigate('/');
+                                        }} sx={{
+                                            color: '#8b7355',
+                                            fontSize: '0.95rem',
+                                            fontFamily: '"Cormorant Garamond", serif',
+                                            fontStyle: 'italic',
+                                            letterSpacing: '0.03em',
+                                            minWidth: 'auto',
+                                            p: 0.5,
+                                            '&:hover': { backgroundColor: 'transparent', color: '#2c2c2c' },
+                                        }}>
+                                            Logout
+                                        </Button>
+                                    </Box>
+                                ) : (
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                        <Button onClick={() => navigate('/login')} sx={{
+                                            color: '#2c2c2c', minWidth: 'auto', p: 0.5,
+                                            '&:hover': { backgroundColor: 'transparent' },
+                                        }}>
+                                            <PersonIcon />
+                                        </Button>
+                                        <Button onClick={() => navigate('/login')} sx={{
+                                            color: '#8b7355',
+                                            fontSize: '0.95rem',
+                                            fontFamily: '"Cormorant Garamond", serif',
+                                            fontStyle: 'italic',
+                                            letterSpacing: '0.03em',
+                                            minWidth: 'auto',
+                                            p: 0.5,
+                                            '&:hover': { backgroundColor: 'transparent', color: '#2c2c2c' },
+                                        }}>
+                                            Login
+                                        </Button>
+                                    </Box>
+                                )}
+                            </Box>
                         </Box>
                     </Box>
-                </Box>
+                )}
             </AppBar>
+
+            {/* Mobile Navigation Drawer */}
+            <Drawer
+                anchor="left"
+                open={mobileOpen}
+                onClose={() => setMobileOpen(false)}
+                ModalProps={{ keepMounted: true }}
+            >
+                <Box sx={{ width: 280, backgroundColor: '#f5f1e8', height: '100%', pt: 2 }}>
+                    <Box sx={{ display: 'flex', alignItems: 'center', px: 2, mb: 1 }}>
+                        <SearchIcon sx={{ fontSize: 18, color: '#2c2c2c', mr: 1 }} />
+                        <InputBase
+                            placeholder="Search..."
+                            value={searchQuery}
+                            onChange={(e) => setSearchQuery(e.target.value)}
+                            sx={{
+                                flex: 1,
+                                fontSize: '1.05rem',
+                                fontFamily: '"Cormorant Garamond", serif',
+                                fontStyle: 'italic',
+                                color: '#2c2c2c',
+                                '& input': { padding: '6px 0' },
+                                '& input::placeholder': { color: '#8b7355', opacity: 1 },
+                            }}
+                        />
+                    </Box>
+                    <Divider sx={{ borderColor: '#e0d5c7', mb: 1 }} />
+                    <List>
+                        {navLinks.map((link) => (
+                            <ListItemButton key={link.to} onClick={() => handleNavigate(link.to)}>
+                                <ListItemText
+                                    primary={link.label}
+                                    primaryTypographyProps={{
+                                        fontFamily: '"Lato", sans-serif',
+                                        fontSize: '0.9rem',
+                                        letterSpacing: '0.05em',
+                                        textTransform: 'uppercase',
+                                        color: link.to === '/special-offers' ? '#c62828' : '#2c2c2c',
+                                    }}
+                                />
+                            </ListItemButton>
+                        ))}
+                    </List>
+                    <Divider sx={{ borderColor: '#e0d5c7', mb: 1 }} />
+                    <List>
+                        <ListItemButton onClick={() => handleNavigate('/wishlist')}>
+                            <ListItemText primary="Wishlist" primaryTypographyProps={{ fontFamily: '"Lato", sans-serif', fontSize: '0.9rem' }} />
+                        </ListItemButton>
+                        {isAuthenticated() && (
+                            <ListItemButton onClick={() => handleNavigate('/order-history')}>
+                                <ListItemText primary="Order History" primaryTypographyProps={{ fontFamily: '"Lato", sans-serif', fontSize: '0.9rem' }} />
+                            </ListItemButton>
+                        )}
+                        {isAuthenticated() ? (
+                            <ListItemButton onClick={() => {
+                                logout();
+                                localStorage.setItem('cartCount', '0');
+                                window.dispatchEvent(new Event('cartUpdated'));
+                                setMobileOpen(false);
+                                navigate('/');
+                            }}>
+                                <ListItemText primary="Logout" primaryTypographyProps={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic', fontSize: '1.05rem', color: '#8b7355' }} />
+                            </ListItemButton>
+                        ) : (
+                            <ListItemButton onClick={() => handleNavigate('/login')}>
+                                <ListItemText primary="Login" primaryTypographyProps={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic', fontSize: '1.05rem', color: '#8b7355' }} />
+                            </ListItemButton>
+                        )}
+                    </List>
+                </Box>
+            </Drawer>
         </Box>
     );
 };

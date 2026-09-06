@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+// In production (Vercel) this must be set as an environment variable
+// (REACT_APP_API_URL, e.g. https://your-backend.up.railway.app/api) -
+// CRA only inlines REACT_APP_* vars at build time, so it has to be set in
+// the Vercel project settings before deploying, not after. Falls back to
+// the local backend for `npm start`.
 const axiosInstance = axios.create({
-    baseURL: 'http://localhost:8080/api',
+    baseURL: process.env.REACT_APP_API_URL || 'http://localhost:8080/api',
     headers: {
         'Content-Type': 'application/json',
     },

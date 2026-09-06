@@ -16,6 +16,7 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from 'react-router-dom';
 import useOrder from '../hooks/useOrder';
 import useAuth from '../hooks/useAuth';
+import Reveal from '../components/Reveal';
 
 const CartPage = () => {
     const { order, loading, removeFromCart } = useOrder();
@@ -65,7 +66,7 @@ const CartPage = () => {
 
     return (
         <Box sx={{ backgroundColor: '#f5f1e8', minHeight: '100vh', py: 8 }}>
-            <Container maxWidth="xl">
+            <Reveal><Container maxWidth="xl">
                 {/* Header */}
                 <Box sx={{ textAlign: 'center', mb: 6 }}>
                     <ShoppingCartIcon sx={{ fontSize: 50, color: '#2c2c2c', mb: 2 }} />
@@ -89,17 +90,30 @@ const CartPage = () => {
                             variant="outlined"
                             onClick={() => navigate('/')}
                             sx={{
-                                color: '#2c2c2c', borderColor: '#e6ccb2',
+                                color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
                                 px: 6, py: 1.5, fontSize: '0.9rem', fontWeight: 400,
-                                letterSpacing: '0.1em',
-                                '&:hover': { borderColor: '#d4b896', backgroundColor: 'rgba(230, 204, 178, 0.1)' },
+                                letterSpacing: '0.15em', fontFamily: '"Lato", sans-serif',
+                                backgroundColor: 'transparent',
+                                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                                position: 'relative', overflow: 'hidden', borderRadius: '6px',
+                                '&::before': {
+                                    content: '""', position: 'absolute', top: 0, left: '-100%',
+                                    width: '100%', height: '100%', backgroundColor: '#f5ebe0',
+                                    transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
+                                },
+                                '&:hover': {
+                                    color: '#22223b', borderColor: '#f5ebe0',
+                                    transform: 'translateY(-2px)',
+                                    boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
+                                },
+                                '&:hover::before': { left: 0 },
                             }}
                         >
                             CONTINUE SHOPPING
                         </Button>
                     </Box>
                 ) : (
-                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: 4 }}>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '2fr 1fr' }, gap: { xs: 3, md: 4 } }}>
                         {/* Cart Items */}
                         <Box>
                             {cartItems.map((item) => {
@@ -110,16 +124,16 @@ const CartPage = () => {
 
                                 return (
                                     <Card key={item.id} sx={{
-                                        display: 'flex', mb: 3, backgroundColor: '#ffffff',
+                                        display: 'flex', mb: 3, backgroundColor: '#fdfbf5',
                                         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)', borderRadius: '4px',
                                     }}>
                                         <CardMedia
                                             component="img"
-                                            sx={{ width: 180, objectFit: 'cover' }}
+                                            sx={{ width: { xs: 110, sm: 180 }, objectFit: 'cover' }}
                                             image={imageUrl}
                                             alt={item.name}
                                         />
-                                        <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', p: 3 }}>
+                                        <CardContent sx={{ flex: 1, display: 'flex', flexDirection: 'column', p: { xs: 1.5, sm: 3 } }}>
                                             <Typography variant="h6" sx={{
                                                 fontFamily: '"Lato", sans-serif',
                                                 fontWeight: 400, fontSize: '1.1rem', mb: 1,
@@ -168,7 +182,7 @@ const CartPage = () => {
                         <Box>
                             <Card sx={{
                                 p: 4, position: 'sticky', top: 100,
-                                backgroundColor: '#ffffff',
+                                backgroundColor: '#fdfbf5',
                                 boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)', borderRadius: '4px',
                             }}>
                                 <Typography variant="h5" sx={{
@@ -215,13 +229,26 @@ const CartPage = () => {
                                 </Box>
 
                                 <Button
-                                    variant="contained" fullWidth size="large"
+                                    variant="outlined" fullWidth size="large"
                                     onClick={handleCheckout}
                                     sx={{
-                                        backgroundColor: '#2c2c2c', color: '#ffffff',
-                                        py: 1.5, mb: 2, fontSize: '0.9rem', fontWeight: 400,
-                                        letterSpacing: '0.1em',
-                                        '&:hover': { backgroundColor: '#1a1a1a' },
+                                        color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
+                                        backgroundColor: 'transparent',
+                                        py: 1.5, mb: 2, fontSize: '0.85rem', fontWeight: 500,
+                                        letterSpacing: '0.15em', fontFamily: '"Lato", sans-serif',
+                                        position: 'relative', overflow: 'hidden', borderRadius: '6px',
+                                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                                        '&::before': {
+                                            content: '""', position: 'absolute', top: 0, left: '-100%',
+                                            width: '100%', height: '100%', backgroundColor: '#f5ebe0',
+                                            transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
+                                        },
+                                        '&:hover': {
+                                            color: '#22223b', borderColor: '#f5ebe0',
+                                            transform: 'translateY(-2px)',
+                                            boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
+                                        },
+                                        '&:hover::before': { left: 0 },
                                     }}
                                 >
                                     PROCEED TO CHECKOUT
@@ -231,10 +258,23 @@ const CartPage = () => {
                                     variant="outlined" fullWidth
                                     onClick={() => navigate('/')}
                                     sx={{
-                                        color: '#2c2c2c', borderColor: '#e6ccb2',
+                                        color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
                                         py: 1.5, fontSize: '0.9rem', fontWeight: 400,
-                                        letterSpacing: '0.1em',
-                                        '&:hover': { borderColor: '#d4b896', backgroundColor: 'rgba(230, 204, 178, 0.1)' },
+                                        letterSpacing: '0.1em', fontFamily: '"Lato", sans-serif',
+                                        backgroundColor: 'transparent',
+                                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                                        position: 'relative', overflow: 'hidden', borderRadius: '6px',
+                                        '&::before': {
+                                            content: '""', position: 'absolute', top: 0, left: '-100%',
+                                            width: '100%', height: '100%', backgroundColor: '#f5ebe0',
+                                            transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
+                                        },
+                                        '&:hover': {
+                                            color: '#22223b', borderColor: '#f5ebe0',
+                                            transform: 'translateY(-2px)',
+                                            boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
+                                        },
+                                        '&:hover::before': { left: 0 },
                                     }}
                                 >
                                     CONTINUE SHOPPING
@@ -243,7 +283,7 @@ const CartPage = () => {
                         </Box>
                     </Box>
                 )}
-            </Container>
+            </Container></Reveal>
         </Box>
     );
 };

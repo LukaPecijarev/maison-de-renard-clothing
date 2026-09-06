@@ -202,7 +202,7 @@ const EditProductPage = () => {
                                        required multiline rows={4} sx={fieldSx} />
 
                             {/* Price and Quantity */}
-                            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3 }}>
+                            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 3 }}>
                                 <TextField fullWidth label="Price (€)" name="price" type="number"
                                            value={formData.price} onChange={handleChange}
                                            required inputProps={{ step: '0.01', min: '0' }} sx={fieldSx} />
@@ -228,7 +228,7 @@ const EditProductPage = () => {
                             </Typography>
 
                             {/* Material and Color */}
-                            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 3 }}>
+                            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 3 }}>
                                 <TextField fullWidth label="Material" name="material"
                                            value={formData.material} onChange={handleChange}
                                            placeholder="100% Italian Cashmere" sx={fieldSx} />
@@ -238,7 +238,7 @@ const EditProductPage = () => {
                             </Box>
 
                             {/* Season, Gender, Style */}
-                            <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 3 }}>
+                            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr 1fr' }, gap: 3 }}>
                                 <TextField fullWidth select label="Season" name="season"
                                            value={formData.season} onChange={handleChange} sx={fieldSx}>
                                     <MenuItem value=""><em>None</em></MenuItem>
@@ -287,7 +287,7 @@ const EditProductPage = () => {
                                        helperText="Optional - This image will show on hover" sx={fieldSx} />
 
                             {/* Buttons */}
-                            <Box sx={{ display: 'flex', gap: 2, mt: 4 }}>
+                            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 2, mt: 4 }}>
                                 <Button variant="outlined" fullWidth onClick={() => navigate(-1)}
                                         sx={{
                                             color: '#8b7355',
@@ -304,17 +304,26 @@ const EditProductPage = () => {
                                     Cancel
                                 </Button>
 
-                                <Button type="submit" variant="contained" fullWidth
+                                <Button type="submit" variant="outlined" fullWidth
                                         sx={{
-                                            backgroundColor: '#d4b896', color: '#ffffff',
+                                            color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
+                                            backgroundColor: 'transparent',
                                             py: 1.8, fontSize: '0.85rem', fontWeight: 500,
                                             letterSpacing: '0.15em', textTransform: 'uppercase',
                                             fontFamily: '"Lato", sans-serif',
-                                            boxShadow: '0 4px 12px rgba(212, 184, 150, 0.3)',
-                                            '&:hover': {
-                                                backgroundColor: '#c4a886',
-                                                boxShadow: '0 6px 16px rgba(196, 168, 134, 0.4)',
+                                            position: 'relative', overflow: 'hidden', borderRadius: '6px',
+                                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                                            '&::before': {
+                                                content: '""', position: 'absolute', top: 0, left: '-100%',
+                                                width: '100%', height: '100%', backgroundColor: '#f5ebe0',
+                                                transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
                                             },
+                                            '&:hover': {
+                                                color: '#22223b', borderColor: '#f5ebe0',
+                                                transform: 'translateY(-2px)',
+                                                boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
+                                            },
+                                            '&:hover::before': { left: 0 },
                                         }}>
                                     Update Product
                                 </Button>

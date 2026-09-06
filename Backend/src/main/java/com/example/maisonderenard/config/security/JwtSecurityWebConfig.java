@@ -1,6 +1,7 @@
 package com.example.maisonderenard.config.security;
 import org.springframework.http.HttpMethod;
 import com.example.maisonderenard.web.filters.JwtFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
@@ -28,6 +29,12 @@ public class JwtSecurityWebConfig {
 
     private final JwtFilter jwtFilter;
 
+    // Comma-separated list, e.g. "http://localhost:3000,https://your-app.vercel.app" -
+    // set via CORS_ALLOWED_ORIGINS on whatever host runs the backend (Railway/Render/etc.)
+    // so the deployed frontend's real origin can be allowed without another code change.
+    @Value("${cors.allowed-origins:http://localhost:3000}")
+    private String allowedOrigins;
+
     public JwtSecurityWebConfig(JwtFilter jwtFilter) {
         this.jwtFilter = jwtFilter;
     }
@@ -35,7 +42,12 @@ public class JwtSecurityWebConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();
-        corsConfiguration.setAllowedOrigins(List.of("http://localhost:3000"));
+        corsConfiguration.setAllowedOrigins(
+                java.util.Arrays.stream(allowedOrigins.split(","))
+                        .map(String::trim)
+                        .filter(origin -> !origin.isEmpty())
+                        .toList()
+        );
         corsConfiguration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         corsConfiguration.setAllowedHeaders(List.of("*"));
         corsConfiguration.setAllowCredentials(true);

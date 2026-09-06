@@ -51,6 +51,15 @@ public class DataInitializer {
             userRepository.save(customer);
         }
 
+        seedCatalog();
+        seedManOutfitPieces();
+        seedWomanOutfitPieces();
+    }
+
+    // Bulk catalog seed - only runs against a genuinely empty database (first
+    // ever run). Once any category exists this is skipped entirely, so it's
+    // safe to keep appending to it without duplicating existing rows.
+    private void seedCatalog() {
         if (categoryRepository.count() > 0) {
             return;
         }
@@ -182,6 +191,103 @@ public class DataInitializer {
         System.out.println("✅ Data initialization completed!");
     }
 
+    // The photographed "Man Outfit" look (coat/cardigan/shirt/trousers/hat).
+    // Runs on every startup - unlike seedCatalog() above it doesn't bail out
+    // just because categories already exist, so these appear even on a
+    // database that was already seeded before this batch was added. Each
+    // item is still only inserted once, guarded individually by name.
+    // Images live in frontend/public/products/men/ (served as static files,
+    // same convention as /logo.png and the homepage videos).
+    private void seedManOutfitPieces() {
+        Category men = categoryRepository.findByName("Men");
+        if (men == null) {
+            return; // shouldn't happen once seedCatalog() has run at least once
+        }
+
+        createDetailedProduct(
+                "Navy Wool Overcoat",
+                "A tailored navy overcoat in virgin wool, cut for a long, clean silhouette that layers effortlessly over knitwear.",
+                2899.99, 8,
+                // ManCoat5/6 (plain front/back, no model) lead the gallery so
+                // neither the default thumbnail nor the hover swap ever shows a
+                // person wearing it - that's reserved for ManOutfit.jpg alone.
+                // The styled shots still live later in the gallery for the
+                // product's own detail-page carousel.
+                "/products/men/ManCoat5.jpg,/products/men/ManCoat6.jpg,/products/men/ManCoat1.jpg,/products/men/ManCoat2.jpg,/products/men/ManCoat3.jpg,/products/men/ManCoat4.jpg,/products/men/ManCoat7.jpg,/products/men/ManCoat8.jpg",
+                men, "Navy", "Fall/Winter", "Virgin Wool", "Men", "Tailored", "S,M,L,XL,XXL");
+
+        createDetailedProduct(
+                "Cable Knit Wool Cardigan",
+                "A hand-finished cable knit cardigan in a rich brown wool, worn buttoned beneath a coat or on its own.",
+                1099.99, 12,
+                "/products/men/ManCardigan5.jpg,/products/men/ManCardigan6.jpg,/products/men/ManCardigan1.jpg,/products/men/ManCardigan2.jpg,/products/men/ManCardigan3.jpg,/products/men/ManCardigan4.jpg,/products/men/ManCardigan7.jpg",
+                men, "Brown", "Fall/Winter", "Wool", "Men", "Casual", "S,M,L,XL");
+
+        createDetailedProduct(
+                "Classic Cotton Shirt",
+                "A crisp white cotton shirt with a clean point collar, tailored to sit smoothly under a cardigan or coat.",
+                329.99, 20,
+                "/products/men/ManShirt5.jpg,/products/men/ManShirt6.jpg,/products/men/ManShirt1.jpg,/products/men/ManShirt2.jpg,/products/men/ManShirt3.jpg,/products/men/ManShirt4.jpg,/products/men/ManShirt7.jpg",
+                men, "White", "All Season", "Cotton", "Men", "Formal", "S,M,L,XL,XXL");
+
+        createDetailedProduct(
+                "Pleated Wool Trousers",
+                "Wide, pleated-front trousers in a soft wool blend, offering a relaxed drape with a refined finish.",
+                799.99, 15,
+                "/products/men/ManTrousers5.jpg,/products/men/ManTrousers6.jpg,/products/men/ManTrousers1.jpg,/products/men/ManTrousers2.jpg,/products/men/ManTrousers3.jpg,/products/men/ManTrousers4.jpg,/products/men/ManTrousers7.jpg",
+                men, "Beige", "Fall/Winter", "Wool", "Men", "Tailored", "S,M,L,XL");
+
+        createDetailedProduct(
+                "Wool Flat Cap",
+                "A classic wool flat cap that finishes the look with a quiet, understated touch.",
+                249.99, 25,
+                "/products/men/ManHat2.jpg,/products/men/ManHat4.jpg,/products/men/ManHat1.jpg,/products/men/ManHat3.jpg",
+                men, "Navy", "Fall/Winter", "Wool", "Men", "Casual", "S,M,L");
+    }
+
+    // The photographed "Woman's Look" (jacket/hat/trousers/shoes) - same
+    // convention as seedManOutfitPieces() above: runs every startup, each
+    // item guarded individually by name, images live in
+    // frontend/public/products/women/. Plain front/back shots (no model)
+    // lead each gallery, so neither the default thumbnail nor the hover
+    // swap ever shows the person wearing it - that's reserved for
+    // WomenFullLook.jpg alone. The styled shots still live later in the
+    // gallery for the product's own detail-page carousel.
+    private void seedWomanOutfitPieces() {
+        Category women = categoryRepository.findByName("Women");
+        if (women == null) {
+            return; // shouldn't happen once seedCatalog() has run at least once
+        }
+
+        createDetailedProduct(
+                "Tweed Stand-Collar Jacket",
+                "A brown herringbone tweed jacket with a clean stand collar and welt pockets, tailored for a sharp, structured line.",
+                1899.99, 10,
+                "/products/women/WomanCoat5.jpg,/products/women/WomanCoat6.jpg,/products/women/WomanCoat1.jpg,/products/women/WomanCoat2.jpg,/products/women/WomanCoat3.jpg,/products/women/WomanCoat4.jpg,/products/women/WomanCoat7.jpg",
+                women, "Brown", "Fall/Winter", "Wool Tweed", "Women", "Tailored", "XS,S,M,L,XL");
+
+        createDetailedProduct(
+                "Wide-Brim Wool Hat",
+                "A camel wool hat with a wide, softly curved brim and a long black ribbon tie for a finishing touch.",
+                399.99, 14,
+                "/products/women/WomanHat2.jpg,/products/women/WomanHat3.jpg,/products/women/WomanHat1.jpg,/products/women/WomanHat4.jpg",
+                women, "Camel", "Fall/Winter", "Wool Felt", "Women", "Formal", "S,M,L");
+
+        createDetailedProduct(
+                "Leopard Print Bow Loafers",
+                "Silk leopard-print loafers finished with a grosgrain bow, cut on a sleek, low-profile last.",
+                890.99, 18,
+                "/products/women/WomanShoes4.jpg,/products/women/WomanShoes6.jpg,/products/women/WomanShoes1.jpg,/products/women/WomanShoes2.jpg,/products/women/WomanShoes3.jpg,/products/women/WomanShoes5.jpg,/products/women/WomanShoes7.jpg",
+                women, "Leopard", "All Season", "Silk", "Women", "Formal", "38,39,40,41,42");
+
+        createDetailedProduct(
+                "Wide-Leg Checked Wool Trousers",
+                "High-waisted, wide-leg trousers in a subtle brown check wool, pleated for a relaxed, fluid drape.",
+                899.99, 16,
+                "/products/women/WomanTrousers5.jpg,/products/women/WomanTrousers6.jpg,/products/women/WomanTrousers1.jpg,/products/women/WomanTrousers2.jpg,/products/women/WomanTrousers3.jpg,/products/women/WomanTrousers4.jpg,/products/women/WomanTrousers7.jpg",
+                women, "Brown", "Fall/Winter", "Wool", "Women", "Tailored", "XS,S,M,L,XL");
+    }
+
     private void createProduct(String name, String description, Double price, Integer quantity, String imageUrl, Category category) {
         Product product = new Product();
         product.setName(name);
@@ -190,6 +296,28 @@ public class DataInitializer {
         product.setQuantity(quantity);
         product.setImageUrl(imageUrl);
         product.setCategory(category);
+        productRepository.save(product);
+    }
+
+    private void createDetailedProduct(String name, String description, Double price, Integer quantity, String imageUrl,
+                                        Category category, String color, String season, String material,
+                                        String gender, String style, String size) {
+        if (productRepository.existsByName(name)) {
+            return;
+        }
+        Product product = new Product();
+        product.setName(name);
+        product.setDescription(description);
+        product.setPrice(price);
+        product.setQuantity(quantity);
+        product.setImageUrl(imageUrl);
+        product.setCategory(category);
+        product.setColor(color);
+        product.setSeason(season);
+        product.setMaterial(material);
+        product.setGender(gender);
+        product.setStyle(style);
+        product.setSize(size);
         productRepository.save(product);
     }
 }

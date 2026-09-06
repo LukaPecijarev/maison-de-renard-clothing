@@ -2,12 +2,30 @@ import React, { useEffect } from 'react';
 import { Container, Typography, Box, Button, IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import RecentlyViewed from '../components/RecentlyViewed';
+import Reveal from '../components/Reveal';
+import ShopTheLookSection from '../components/ShopTheLookSection';
+import useProducts from '../hooks/useProducts';
 
 const HomePage = () => {
     const navigate = useNavigate();
     const heroVideoRef = React.useRef(null);
     const midVideo1Ref = React.useRef(null);
     const midVideo2Ref = React.useRef(null);
+
+    // The "Shop the Look" pieces below are matched to their real product by
+    // name (rather than a hardcoded id) so a card click can route straight
+    // to that product's page - ids aren't stable across reseeds, but names
+    // are what DataInitializer's existsByName guard keys off already.
+    const { products: menCategoryProducts } = useProducts(2);
+    const { products: womenCategoryProducts } = useProducts(1);
+    const { products: giftsCategoryProducts } = useProducts(3);
+    const goToOutfitPiece = (categoryProducts, productName) => {
+        const match = categoryProducts.find((p) => p.name === productName);
+        if (match) {
+            navigate(`/products/${match.id}`);
+        }
+    };
 
     useEffect(() => {
         const handleScroll = () => {
@@ -43,6 +61,16 @@ const HomePage = () => {
 
     const ImageWithHover = ({ images, alt, name, price, onClick, categoryUrl }) => {
         const [isHovered, setIsHovered] = React.useState(false);
+        const [cursorPos, setCursorPos] = React.useState({ x: 0, y: 0 });
+        const [overIcon, setOverIcon] = React.useState(false);
+        const showCursorHint = isHovered && !overIcon;
+
+        // Tell the global CustomCursor to stand down while this tile's own
+        // VIEW bubble is showing, so the two don't draw on top of each other.
+        React.useEffect(() => {
+            window.dispatchEvent(new CustomEvent('customCursor:localHint', { detail: { active: showCursorHint } }));
+            return () => window.dispatchEvent(new CustomEvent('customCursor:localHint', { detail: { active: false } }));
+        }, [showCursorHint]);
 
         return (
             <Box
@@ -50,14 +78,42 @@ const HomePage = () => {
                     width: '100%',
                     aspectRatio: '3/4',
                     overflow: 'hidden',
-                    cursor: 'pointer',
+                    cursor: showCursorHint ? 'none' : 'pointer',
                     position: 'relative',
                     backgroundColor: '#f5f1e8',
                 }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
+                onMouseMove={(e) => {
+                    const rect = e.currentTarget.getBoundingClientRect();
+                    setCursorPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+                }}
                 onClick={onClick}
             >
+                {/* Custom cursor-follow "VIEW" hint, replacing the system pointer while hovering -
+                    hidden over the shopping bag icon so the real cursor shows through instead */}
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        left: cursorPos.x, top: cursorPos.y,
+                        transform: `translate(-50%, -50%) scale(${showCursorHint ? 1 : 0.4})`,
+                        opacity: showCursorHint ? 1 : 0,
+                        transition: 'opacity 0.2s ease, transform 0.2s ease',
+                        pointerEvents: 'none',
+                        width: 62, height: 62, borderRadius: '50%',
+                        backgroundColor: 'rgba(230, 204, 178, 0.55)',
+                        backdropFilter: 'blur(2px)',
+                        display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        zIndex: 3,
+                    }}
+                >
+                    <Typography sx={{
+                        fontFamily: '"Lato", sans-serif', fontSize: '0.65rem',
+                        color: '#2c2c2c', letterSpacing: '0.1em',
+                    }}>
+                        VIEW
+                    </Typography>
+                </Box>
                 <Box
                     component="img"
                     src={isHovered ? images[1] : images[0]}
@@ -75,15 +131,19 @@ const HomePage = () => {
                 />
 
                 <IconButton
+                    onMouseEnter={() => setOverIcon(true)}
+                    onMouseLeave={() => setOverIcon(false)}
                     sx={{
                         position: 'absolute',
-                        top: 12,
-                        right: 12,
+                        top: { xs: 6, sm: 12 },
+                        right: { xs: 6, sm: 12 },
                         backgroundColor: 'transparent',
-                        width: 36,
-                        height: 36,
+                        width: { xs: 28, sm: 36 },
+                        height: { xs: 28, sm: 36 },
+                        cursor: 'pointer',
                         opacity: isHovered ? 1 : 0,
                         transition: 'opacity 0.3s ease',
+                        '@media (hover: none)': { opacity: 1 },
                         '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
                     }}
                     onClick={(e) => {
@@ -91,38 +151,43 @@ const HomePage = () => {
                         navigate(categoryUrl);
                     }}
                 >
-                    <ShoppingBagOutlinedIcon sx={{ fontSize: 20, color: '#ffffff' }} />
+                    <ShoppingBagOutlinedIcon sx={{ fontSize: { xs: 15, sm: 20 }, color: '#ffffff' }} />
                 </IconButton>
 
                 <Box
                     sx={{
                         position: 'absolute',
-                        bottom: 16,
+                        bottom: { xs: 8, sm: 16 },
                         left: '50%',
-                        transform: isHovered ? 'translate(-50%, 0)' : 'translate(-50%, 20px)',
+                        transform: { xs: 'translate(-50%, 0)', sm: isHovered ? 'translate(-50%, 0)' : 'translate(-50%, 20px)' },
                         opacity: isHovered ? 1 : 0,
                         transition: 'all 0.4s ease',
+                        '@media (hover: none)': { opacity: 1 },
                         backgroundColor: '#f5ebe0',
-                        padding: '8px 20px',
+                        padding: { xs: '5px 10px', sm: '8px 20px' },
                         borderRadius: '4px',
                         boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
                         pointerEvents: 'none',
-                        minWidth: '140px',
+                        minWidth: { xs: '100px', sm: '140px' },
+                        maxWidth: { xs: '90%', sm: 'none' },
                         textAlign: 'center',
                     }}
                 >
                     <Typography sx={{
                         fontFamily: '"Lato", sans-serif',
-                        fontSize: '0.7rem', fontWeight: 400,
+                        fontSize: { xs: '0.55rem', sm: '0.7rem' }, fontWeight: 400,
                         color: 'rgba(44, 44, 44, 0.7)',
                         letterSpacing: '0.05em', mb: 0.3,
                         textTransform: 'uppercase',
+                        whiteSpace: { xs: 'nowrap', sm: 'normal' },
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
                     }}>
                         {name}
                     </Typography>
                     <Typography sx={{
                         fontFamily: '"Cormorant Garamond", serif',
-                        fontSize: '1rem', fontWeight: 500,
+                        fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 500,
                         color: '#2c2c2c', letterSpacing: '0.05em',
                     }}>
                         {price}
@@ -132,62 +197,65 @@ const HomePage = () => {
         );
     };
 
-    const menProducts = [
-        {
-            images: ['https://media.loropiana.com/HYBRIS/FAQ/FAQ0839/F3A31F28-EEB5-446C-AF81-2FF122E5399E/FAQ0839_D0VB_MEDIUM.jpg?sw=500&sh=700', 'https://media.loropiana.com/HYBRIS/FAQ/FAQ0839/5A9F478F-89D6-4DDD-ADC7-2C913A6FBD09/FAQ0839_D0VB_MEDIUM.jpg'],
-            name: 'Cable Knit Sweater', price: '€1299'
-        },
-        {
-            images: ['https://media.loropiana.com/HYBRIS/FAQ/FAQ2674/4C15C42C-7EBA-4347-BFBA-492B6E42C8D9/FAQ2674_F7NK_MEDIUM.jpg?sw=500&sh=700', 'https://media.loropiana.com/HYBRIS/FAQ/FAQ2674/E7507378-83E2-4122-B51C-292A595E0AC7/FAQ2674_F7NK_MEDIUM.jpg'],
-            name: 'Merino Wool Polo', price: '€599'
-        },
-        {
-            images: ['https://media.loropiana.com/HYBRIS/FAO/FAO3172/9BFFA412-D914-43DE-9152-26AB24FEE3A0/FAO3172_W000_MEDIUM.jpg?sw=500&sh=700', 'https://media.loropiana.com/HYBRIS/FAO/FAO3172/C89239A3-F9CC-4A00-9B37-9BA1996B85FF/FAO3172_W000_MEDIUM.jpg'],
-            name: 'Cashmere Overcoat', price: '€3499'
-        },
-        {
-            images: ['https://media.loropiana.com/HYBRIS/FAQ/FAQ3010/6CC34349-A543-421A-8B19-53C1ED71FEAB/FAQ3010_51EG_MEDIUM.jpg?sw=500&sh=700', 'https://media.loropiana.com/HYBRIS/FAQ/FAQ3010/A05EA408-6D59-4F85-B8F5-CEAD9B95B01B/FAQ3010_51EG_MEDIUM.jpg'],
-            name: 'Suede Field Jacket', price: '€2899'
-        },
+    // The 4-tile grids below show real catalog products pulled from each
+    // category (fetched above via useProducts), rather than placeholder
+    // stock photos - each tile routes straight to that specific product's
+    // page on click, not the category listing. The outfit pieces already
+    // featured in the "Shop the Look" carousels are excluded here so
+    // nothing's shown twice on the same page.
+    const OUTFIT_PIECE_NAMES = new Set([
+        'Navy Wool Overcoat', 'Cable Knit Wool Cardigan', 'Classic Cotton Shirt',
+        'Pleated Wool Trousers', 'Wool Flat Cap',
+        'Tweed Stand-Collar Jacket', 'Wide-Brim Wool Hat',
+        'Wide-Leg Checked Wool Trousers', 'Leopard Print Bow Loafers',
+    ]);
+    const toTile = (product) => {
+        const images = product.imageUrl ? product.imageUrl.split(',').map((u) => u.trim()) : [];
+        return {
+            id: product.id,
+            images: [images[0], images[1] || images[0]],
+            name: product.name,
+            price: `€${Math.round(product.price)}`,
+        };
+    };
+    const menProducts = menCategoryProducts
+        .filter((p) => !OUTFIT_PIECE_NAMES.has(p.name))
+        .slice(0, 4)
+        .map(toTile);
+    const womenProducts = womenCategoryProducts
+        .filter((p) => !OUTFIT_PIECE_NAMES.has(p.name))
+        .slice(0, 4)
+        .map(toTile);
+    const giftsProducts = giftsCategoryProducts.slice(0, 4).map(toTile);
+
+    // Carousel content for the Men "Shop the Look" banner - these 5 pieces
+    // from the photographed outfit. A person wearing the piece should only
+    // ever appear in the full banner photo (ManOutfit.jpg) - every card here,
+    // default AND hover, uses a plain, isolated shot of the item alone (the
+    // same defaults the product grid/detail pages use, plus a second
+    // isolated angle for the hover swap). `name` is the shortened display
+    // label; `productName` is the exact DataInitializer product name (they
+    // differ for a few pieces) and is what goToOutfitPiece() matches on to
+    // find the real product and route to it.
+    const manOutfitPieces = [
+        { image: '/products/men/ManCoat5.jpg', hoverImage: '/products/men/ManCoat6.jpg', name: 'Navy Wool Overcoat', productName: 'Navy Wool Overcoat', subtitle: 'Virgin Wool' },
+        { image: '/products/men/ManCardigan5.jpg', hoverImage: '/products/men/ManCardigan6.jpg', name: 'Cable Knit Cardigan', productName: 'Cable Knit Wool Cardigan', subtitle: 'Wool' },
+        { image: '/products/men/ManShirt5.jpg', hoverImage: '/products/men/ManShirt6.jpg', name: 'Classic Cotton Shirt', productName: 'Classic Cotton Shirt', subtitle: 'Cotton' },
+        { image: '/products/men/ManTrousers5.jpg', hoverImage: '/products/men/ManTrousers6.jpg', name: 'Pleated Trousers', productName: 'Pleated Wool Trousers', subtitle: 'Wool' },
+        { image: '/products/men/ManHat2.jpg', hoverImage: '/products/men/ManHat4.jpg', name: 'Wool Flat Cap', productName: 'Wool Flat Cap', subtitle: 'Wool' },
     ];
 
-    const womenProducts = [
-        {
-            images: ['https://media.loropiana.com/HYBRIS/FAP/FAP5979/D1C00CB8-B96A-45C0-8437-2A7015ACBC71/FAP5979_H10W_MEDIUM.jpg?sw=500&sh=700', 'https://media.loropiana.com/HYBRIS/FAP/FAP5979/13B45339-E3F8-46F5-B9B3-80BD2C234900/FAP5979_H10W_MEDIUM.jpg'],
-            name: 'Cashmere Polo', price: '€1199'
-        },
-        {
-            images: ['https://media.loropiana.com/HYBRIS/FAP/FAP9489/9189C7C7-13BC-47F0-9BB1-87DF6D3F28B6/FAP9489_A014_MEDIUM.jpg?sw=500&sh=700', 'https://media.loropiana.com/HYBRIS/FAP/FAP9489/E51CE160-3908-4286-93C7-C26A41B1E937/FAP9489_A014_MEDIUM.jpg'],
-            name: 'Ski Salopettes', price: '€1799'
-        },
-        {
-            images: ['https://media.loropiana.com/HYBRIS/FAP/FAP7058/55F28EEC-94B9-40A0-B7C8-3860D2052DCB/FAP7058_H0QI_MEDIUM.jpg?sw=500&sh=700', 'https://media.loropiana.com/HYBRIS/FAP/FAP7058/C5E18F29-C23B-4DE3-8C83-A1B489DFCDD6/FAP7058_H0QI_MEDIUM.jpg'],
-            name: 'Cashmere Trench', price: '€3299'
-        },
-        {
-            images: ['https://media.loropiana.com/PRODUCTS/HYBRIS/FAP/FAP6985/F7AN/FR/D1866377-298C-46F8-826F-0F413FB47639_FAP6985_F7AN_MEDIUM.jpg?sw=500&sh=700', 'https://media.loropiana.com/PRODUCTS/HYBRIS/FAP/FAP6985/F7AN/L3/E3E2DE6D-D8E4-4C5A-A675-F974C53D41AE_FAP6985_F7AN_MEDIUM.jpg'],
-            name: 'Ribbed Cardigan', price: '€1399'
-        },
+    // Carousel content for the Women "Shop the Look" banner - same
+    // convention as manOutfitPieces above: plain isolated shots only, a
+    // person only ever shows up in the WomenFullLook.jpg banner photo.
+    // See manOutfitPieces above for why `productName` is separate from `name`.
+    const womanOutfitPieces = [
+        { image: '/products/women/WomanCoat5.jpg', hoverImage: '/products/women/WomanCoat6.jpg', name: 'Tweed Stand-Collar Jacket', productName: 'Tweed Stand-Collar Jacket', subtitle: 'Wool Tweed' },
+        { image: '/products/women/WomanHat2.jpg', hoverImage: '/products/women/WomanHat3.jpg', name: 'Wide-Brim Wool Hat', productName: 'Wide-Brim Wool Hat', subtitle: 'Wool Felt' },
+        { image: '/products/women/WomanTrousers5.jpg', hoverImage: '/products/women/WomanTrousers6.jpg', name: 'Wide-Leg Trousers', productName: 'Wide-Leg Checked Wool Trousers', subtitle: 'Wool' },
+        { image: '/products/women/WomanShoes4.jpg', hoverImage: '/products/women/WomanShoes6.jpg', name: 'Leopard Bow Loafers', productName: 'Leopard Print Bow Loafers', subtitle: 'Silk' },
     ];
 
-    const giftsProducts = [
-        {
-            images: ['https://media.loropiana.com/HYBRIS/FAQ/FAQ0627/8CB810A7-3A45-4DBA-967D-4EEA41B6CCB3/FAQ0627_T1SS_MEDIUM.jpg', 'https://media.loropiana.com/HYBRIS/FAQ/FAQ0627/3B091BE1-CD87-4091-B3F1-0DA38006B77D/FAQ0627_T1SS_MEDIUM.jpg'],
-            name: 'Vintage Car Print', price: '€599'
-        },
-        {
-            images: ['https://media.loropiana.com/HYBRIS/FAQ/FAQ2841/9117F3EE-B78E-42FE-ABA0-62D040935E1F/FAQ2841_B5NA_MEDIUM.jpg', 'https://media.loropiana.com/HYBRIS/FAQ/FAQ2841/A1A1AD17-CF12-4B33-8F5F-D1BA91174CA2/FAQ2841_B5NA_MEDIUM.jpg?sw=500&sh=700'],
-            name: 'Leather Travel Case', price: '€899'
-        },
-        {
-            images: ['https://media.loropiana.com/HYBRIS/FAO/FAO5321/E0DC56C0-F976-411F-A51A-0D9CB1B51F6E/FAO5321_F6KX_MEDIUM.jpg', 'https://media.loropiana.com/PRODUCTS/HYBRIS/FAO/FAO5321/F6KX/D3/DEC74A3D-D8E1-4534-8505-2C4E0AE81A6B_FAO5321_F6KX_MEDIUM.jpg'],
-            name: 'Cashmere Socks', price: '€299'
-        },
-        {
-            images: ['https://media.loropiana.com/PRODUCTS/HYBRIS/FAP/FAP5328/H16Y/FR/FE19A6D6-59EB-46EA-AE50-638A05317716_FAP5328_H16Y_MEDIUM.jpg', 'https://media.loropiana.com/HYBRIS/FAP/FAP5328/97FEDA37-D6A5-447B-B2BC-FAAFB97B3E13/FAP5328_H16Y_MEDIUM.jpg'],
-            name: 'Leather Backpack', price: '€1299'
-        },
-    ];
 
     return (
         <Box sx={{ backgroundColor: '#f5f1e8' }}>
@@ -212,6 +280,17 @@ const HomePage = () => {
             <Container maxWidth="xl" sx={{ pt: 8, pb: 3 }}>
                 {/* Men Section */}
                 <Box sx={{ mb: 10 }}>
+                    <Box sx={{ mb: 6 }}>
+                        <ShopTheLookSection
+                            title="Men"
+                            image="/products/men/ManOutfit.jpg"
+                            imageAlt="Men's look"
+                            onImageClick={() => navigate('/products?category=2')}
+                            onViewAllClick={() => navigate('/products?category=2')}
+                            onProductClick={(product) => goToOutfitPiece(menCategoryProducts, product.productName)}
+                            products={manOutfitPieces}
+                        />
+                    </Box>
                     <Typography variant="h3" align="center" sx={{
                         fontFamily: '"Cormorant Garamond", serif',
                         fontWeight: 300, letterSpacing: '0.1em', mb: 3,
@@ -228,17 +307,18 @@ const HomePage = () => {
                         with masterful precision, offering an effortless elegance and tactile refinement
                         that are unmistakably Maison de Renard.
                     </Typography>
-                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: 3 }}>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: { xs: 1.5, sm: 3 } }}>
                         {menProducts.map((product, index) => (
-                            <ImageWithHover
-                                key={index}
-                                images={product.images}
-                                name={product.name}
-                                price={product.price}
-                                alt={`Men's product ${index + 1}`}
-                                categoryUrl="/products?category=2"
-                                onClick={() => navigate('/products?category=2')}
-                            />
+                            <Reveal key={product.id} delay={index * 0.08}>
+                                <ImageWithHover
+                                    images={product.images}
+                                    name={product.name}
+                                    price={product.price}
+                                    alt={product.name}
+                                    categoryUrl={`/products/${product.id}`}
+                                    onClick={() => navigate(`/products/${product.id}`)}
+                                />
+                            </Reveal>
                         ))}
                     </Box>
                 </Box>
@@ -267,6 +347,18 @@ const HomePage = () => {
 
                 {/* Women Section */}
                 <Box sx={{ mb: 10 }}>
+                    <Box sx={{ mb: 6 }}>
+                        <ShopTheLookSection
+                            title="Women"
+                            image="/products/women/WomenFullLook.jpg"
+                            imageAlt="Women's look"
+                            imageOnRight
+                            onImageClick={() => navigate('/products?category=1')}
+                            onViewAllClick={() => navigate('/products?category=1')}
+                            onProductClick={(product) => goToOutfitPiece(womenCategoryProducts, product.productName)}
+                            products={womanOutfitPieces}
+                        />
+                    </Box>
                     <Typography variant="h3" align="center" sx={{
                         fontFamily: '"Cormorant Garamond", serif',
                         fontWeight: 300, letterSpacing: '0.1em', mb: 3,
@@ -283,17 +375,18 @@ const HomePage = () => {
                         meticulously considered, offering a sensorial experience and a signature
                         sophistication that is uniquely Maison de Renard.
                     </Typography>
-                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: 3 }}>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: { xs: 1.5, sm: 3 } }}>
                         {womenProducts.map((product, index) => (
-                            <ImageWithHover
-                                key={index}
-                                images={product.images}
-                                name={product.name}
-                                price={product.price}
-                                alt={`Women's product ${index + 1}`}
-                                categoryUrl="/products?category=1"
-                                onClick={() => navigate('/products?category=1')}
-                            />
+                            <Reveal key={product.id} delay={index * 0.08}>
+                                <ImageWithHover
+                                    images={product.images}
+                                    name={product.name}
+                                    price={product.price}
+                                    alt={product.name}
+                                    categoryUrl={`/products/${product.id}`}
+                                    onClick={() => navigate(`/products/${product.id}`)}
+                                />
+                            </Reveal>
                         ))}
                     </Box>
                 </Box>
@@ -338,23 +431,24 @@ const HomePage = () => {
                         reflect the Maison's dedication to artistry, making every gift a gesture of
                         refined taste and enduring sophistication.
                     </Typography>
-                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: 3 }}>
+                    <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: { xs: 1.5, sm: 3 } }}>
                         {giftsProducts.map((product, index) => (
-                            <ImageWithHover
-                                key={index}
-                                images={product.images}
-                                name={product.name}
-                                price={product.price}
-                                alt={`Gift product ${index + 1}`}
-                                categoryUrl="/products?category=3"
-                                onClick={() => navigate('/products?category=3')}
-                            />
+                            <Reveal key={product.id} delay={index * 0.08}>
+                                <ImageWithHover
+                                    images={product.images}
+                                    name={product.name}
+                                    price={product.price}
+                                    alt={product.name}
+                                    categoryUrl={`/products/${product.id}`}
+                                    onClick={() => navigate(`/products/${product.id}`)}
+                                />
+                            </Reveal>
                         ))}
                     </Box>
                 </Box>
 
                 {/* CTA */}
-                <Box sx={{ textAlign: 'center', py: 2, mb: 0 }}>
+                <Box sx={{ textAlign: 'center', py: 2, mb: 10 }}>
                     <Typography variant="h4" sx={{
                         fontFamily: '"Cormorant Garamond", serif',
                         fontWeight: 300, letterSpacing: '0.1em', mb: 3,
@@ -388,6 +482,9 @@ const HomePage = () => {
                         SHOP NOW
                     </Button>
                 </Box>
+
+                {/* Recently Viewed - below the collection CTA */}
+                <RecentlyViewed />
             </Container>
         </Box>
     );

@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { Container, Typography, Box, TextField, Button, Radio, RadioGroup, FormControlLabel, FormControl, Alert } from '@mui/material';
+import { Container, Typography, Box, TextField, Button, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import CreditCardIcon from '@mui/icons-material/CreditCard';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import useOrder from '../hooks/useOrder';
+import WalletCard from '../components/WalletCard';
+import Reveal from '../components/Reveal';
 
 const CheckoutPage = () => {
     const navigate = useNavigate();
-    const { confirmOrder } = useOrder();
+    const { confirmOrder, order } = useOrder();
     const [selectedPayment, setSelectedPayment] = useState('visa');
     const [formData, setFormData] = useState({
         fullName: '',
@@ -67,12 +69,12 @@ const CheckoutPage = () => {
         }
     };
 
-    const paymentMethods = [
-        { id: 'visa', name: 'Visa', logo: 'https://upload.wikimedia.org/wikipedia/commons/5/5c/Visa_Inc._logo_%282021%E2%80%93present%29.svg' },
-        { id: 'mastercard', name: 'Mastercard', logo: 'https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg' },
-        { id: 'amex', name: 'American Express', logo: 'https://upload.wikimedia.org/wikipedia/commons/f/fa/American_Express_logo_%282018%29.svg' },
-        { id: 'discover', name: 'Discover', logo: 'https://upload.wikimedia.org/wikipedia/commons/5/57/Discover_Card_logo.svg' },
-    ];
+    const cartItems = order?.products || [];
+    const orderTotal = cartItems.reduce((sum, item) => {
+        const discountMatch = item.description?.match(/DISCOUNT:(\d+)/);
+        const discount = discountMatch ? parseInt(discountMatch[1]) : 0;
+        return sum + item.price * (1 - discount / 100);
+    }, 0);
 
     const textFieldSx = {
         '& .MuiOutlinedInput-root': {
@@ -90,7 +92,7 @@ const CheckoutPage = () => {
 
     return (
         <Box sx={{ backgroundColor: '#f5f1e8', minHeight: '100vh', py: 4 }}>
-            <Container maxWidth="md">
+            <Reveal><Container maxWidth="md">
                 <Box sx={{ mb: 4, textAlign: 'center' }}>
                     <Typography variant="h3" sx={{
                         fontFamily: '"Cormorant Garamond", serif',
@@ -124,7 +126,7 @@ const CheckoutPage = () => {
                                            value={formData.fullName} onChange={handleInputChange}
                                            error={!!errors.fullName} helperText={errors.fullName} sx={textFieldSx} />
 
-                                <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+                                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
                                     <TextField fullWidth label="Email" name="email" type="email"
                                                value={formData.email} onChange={handleInputChange}
                                                error={!!errors.email} helperText={errors.email} sx={textFieldSx} />
@@ -137,7 +139,7 @@ const CheckoutPage = () => {
                                            value={formData.address} onChange={handleInputChange}
                                            error={!!errors.address} helperText={errors.address} sx={textFieldSx} />
 
-                                <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 2 }}>
+                                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr 1fr' }, gap: 2 }}>
                                     <TextField fullWidth label="City" name="city"
                                                value={formData.city} onChange={handleInputChange}
                                                error={!!errors.city} helperText={errors.city} sx={textFieldSx} />
@@ -159,41 +161,13 @@ const CheckoutPage = () => {
                             }}>
                                 PAYMENT METHOD
                             </Typography>
-                            <FormControl component="fieldset" fullWidth>
-                                <RadioGroup
-                                    value={selectedPayment}
-                                    onChange={(e) => setSelectedPayment(e.target.value)}
-                                    sx={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 1.5 }}
-                                >
-                                    {paymentMethods.map((method) => (
-                                        <Box key={method.id} onClick={() => setSelectedPayment(method.id)}
-                                             sx={{
-                                                 border: selectedPayment === method.id
-                                                     ? '2px solid #d4b896' : '1px solid rgba(212, 184, 150, 0.2)',
-                                                 borderRadius: '4px', p: 1.5,
-                                                 display: 'flex', flexDirection: 'column',
-                                                 alignItems: 'center', justifyContent: 'center',
-                                                 cursor: 'pointer', transition: 'all 0.3s ease',
-                                                 backgroundColor: selectedPayment === method.id
-                                                     ? 'rgba(212, 184, 150, 0.05)' : 'transparent',
-                                                 minHeight: '70px',
-                                                 '&:hover': { borderColor: '#d4b896' },
-                                             }}
-                                        >
-                                            <FormControlLabel
-                                                value={method.id}
-                                                control={<Radio sx={{
-                                                    color: 'rgba(212, 184, 150, 0.5)', padding: 0, mb: 0.5,
-                                                    '&.Mui-checked': { color: '#d4b896' },
-                                                }} />}
-                                                label="" sx={{ m: 0 }}
-                                            />
-                                            <Box component="img" src={method.logo} alt={method.name}
-                                                 sx={{ height: 18, width: 'auto', maxWidth: '60px', objectFit: 'contain' }} />
-                                        </Box>
-                                    ))}
-                                </RadioGroup>
-                            </FormControl>
+                            <Box sx={{ display: 'flex', justifyContent: 'center', py: { xs: 2, sm: 3 } }}>
+                                <WalletCard
+                                    selected={selectedPayment}
+                                    onSelect={setSelectedPayment}
+                                    total={orderTotal}
+                                />
+                            </Box>
                         </Box>
 
                         {/* Card Details */}
@@ -215,7 +189,7 @@ const CheckoutPage = () => {
                                            placeholder="JOHN DOE"
                                            value={formData.cardName} onChange={handleInputChange}
                                            error={!!errors.cardName} helperText={errors.cardName} sx={textFieldSx} />
-                                <Box sx={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 2 }}>
+                                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
                                     <TextField fullWidth label="Expiry Date" name="expiryDate"
                                                placeholder="MM/YY"
                                                value={formData.expiryDate} onChange={handleInputChange}
@@ -239,7 +213,10 @@ const CheckoutPage = () => {
                     </Box>
 
                     {/* Action Buttons */}
-                    <Box sx={{ display: 'flex', gap: 2, mt: 3, justifyContent: 'space-between' }}>
+                    <Box sx={{
+                        display: 'flex', flexDirection: { xs: 'column-reverse', sm: 'row' },
+                        gap: 2, mt: 3, justifyContent: 'space-between',
+                    }}>
                         <Button variant="outlined" onClick={() => navigate('/cart')} sx={{
                             fontFamily: '"Lato", sans-serif', fontSize: '0.85rem',
                             fontWeight: 500, letterSpacing: '0.15em', textTransform: 'uppercase',
@@ -249,18 +226,30 @@ const CheckoutPage = () => {
                         }}>
                             Back to Cart
                         </Button>
-                        <Button type="submit" variant="contained" sx={{
+                        <Button type="submit" variant="outlined" sx={{
                             fontFamily: '"Lato", sans-serif', fontSize: '0.85rem',
                             fontWeight: 500, letterSpacing: '0.15em', textTransform: 'uppercase',
-                            backgroundColor: '#d4b896', color: '#ffffff', padding: '12px 50px',
-                            boxShadow: '0 4px 12px rgba(212, 184, 150, 0.3)',
-                            '&:hover': { backgroundColor: '#c4a886', boxShadow: '0 6px 16px rgba(196, 168, 134, 0.4)' },
+                            color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
+                            backgroundColor: 'transparent', padding: '12px 50px',
+                            position: 'relative', overflow: 'hidden', borderRadius: '6px',
+                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
+                            '&::before': {
+                                content: '""', position: 'absolute', top: 0, left: '-100%',
+                                width: '100%', height: '100%', backgroundColor: '#f5ebe0',
+                                transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
+                            },
+                            '&:hover': {
+                                color: '#22223b', borderColor: '#f5ebe0',
+                                transform: 'translateY(-2px)',
+                                boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
+                            },
+                            '&:hover::before': { left: 0 },
                         }}>
                             Complete Purchase
                         </Button>
                     </Box>
                 </Box>
-            </Container>
+            </Container></Reveal>
         </Box>
     );
 };

@@ -20,11 +20,14 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+// CORS is handled globally by JwtSecurityWebConfig.corsConfigurationSource()
+// (driven by the cors.allowed-origins property) - a class-level @CrossOrigin
+// here would be redundant, and couldn't express multiple allowed origins
+// (e.g. localhost + the deployed frontend) the way that property can anyway.
 @Slf4j
 @RestController
 @RequestMapping("/api/chat")
 @RequiredArgsConstructor
-@CrossOrigin(origins = "http://localhost:3000")
 public class ChatController {
 
     private final ProductApplicationService productApplicationService;
