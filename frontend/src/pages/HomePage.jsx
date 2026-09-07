@@ -342,7 +342,7 @@ const HomePage = () => {
                             transformOrigin: 'center center',
                         }}
                     >
-                        <source src="/MaisonHomePage2.mp4" type="video/mp4" />
+                        <source src="/MaisonHomePage3.mp4" type="video/mp4" />
                     </video>
                 </Box>
 
@@ -409,7 +409,7 @@ const HomePage = () => {
                             transformOrigin: 'center center',
                         }}
                     >
-                        <source src="/MaisonHomePage3.mp4" type="video/mp4" />
+                        <source src="/MaisonHomePage2.mp4" type="video/mp4" />
                     </video>
                 </Box>
 
