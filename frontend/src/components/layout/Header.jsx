@@ -344,14 +344,14 @@ const Header = () => {
 
                                 {/* Person / Logout */}
                                 {isAuthenticated() ? (
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
                                         <Button onClick={() => navigate('/order-history')} sx={{
                                             color: '#2c2c2c', minWidth: 'auto', p: 0.5,
                                             '&:hover': { backgroundColor: 'transparent' },
                                         }}>
                                             <PersonIcon />
                                         </Button>
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.15 }}>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1.15, mt: 0.6 }}>
                                             <Typography sx={{
                                                 color: '#a0826d',
                                                 fontSize: '0.6rem',
@@ -365,12 +365,13 @@ const Header = () => {
                                             </Typography>
                                             <Typography sx={{
                                                 color: '#2c2c2c',
-                                                fontSize: '1rem',
+                                                fontSize: '0.8rem',
                                                 fontFamily: '"Cormorant Garamond", serif',
                                                 fontStyle: 'italic',
                                                 fontWeight: 500,
                                                 letterSpacing: '0.02em',
                                                 whiteSpace: 'nowrap',
+                                                textAlign: 'center',
                                             }}>
                                                 {getUsername()}
                                             </Typography>
