@@ -351,16 +351,28 @@ const Header = () => {
                                         }}>
                                             <PersonIcon />
                                         </Button>
-                                        <Typography sx={{
-                                            color: '#2c2c2c',
-                                            fontSize: '0.85rem',
-                                            fontFamily: '"Cormorant Garamond", serif',
-                                            fontStyle: 'italic',
-                                            letterSpacing: '0.02em',
-                                            whiteSpace: 'nowrap',
-                                        }}>
-                                            {getUsername()}
-                                        </Typography>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.1 }}>
+                                            <Typography sx={{
+                                                color: '#8b7355',
+                                                fontSize: '0.62rem',
+                                                fontFamily: '"Lato", sans-serif',
+                                                textTransform: 'uppercase',
+                                                letterSpacing: '0.05em',
+                                                whiteSpace: 'nowrap',
+                                            }}>
+                                                Welcome back,
+                                            </Typography>
+                                            <Typography sx={{
+                                                color: '#2c2c2c',
+                                                fontSize: '0.85rem',
+                                                fontFamily: '"Cormorant Garamond", serif',
+                                                fontStyle: 'italic',
+                                                letterSpacing: '0.02em',
+                                                whiteSpace: 'nowrap',
+                                            }}>
+                                                {getUsername()}
+                                            </Typography>
+                                        </Box>
                                         <Button onClick={() => {
                                             logout();
                                             localStorage.setItem('cartCount', '0');
