@@ -344,14 +344,14 @@ const Header = () => {
 
                                 {/* Person / Logout */}
                                 {isAuthenticated() ? (
-                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 3 }}>
                                         <Button onClick={() => navigate('/order-history')} sx={{
                                             color: '#2c2c2c', minWidth: 'auto', p: 0.5,
                                             '&:hover': { backgroundColor: 'transparent' },
                                         }}>
                                             <PersonIcon />
                                         </Button>
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1.15, mt: 0.6 }}>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1 }}>
                                             <Typography sx={{
                                                 color: '#a0826d',
                                                 fontSize: '0.6rem',
@@ -360,18 +360,20 @@ const Header = () => {
                                                 textTransform: 'uppercase',
                                                 letterSpacing: '0.18em',
                                                 whiteSpace: 'nowrap',
+                                                mt: '2px',
                                             }}>
                                                 Welcome
                                             </Typography>
                                             <Typography sx={{
                                                 color: '#2c2c2c',
-                                                fontSize: '0.8rem',
+                                                fontSize: '0.7rem',
                                                 fontFamily: '"Cormorant Garamond", serif',
                                                 fontStyle: 'italic',
                                                 fontWeight: 500,
                                                 letterSpacing: '0.02em',
                                                 whiteSpace: 'nowrap',
                                                 textAlign: 'center',
+                                                mt: '-1px',
                                             }}>
                                                 {getUsername()}
                                             </Typography>
