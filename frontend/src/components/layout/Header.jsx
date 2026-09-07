@@ -351,22 +351,24 @@ const Header = () => {
                                         }}>
                                             <PersonIcon />
                                         </Button>
-                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.1 }}>
+                                        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', lineHeight: 1.15 }}>
                                             <Typography sx={{
-                                                color: '#8b7355',
-                                                fontSize: '0.62rem',
+                                                color: '#a0826d',
+                                                fontSize: '0.6rem',
                                                 fontFamily: '"Lato", sans-serif',
+                                                fontWeight: 500,
                                                 textTransform: 'uppercase',
-                                                letterSpacing: '0.05em',
+                                                letterSpacing: '0.18em',
                                                 whiteSpace: 'nowrap',
                                             }}>
-                                                Welcome back,
+                                                Welcome
                                             </Typography>
                                             <Typography sx={{
                                                 color: '#2c2c2c',
-                                                fontSize: '0.85rem',
+                                                fontSize: '1rem',
                                                 fontFamily: '"Cormorant Garamond", serif',
                                                 fontStyle: 'italic',
+                                                fontWeight: 500,
                                                 letterSpacing: '0.02em',
                                                 whiteSpace: 'nowrap',
                                             }}>
