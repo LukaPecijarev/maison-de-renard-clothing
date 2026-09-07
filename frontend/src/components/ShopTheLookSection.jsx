@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, Typography, IconButton, Button } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
@@ -31,6 +31,59 @@ const ShopTheLookSection = ({
     const trackWidth = products.length * CARD_WIDTH + Math.max(0, products.length - 1) * CARD_GAP;
     const maxScroll = Math.max(0, trackWidth - VIEWPORT_WIDTH);
     const scrollX = Math.min(index * (CARD_WIDTH + CARD_GAP), maxScroll);
+
+    // Click-and-drag scrolling: hold the left mouse button down over the
+    // carousel and move to scrub through the cards, in addition to the
+    // chevron buttons. `dragRef` holds the live drag values in a ref (not
+    // state) so the window mousemove/mouseup listeners always see the
+    // latest position without stale-closure issues; `liveScrollX` mirrors
+    // it into state purely to drive the visible transform while dragging.
+    const [isDragging, setIsDragging] = useState(false);
+    const [liveScrollX, setLiveScrollX] = useState(null);
+    const dragRef = useRef({ startX: 0, startScroll: 0, current: 0, moved: false });
+    const displayScrollX = liveScrollX !== null ? liveScrollX : scrollX;
+
+    const handleDragStart = (e) => {
+        dragRef.current = { startX: e.clientX, startScroll: scrollX, current: scrollX, moved: false };
+        setIsDragging(true);
+    };
+
+    useEffect(() => {
+        if (!isDragging) return undefined;
+
+        const handleMove = (e) => {
+            const delta = e.clientX - dragRef.current.startX;
+            if (Math.abs(delta) > 4) dragRef.current.moved = true;
+            const next = Math.min(maxScroll, Math.max(0, dragRef.current.startScroll - delta));
+            dragRef.current.current = next;
+            setLiveScrollX(next);
+        };
+        const handleUp = () => {
+            const step = CARD_WIDTH + CARD_GAP;
+            const nearest = Math.min(maxIndex, Math.max(0, Math.round(dragRef.current.current / step)));
+            setIndex(nearest);
+            setLiveScrollX(null);
+            setIsDragging(false);
+        };
+
+        window.addEventListener('mousemove', handleMove);
+        window.addEventListener('mouseup', handleUp);
+        return () => {
+            window.removeEventListener('mousemove', handleMove);
+            window.removeEventListener('mouseup', handleUp);
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isDragging, maxScroll, maxIndex]);
+
+    // Cards suppress their onClick right after a drag (so releasing mid-drag
+    // over a card doesn't also navigate to it), but still fire it for a
+    // plain click - dragRef.current.moved only flips true once the pointer
+    // has actually traveled a few pixels.
+    const handleCardClick = (product, i) => {
+        if (dragRef.current.moved) return;
+        if (onProductClick) onProductClick(product, i);
+        else setIndex(i);
+    };
 
     const photo = (
         <Box
@@ -79,19 +132,26 @@ const ShopTheLookSection = ({
             </Typography>
             <Box sx={{ width: 0, height: 28, borderLeft: '1px dashed #d4b896', mb: 5 }} />
 
-            <Box sx={{ position: 'relative', width: VIEWPORT_WIDTH, maxWidth: '100%', overflow: 'hidden' }}>
+            <Box
+                onMouseDown={handleDragStart}
+                sx={{
+                    position: 'relative', width: VIEWPORT_WIDTH, maxWidth: '100%', overflow: 'hidden',
+                    cursor: isDragging ? 'grabbing' : 'grab',
+                    userSelect: 'none',
+                }}
+            >
                 <Box sx={{
                     display: 'flex', gap: `${CARD_GAP}px`,
-                    transform: `translateX(-${scrollX}px)`,
-                    transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                    transform: `translateX(-${displayScrollX}px)`,
+                    transition: isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
                 }}>
                     {products.map((product, i) => (
                         <Box
                             key={i}
-                            onClick={() => (onProductClick ? onProductClick(product, i) : setIndex(i))}
+                            onClick={() => handleCardClick(product, i)}
                             onMouseEnter={() => setHoveredCard(i)}
                             onMouseLeave={() => setHoveredCard(null)}
-                            sx={{ flex: `0 0 ${CARD_WIDTH}px`, cursor: 'pointer' }}
+                            sx={{ flex: `0 0 ${CARD_WIDTH}px`, cursor: 'inherit' }}
                         >
                             <Box sx={{
                                 width: CARD_WIDTH, aspectRatio: '3/4', overflow: 'hidden',
@@ -109,6 +169,7 @@ const ShopTheLookSection = ({
                                 <Box component="img"
                                      src={hoveredCard === i && product.hoverImage ? product.hoverImage : product.image}
                                      alt={product.name}
+                                     draggable={false}
                                      sx={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'top', transition: 'opacity 0.2s ease' }} />
                             </Box>
                             <Typography sx={{

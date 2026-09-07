@@ -285,6 +285,7 @@ const HomePage = () => {
                             title="Men"
                             image="/products/men/ManOutfit.jpg"
                             imageAlt="Men's look"
+                            imageOnRight
                             onImageClick={() => navigate('/products?category=2')}
                             onViewAllClick={() => navigate('/products?category=2')}
                             onProductClick={(product) => goToOutfitPiece(menCategoryProducts, product.productName)}
@@ -352,7 +353,6 @@ const HomePage = () => {
                             title="Women"
                             image="/products/women/WomenFullLook.jpg"
                             imageAlt="Women's look"
-                            imageOnRight
                             onImageClick={() => navigate('/products?category=1')}
                             onViewAllClick={() => navigate('/products?category=1')}
                             onProductClick={(product) => goToOutfitPiece(womenCategoryProducts, product.productName)}
