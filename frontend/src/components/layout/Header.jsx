@@ -26,7 +26,7 @@ const Header = () => {
         JSON.parse(localStorage.getItem('wishlist') || '[]').length
     );
     const [mobileOpen, setMobileOpen] = useState(false);
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated, getUsername, logout } = useAuth();
 
     const navLinks = [
         { label: 'Fall/Winter 2026/2027', to: '/products?category=5' },
@@ -351,6 +351,16 @@ const Header = () => {
                                         }}>
                                             <PersonIcon />
                                         </Button>
+                                        <Typography sx={{
+                                            color: '#2c2c2c',
+                                            fontSize: '0.85rem',
+                                            fontFamily: '"Cormorant Garamond", serif',
+                                            fontStyle: 'italic',
+                                            letterSpacing: '0.02em',
+                                            whiteSpace: 'nowrap',
+                                        }}>
+                                            {getUsername()}
+                                        </Typography>
                                         <Button onClick={() => {
                                             logout();
                                             localStorage.setItem('cartCount', '0');
@@ -457,7 +467,12 @@ const Header = () => {
                                 setMobileOpen(false);
                                 navigate('/');
                             }}>
-                                <ListItemText primary="Logout" primaryTypographyProps={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic', fontSize: '1.05rem', color: '#8b7355' }} />
+                                <ListItemText
+                                    primary="Logout"
+                                    secondary={getUsername()}
+                                    primaryTypographyProps={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic', fontSize: '1.05rem', color: '#8b7355' }}
+                                    secondaryTypographyProps={{ fontFamily: '"Lato", sans-serif', fontSize: '0.75rem', color: '#8b7355' }}
+                                />
                             </ListItemButton>
                         ) : (
                             <ListItemButton onClick={() => handleNavigate('/login')}>
