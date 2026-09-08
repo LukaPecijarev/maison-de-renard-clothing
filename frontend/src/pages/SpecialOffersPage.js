@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { Container, Typography, Box, Snackbar, Alert, Fab } from '@mui/material';
+import { Container, Typography, Box, Snackbar, Alert, Fab, IconButton } from '@mui/material';
 import ProductGridSkeleton from '../components/ProductGridSkeleton';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
+import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import ViewAgendaOutlinedIcon from '@mui/icons-material/ViewAgendaOutlined';
 import useProducts from '../hooks/useProducts';
 import ProductCard from '../components/ProductCard';
 import QuickViewModal from '../components/QuickViewModal';
@@ -17,6 +19,9 @@ const SpecialOffersPage = () => {
     const [quickViewProduct, setQuickViewProduct] = useState(null);
 
     const { products, loading, onDelete } = useProducts(6);
+    // Mobile-only grid density: 2-per-row (default) or 1-per-row/bigger.
+    const [mobileSingleColumn, setMobileSingleColumn] = useState(false);
+    const mobileColumns = mobileSingleColumn ? '1fr' : 'repeat(2, 1fr)';
 
     const isAdmin = () => {
         const role = localStorage.getItem('role');
@@ -55,9 +60,21 @@ const SpecialOffersPage = () => {
                         Discover exceptional savings on our finest pieces. Limited time offers on selected luxury items.
                     </Typography>
 
+                    {/* Mobile view-mode toggle: 2-per-row <-> 1-per-row/bigger. Hidden on
+                        sm+ where the grid is always 4 across regardless. */}
+                    <Box sx={{ display: { xs: 'flex', md: 'none' }, justifyContent: 'flex-end', mb: 2 }}>
+                        <IconButton
+                            onClick={() => setMobileSingleColumn((prev) => !prev)}
+                            aria-label={mobileSingleColumn ? 'Show 2 products per row' : 'Show 1 product per row'}
+                            sx={{ color: '#8b7355', '&:hover': { backgroundColor: 'rgba(212, 184, 150, 0.12)' } }}
+                        >
+                            {mobileSingleColumn ? <GridViewOutlinedIcon /> : <ViewAgendaOutlinedIcon />}
+                        </IconButton>
+                    </Box>
+
                     <Box sx={{
                         display: 'grid',
-                        gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+                        gridTemplateColumns: { xs: mobileColumns, md: 'repeat(4, 1fr)' },
                         gap: { xs: 1.5, sm: 3 },
                     }}>
                         {filteredProducts.map((product, index) => (

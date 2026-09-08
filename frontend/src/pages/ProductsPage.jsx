@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import {
     Container, Typography, Box, Snackbar, Alert, Fab,
-    FormControl, InputLabel, Select, MenuItem, Button,
+    FormControl, InputLabel, Select, MenuItem, Button, IconButton,
 } from '@mui/material';
 import ProductGridSkeleton from '../components/ProductGridSkeleton';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import AddIcon from '@mui/icons-material/Add';
+import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import ViewAgendaOutlinedIcon from '@mui/icons-material/ViewAgendaOutlined';
 import useProducts from '../hooks/useProducts';
 import categoryRepository from '../repository/categoryRepository';
 import ProductCard from '../components/ProductCard';
@@ -26,6 +28,10 @@ const ProductsPage = () => {
     const [sortBy, setSortBy] = useState('default');
     const [filterColor, setFilterColor] = useState('');
     const [filterMaterial, setFilterMaterial] = useState('');
+    // Mobile-only grid density: 2-per-row (default) or 1-per-row/bigger. Doesn't
+    // affect sm/md+ layouts, which always show 4 across regardless.
+    const [mobileSingleColumn, setMobileSingleColumn] = useState(false);
+    const mobileColumns = mobileSingleColumn ? '1fr' : 'repeat(2, 1fr)';
 
     // Check if user is admin
     const isAdmin = () => {
@@ -218,11 +224,23 @@ const ProductsPage = () => {
                         )}
                     </Box>
 
-                    {/* Products Grid - 4 columns */}
+                    {/* Mobile view-mode toggle: 2-per-row <-> 1-per-row/bigger. Hidden on
+                        sm+ where the grid is always 4 across regardless. */}
+                    <Box sx={{ display: { xs: 'flex', md: 'none' }, justifyContent: 'flex-end', mb: 2 }}>
+                        <IconButton
+                            onClick={() => setMobileSingleColumn((prev) => !prev)}
+                            aria-label={mobileSingleColumn ? 'Show 2 products per row' : 'Show 1 product per row'}
+                            sx={{ color: '#8b7355', '&:hover': { backgroundColor: 'rgba(212, 184, 150, 0.12)' } }}
+                        >
+                            {mobileSingleColumn ? <GridViewOutlinedIcon /> : <ViewAgendaOutlinedIcon />}
+                        </IconButton>
+                    </Box>
+
+                    {/* Products Grid - 2 per row on mobile (toggleable), 4 columns from md up */}
                     <Box
                         sx={{
                             display: 'grid',
-                            gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+                            gridTemplateColumns: { xs: mobileColumns, md: 'repeat(4, 1fr)' },
                             gap: { xs: 1.5, sm: 3 },
                             mb: 6,
                         }}
@@ -276,7 +294,7 @@ const ProductsPage = () => {
                         <Box
                             sx={{
                                 display: 'grid',
-                                gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
+                                gridTemplateColumns: { xs: mobileColumns, md: 'repeat(4, 1fr)' },
                                 gap: 3,
                             }}
                         >
