@@ -8,9 +8,13 @@ import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import axiosInstance from '../axios/axios';
 
 const ChatBot = () => {
-    // Always starts open on a fresh page load/refresh, rather than
-    // remembering whether it was closed last time.
-    const [isOpen, setIsOpen] = useState(true);
+    // Always starts open on a fresh page load/refresh on desktop, rather than
+    // remembering whether it was closed last time - but starts closed (just the
+    // floating icon) on small screens, where the panel takes over nearly the
+    // whole viewport (see the `xs` sizing below) and shouldn't ambush people
+    // the moment the site loads. 600px matches MUI's default `sm` breakpoint,
+    // same one the panel's own responsive sizing switches on.
+    const [isOpen, setIsOpen] = useState(() => window.innerWidth >= 600);
 
     const [messages, setMessages] = useState(() => {
         const saved = localStorage.getItem('chatbotMessages');

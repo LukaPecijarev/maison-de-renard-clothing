@@ -7,6 +7,7 @@ import com.example.maisonderenard.dto.domain.RegisterUserResponseDto;
 import com.example.maisonderenard.helpers.JwtHelper;
 import com.example.maisonderenard.model.domain.User;
 import com.example.maisonderenard.model.enums.Role;
+import com.example.maisonderenard.model.exceptions.InvalidPasswordException;
 import com.example.maisonderenard.model.exceptions.UserNotFoundException;
 import com.example.maisonderenard.service.application.UserApplicationService;
 import com.example.maisonderenard.service.domain.UserService;
@@ -58,7 +59,7 @@ public class UserApplicationServiceImpl implements UserApplicationService {
 
         // 2. Check password
         if (!passwordEncoder.matches(loginDto.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new InvalidPasswordException();
         }
 
         // 3. Generate JWT token
