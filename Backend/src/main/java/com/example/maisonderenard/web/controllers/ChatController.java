@@ -199,18 +199,12 @@ public class ChatController {
                 
                 AVAILABLE PRODUCTS:
                 """ + productsInfo + """
-                
+
                 RECENTLY SOLD PRODUCTS (last 20 sales):
                 """ + soldProductsInfo + """
-                
+
                 SALES STATISTICS BY CATEGORY:
-                """ + statsInfo + """
-                
-                CURRENT USER ORDER HISTORY:
-                """ + orderHistoryInfo + """
-                
-                RECENTLY VIEWED PRODUCTS BY USER:
-                """ + viewedProductsInfo;
+                """ + statsInfo;
 
         } else {
             systemPrompt = """
@@ -260,14 +254,21 @@ public class ChatController {
                 - Never mention null or missing attributes
                 
                 AVAILABLE PRODUCTS:
-                """ + productsInfo + """
-                
+                """ + productsInfo;
+        }
+
+        // Kept separate from systemPrompt (and NOT cache_control'd below) on purpose:
+        // order history / recently-viewed change on nearly every message as the user
+        // browses between chat turns, so folding them into the cached block would bust
+        // the cache (and refetch the whole ~5k-token catalog+rules block at full price)
+        // on almost every request. This stays small and is cheap to resend uncached.
+        String dynamicContext = """
+
                 CURRENT USER ORDER HISTORY:
                 """ + orderHistoryInfo + """
-                
+
                 RECENTLY VIEWED PRODUCTS BY USER:
                 """ + viewedProductsInfo;
-        }
 
         List<Map<String, String>> messages = new ArrayList<>();
         if (request.getConversationHistory() != null) {
@@ -277,20 +278,25 @@ public class ChatController {
         }
         messages.add(Map.of("role", "user", "content", request.getMessage()));
 
-        // The system prompt (full catalog + order history etc.) is rebuilt every
-        // request but is usually byte-identical turn-to-turn within a conversation,
-        // so it's the biggest win for Anthropic's prompt caching: marking it as an
-        // ephemeral cache breakpoint means repeat turns re-send it at a fraction of
-        // the input-token cost/latency instead of paying full price every message.
-        Map<String, Object> systemBlock = new HashMap<>();
-        systemBlock.put("type", "text");
-        systemBlock.put("text", systemPrompt);
-        systemBlock.put("cache_control", Map.of("type", "ephemeral"));
+        // systemPrompt (rules + full catalog + admin sales data) is identical
+        // turn-to-turn within a conversation, so it's marked as an ephemeral cache
+        // breakpoint: turn 2+ re-sends it at a fraction of the input-token cost/latency
+        // instead of paying full price every message. dynamicContext (order history +
+        // recently viewed) is sent as a second, uncached block - see its comment above
+        // for why it's kept out of the cached one.
+        Map<String, Object> staticBlock = new HashMap<>();
+        staticBlock.put("type", "text");
+        staticBlock.put("text", systemPrompt);
+        staticBlock.put("cache_control", Map.of("type", "ephemeral"));
+
+        Map<String, Object> dynamicBlock = new HashMap<>();
+        dynamicBlock.put("type", "text");
+        dynamicBlock.put("text", dynamicContext);
 
         Map<String, Object> body = new HashMap<>();
         body.put("model", "claude-sonnet-4-5-20250929");
         body.put("max_tokens", 1024);
-        body.put("system", List.of(systemBlock));
+        body.put("system", List.of(staticBlock, dynamicBlock));
         body.put("messages", messages);
 
         HttpHeaders headers = new HttpHeaders();
