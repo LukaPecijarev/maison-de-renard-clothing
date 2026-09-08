@@ -6,6 +6,8 @@ import com.example.maisonderenard.model.exceptions.ProductOutOfStockException;
 import com.example.maisonderenard.repository.OrderRepository;
 import com.example.maisonderenard.repository.ProductRepository;
 import com.example.maisonderenard.service.domain.ProductService;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,6 +15,12 @@ import java.util.Optional;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    // Cache names shared with CategoryServiceImpl, which also evicts these -
+    // a category rename/delete changes what findAll()/findByCategoryId() return
+    // (DisplayProductDto embeds the category name), so it can't just evict its own cache.
+    private static final String PRODUCTS_CACHE = "products";
+    private static final String PRODUCTS_BY_CATEGORY_CACHE = "productsByCategory";
 
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
@@ -23,6 +31,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(PRODUCTS_CACHE)
     public List<Product> findAll() {
         return productRepository.findAll();
     }
@@ -33,16 +42,19 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Cacheable(cacheNames = PRODUCTS_BY_CATEGORY_CACHE, key = "#categoryId")
     public List<Product> findByCategoryId(Long categoryId) {
         return productRepository.findByCategoryId(categoryId);
     }
 
     @Override
+    @CacheEvict(cacheNames = { PRODUCTS_CACHE, PRODUCTS_BY_CATEGORY_CACHE }, allEntries = true)
     public Product save(Product product) {
         return productRepository.save(product);
     }
 
     @Override
+    @CacheEvict(cacheNames = { PRODUCTS_CACHE, PRODUCTS_BY_CATEGORY_CACHE }, allEntries = true)
     public Optional<Product> update(Long id, Product product) {
         return findById(id)
                 .map(existingProduct -> {
@@ -63,6 +75,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(cacheNames = { PRODUCTS_CACHE, PRODUCTS_BY_CATEGORY_CACHE }, allEntries = true)
     public Optional<Product> deleteById(Long id) {
         Optional<Product> product = findById(id);
         product.ifPresent(productRepository::delete);
@@ -70,6 +83,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(cacheNames = { PRODUCTS_CACHE, PRODUCTS_BY_CATEGORY_CACHE }, allEntries = true)
     public Order addToOrder(Product product, Order order) {
         if(product.getQuantity() <= 0){
             throw new ProductOutOfStockException(product.getId());
@@ -81,6 +95,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @CacheEvict(cacheNames = { PRODUCTS_CACHE, PRODUCTS_BY_CATEGORY_CACHE }, allEntries = true)
     public Order removeFromOrder(Product product, Order order) {
         product.increaseQuantity();
         productRepository.save(product);

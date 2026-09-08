@@ -277,10 +277,20 @@ public class ChatController {
         }
         messages.add(Map.of("role", "user", "content", request.getMessage()));
 
+        // The system prompt (full catalog + order history etc.) is rebuilt every
+        // request but is usually byte-identical turn-to-turn within a conversation,
+        // so it's the biggest win for Anthropic's prompt caching: marking it as an
+        // ephemeral cache breakpoint means repeat turns re-send it at a fraction of
+        // the input-token cost/latency instead of paying full price every message.
+        Map<String, Object> systemBlock = new HashMap<>();
+        systemBlock.put("type", "text");
+        systemBlock.put("text", systemPrompt);
+        systemBlock.put("cache_control", Map.of("type", "ephemeral"));
+
         Map<String, Object> body = new HashMap<>();
         body.put("model", "claude-sonnet-4-5-20250929");
         body.put("max_tokens", 1024);
-        body.put("system", systemPrompt);
+        body.put("system", List.of(systemBlock));
         body.put("messages", messages);
 
         HttpHeaders headers = new HttpHeaders();

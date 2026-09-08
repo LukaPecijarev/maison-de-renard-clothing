@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Container, Typography, Box, IconButton, Snackbar, Alert, Fab,
+    Container, Typography, Box, Snackbar, Alert, Fab,
     FormControl, InputLabel, Select, MenuItem, Button,
 } from '@mui/material';
 import ProductGridSkeleton from '../components/ProductGridSkeleton';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddIcon from '@mui/icons-material/Add';
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import VisibilityOutlinedIcon from '@mui/icons-material/VisibilityOutlined';
 import useProducts from '../hooks/useProducts';
-import useOrder from '../hooks/useOrder';
-import useAuth from '../hooks/useAuth';
-import useWishlist from '../hooks/useWishlist';
 import categoryRepository from '../repository/categoryRepository';
+import ProductCard from '../components/ProductCard';
 import QuickViewModal from '../components/QuickViewModal';
 import Reveal from '../components/Reveal';
 import RecentlyViewed from '../components/RecentlyViewed';
@@ -35,15 +27,13 @@ const ProductsPage = () => {
     const [filterColor, setFilterColor] = useState('');
     const [filterMaterial, setFilterMaterial] = useState('');
 
-    const { isAuthenticated } = useAuth();
-    const { addToCart } = useOrder();
-    const { isInWishlist, toggleWishlist } = useWishlist();
-
     // Check if user is admin
     const isAdmin = () => {
         const role = localStorage.getItem('role');
         return role === 'ROLE_ADMIN' || role === 'ADMIN';
     };
+
+    const notify = (message, severity) => setSnackbar({ open: true, message, severity });
 
     // Update selected category when URL changes
     useEffect(() => {
@@ -134,317 +124,6 @@ const ProductsPage = () => {
         if (categoryName === 'Women') return '/WomenVideo.mp4';
         if (categoryName === 'Gifts') return '/GiftsVideo.mp4';
         return null;
-    };
-
-    const handleDelete = async (productId, productName) => {
-        if (window.confirm(`Are you sure you want to delete "${productName}"?`)) {
-            try {
-                await onDelete(productId);
-                setSnackbar({
-                    open: true,
-                    message: `${productName} deleted successfully!`,
-                    severity: 'success',
-                });
-            } catch (error) {
-                setSnackbar({
-                    open: true,
-                    message: 'Failed to delete product',
-                    severity: 'error',
-                });
-            }
-        }
-    };
-
-    // Component for image with hover effect
-    const ImageWithHover = ({ product, onClick }) => {
-        const [isHovered, setIsHovered] = useState(false);
-        const [cursorPos, setCursorPos] = useState({ x: 0, y: 0 });
-        const [overIcon, setOverIcon] = useState(false);
-        const admin = isAdmin();
-        const showCursorHint = isHovered && !overIcon;
-
-        // Tell the global CustomCursor to stand down while this tile's own
-        // VIEW bubble is showing, so the two don't draw on top of each other.
-        useEffect(() => {
-            window.dispatchEvent(new CustomEvent('customCursor:localHint', { detail: { active: showCursorHint } }));
-            return () => window.dispatchEvent(new CustomEvent('customCursor:localHint', { detail: { active: false } }));
-        }, [showCursorHint]);
-
-        // Parse imageUrl - should be in format: "url1,url2" or just "url1"
-        const images = product.imageUrl ? product.imageUrl.split(',').map(url => url.trim()) : [];
-        const defaultImage = images[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500';
-        const hoverImage = images[1] || defaultImage;
-
-        // Format price in euros
-        const formattedPrice = `€${product.price.toFixed(0)}`;
-
-        return (
-            <Box
-                sx={{
-                    width: '100%',
-                    aspectRatio: '3/4',
-                    overflow: 'hidden',
-                    cursor: showCursorHint ? 'none' : 'pointer',
-                    position: 'relative',
-                    backgroundColor: '#f5f1e8',
-                }}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                onMouseMove={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    setCursorPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-                }}
-                onClick={onClick}
-            >
-                {/* Custom cursor-follow "VIEW" hint, replacing the system pointer while hovering -
-                    hidden over the icon buttons so the real cursor shows through instead */}
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        left: cursorPos.x, top: cursorPos.y,
-                        transform: `translate(-50%, -50%) scale(${showCursorHint ? 1 : 0.4})`,
-                        opacity: showCursorHint ? 1 : 0,
-                        transition: 'opacity 0.2s ease, transform 0.2s ease',
-                        pointerEvents: 'none',
-                        width: 62, height: 62, borderRadius: '50%',
-                        backgroundColor: 'rgba(230, 204, 178, 0.55)',
-                        backdropFilter: 'blur(2px)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        zIndex: 3,
-                    }}
-                >
-                    <Typography sx={{
-                        fontFamily: '"Lato", sans-serif', fontSize: '0.65rem',
-                        color: '#2c2c2c', letterSpacing: '0.1em',
-                    }}>
-                        VIEW
-                    </Typography>
-                </Box>
-
-                <Box
-                    component="img"
-                    src={isHovered ? hoverImage : defaultImage}
-                    alt={product.name}
-                    sx={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        transition: 'all 0.6s ease',
-                        transform: isHovered ? 'scale(1.03)' : 'scale(1)',
-                        display: 'block',
-                        filter: 'brightness(0.98) contrast(1.02)',
-                        mixBlendMode: 'multiply',
-                    }}
-                />
-
-                {/* Wishlist Toggle */}
-                <IconButton
-                    onMouseEnter={() => setOverIcon(true)}
-                    onMouseLeave={() => setOverIcon(false)}
-                    sx={{
-                        position: 'absolute',
-                        top: { xs: 6, sm: 12 },
-                        left: { xs: 6, sm: 12 },
-                        backgroundColor: 'transparent',
-                        width: { xs: 28, sm: 36 },
-                        height: { xs: 28, sm: 36 },
-                        cursor: 'pointer',
-                        opacity: isHovered ? 1 : 0,
-                        transition: 'opacity 0.3s ease',
-                        '@media (hover: none)': { opacity: 1 },
-                        '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
-                    }}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        toggleWishlist(product);
-                    }}
-                >
-                    {isInWishlist(product.id)
-                        ? <FavoriteIcon sx={{ fontSize: { xs: 15, sm: 20 }, color: '#d32f2f' }} />
-                        : <FavoriteBorderIcon sx={{ fontSize: { xs: 15, sm: 20 }, color: '#ffffff' }} />}
-                </IconButton>
-
-                {/* Quick View */}
-                <IconButton
-                    onMouseEnter={() => setOverIcon(true)}
-                    onMouseLeave={() => setOverIcon(false)}
-                    sx={{
-                        position: 'absolute',
-                        bottom: { xs: 6, sm: 12 },
-                        right: { xs: 6, sm: 12 },
-                        backgroundColor: 'transparent',
-                        width: { xs: 28, sm: 36 },
-                        height: { xs: 28, sm: 36 },
-                        cursor: 'pointer',
-                        opacity: isHovered ? 1 : 0,
-                        transition: 'opacity 0.3s ease',
-                        '@media (hover: none)': { opacity: 1 },
-                        '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
-                    }}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        setQuickViewProduct(product);
-                    }}
-                >
-                    <VisibilityOutlinedIcon sx={{ fontSize: { xs: 15, sm: 20 }, color: '#ffffff' }} />
-                </IconButton>
-
-                {/* Admin Controls - Edit and Delete */}
-                {admin ? (
-                    <Box
-                        onMouseEnter={() => setOverIcon(true)}
-                        onMouseLeave={() => setOverIcon(false)}
-                        sx={{
-                            position: 'absolute',
-                            top: { xs: 6, sm: 12 },
-                            right: { xs: 6, sm: 12 },
-                            display: 'flex',
-                            gap: 1,
-                            cursor: 'pointer',
-                            opacity: isHovered ? 1 : 0,
-                            transition: 'opacity 0.3s ease',
-                            '@media (hover: none)': { opacity: 1 },
-                        }}
-                    >
-                        {/* Edit Button */}
-                        <IconButton
-                            sx={{
-                                backgroundColor: 'rgba(245, 235, 224, 0.95)',
-                                width: { xs: 28, sm: 36 },
-                                height: { xs: 28, sm: 36 },
-                                '&:hover': {
-                                    backgroundColor: 'rgba(230, 204, 178, 0.95)',
-                                },
-                            }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(`/products/${product.id}/edit`);
-                            }}
-                        >
-                            <EditOutlinedIcon sx={{ fontSize: { xs: 14, sm: 18 }, color: '#2c2c2c' }} />
-                        </IconButton>
-
-                        {/* Delete Button */}
-                        <IconButton
-                            sx={{
-                                backgroundColor: 'rgba(245, 235, 224, 0.95)',
-                                width: { xs: 28, sm: 36 },
-                                height: { xs: 28, sm: 36 },
-                                '&:hover': {
-                                    backgroundColor: 'rgba(244, 143, 177, 0.95)',
-                                },
-                            }}
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                handleDelete(product.id, product.name);
-                            }}
-                        >
-                            <DeleteOutlineIcon sx={{ fontSize: { xs: 14, sm: 18 }, color: '#d32f2f' }} />
-                        </IconButton>
-                    </Box>
-                ) : (
-                    /* Customer Shopping Bag Icon */
-                    <IconButton
-                        onMouseEnter={() => setOverIcon(true)}
-                        onMouseLeave={() => setOverIcon(false)}
-                        sx={{
-                            position: 'absolute',
-                            top: { xs: 6, sm: 12 },
-                            right: { xs: 6, sm: 12 },
-                            backgroundColor: 'transparent',
-                            width: { xs: 28, sm: 36 },
-                            height: { xs: 28, sm: 36 },
-                            cursor: 'pointer',
-                            opacity: isHovered ? 1 : 0,
-                            transition: 'opacity 0.3s ease',
-                            '@media (hover: none)': { opacity: 1 },
-                            '&:hover': {
-                                backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                            },
-                        }}
-                        onClick={async (e) => {
-                            e.stopPropagation();
-
-                            if (!isAuthenticated()) {
-                                setSnackbar({
-                                    open: true,
-                                    message: 'Please login to add items to cart',
-                                    severity: 'warning',
-                                });
-                                setTimeout(() => navigate('/login'), 1500);
-                                return;
-                            }
-
-                            const success = await addToCart(product.id);
-                            if (success) {
-                                setSnackbar({
-                                    open: true,
-                                    message: `${product.name} added to cart!`,
-                                    severity: 'success',
-                                });
-                            } else {
-                                setSnackbar({
-                                    open: true,
-                                    message: 'Failed to add item to cart',
-                                    severity: 'error',
-                                });
-                            }
-                        }}
-                    >
-                        <ShoppingBagOutlinedIcon sx={{ fontSize: { xs: 15, sm: 20 }, color: '#ffffff' }} />
-                    </IconButton>
-                )}
-
-                {/* Price Popup - Shows on Hover */}
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        bottom: { xs: 8, sm: 16 },
-                        left: '50%',
-                        transform: { xs: 'translate(-50%, 0)', sm: isHovered ? 'translate(-50%, 0)' : 'translate(-50%, 20px)' },
-                        opacity: isHovered ? 1 : 0,
-                        transition: 'all 0.4s ease',
-                        '@media (hover: none)': { opacity: 1 },
-                        backgroundColor: '#f5ebe0',
-                        padding: { xs: '5px 10px', sm: '8px 20px' },
-                        borderRadius: '4px',
-                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-                        pointerEvents: 'none',
-                        minWidth: { xs: '100px', sm: '140px' },
-                        maxWidth: { xs: '90%', sm: 'none' },
-                        textAlign: 'center',
-                    }}
-                >
-                    <Typography
-                        sx={{
-                            fontFamily: '"Lato", sans-serif',
-                            fontSize: { xs: '0.55rem', sm: '0.7rem' },
-                            fontWeight: 400,
-                            color: 'rgba(44, 44, 44, 0.7)',
-                            letterSpacing: '0.05em',
-                            mb: 0.3,
-                            textTransform: 'uppercase',
-                            whiteSpace: { xs: 'nowrap', sm: 'normal' },
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                        }}
-                    >
-                        {product.name}
-                    </Typography>
-                    <Typography
-                        sx={{
-                            fontFamily: '"Cormorant Garamond", serif',
-                            fontSize: { xs: '0.85rem', sm: '1rem' },
-                            fontWeight: 500,
-                            color: '#2c2c2c',
-                            letterSpacing: '0.05em',
-                        }}
-                    >
-                        {formattedPrice}
-                    </Typography>
-                </Box>
-            </Box>
-        );
     };
 
     if (loading) {
@@ -550,9 +229,12 @@ const ProductsPage = () => {
                     >
                         {filteredProducts.slice(0, 4).map((product, index) => (
                             <Reveal key={product.id} delay={index * 0.08}>
-                                <ImageWithHover
+                                <ProductCard
                                     product={product}
-                                    onClick={() => navigate(`/products/${product.id}`)}
+                                    variant="grid"
+                                    onQuickView={setQuickViewProduct}
+                                    onDelete={onDelete}
+                                    onNotify={notify}
                                 />
                             </Reveal>
                         ))}
@@ -600,9 +282,12 @@ const ProductsPage = () => {
                         >
                             {filteredProducts.slice(4).map((product, index) => (
                                 <Reveal key={product.id} delay={(index % 4) * 0.08}>
-                                    <ImageWithHover
+                                    <ProductCard
                                         product={product}
-                                        onClick={() => navigate(`/products/${product.id}`)}
+                                        variant="grid"
+                                        onQuickView={setQuickViewProduct}
+                                        onDelete={onDelete}
+                                        onNotify={notify}
                                     />
                                 </Reveal>
                             ))}
