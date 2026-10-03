@@ -13,3 +13,7 @@ frontend/.idea/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local dev server logs
+*-out.log
+*-err.log
