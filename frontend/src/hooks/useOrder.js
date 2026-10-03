@@ -74,11 +74,17 @@ const useOrder = () => {
         }
     }, [fetchPendingOrder]);
 
-    const cancelOrder = useCallback(() => {
-        orderRepository
-            .cancelPendingOrder()
-            .then(() => fetchPendingOrder())
-            .catch((error) => console.error('Error cancelling order:', error));
+    const cancelOrder = useCallback(async () => {
+        try {
+            await orderRepository.cancelPendingOrder();
+            localStorage.setItem('cartCount', '0');
+            window.dispatchEvent(new Event('cartUpdated'));
+            await fetchPendingOrder();
+            return true;
+        } catch (error) {
+            console.error('Error cancelling order:', error);
+            return false;
+        }
     }, [fetchPendingOrder]);
 
     useEffect(() => {

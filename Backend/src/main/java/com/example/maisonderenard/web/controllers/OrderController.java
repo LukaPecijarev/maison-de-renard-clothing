@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,13 +38,13 @@ public class OrderController {
     }
 
     @PreAuthorize("hasRole('CUSTOMER')")
-    @GetMapping("/pending/confirm")
+    @PutMapping("/pending/confirm")
     public ResponseEntity<DisplayOrderDto> confirmPendingOrder(@AuthenticationPrincipal User user){
         return ResponseEntity.ok(orderApplicationService.confirmPendingOrder(user.getUsername()));
     }
 
     @PreAuthorize("hasRole('CUSTOMER')")
-    @GetMapping("/pending/cancel")
+    @PutMapping("/pending/cancel")
     public ResponseEntity<DisplayOrderDto> cancelPendingOrder(@AuthenticationPrincipal User user){
         return ResponseEntity.ok(orderApplicationService.cancelPendingOrder(user.getUsername()));
     }

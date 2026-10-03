@@ -84,8 +84,7 @@ const ProductDetailsPage = () => {
     const clothingSizes = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
     const allSizes = isFootwear ? shoesSizes : clothingSizes;
 
-    const discountMatch = product.description?.match(/DISCOUNT:(\d+)/);
-    const discount = discountMatch ? parseInt(discountMatch[1]) : 0;
+    const discount = product.discountPercentage || 0;
     const discountedPrice = discount > 0 ? product.price * (1 - discount / 100) : product.price;
 
     const handleAddToCart = async () => {
@@ -190,7 +189,7 @@ const ProductDetailsPage = () => {
                             fontFamily: '"Lato", sans-serif', fontSize: '0.95rem',
                             lineHeight: 1.8, color: '#666', mb: 4,
                         }}>
-                            {product.description?.replace(/DISCOUNT:\d+\s?/, '')}
+                            {product.description}
                         </Typography>
 
                         {/* Add to Cart Button + Wishlist Toggle */}

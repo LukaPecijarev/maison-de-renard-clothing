@@ -48,8 +48,7 @@ const ProductCard = ({ product, variant = 'grid', onQuickView, onDelete, onNotif
     const hoverImage = images[1] || defaultImage;
 
     // Only the offers variant (SpecialOffersPage) parses/displays discounts.
-    const discountMatch = variant === 'offers' ? product.description?.match(/DISCOUNT:(\d+)/) : null;
-    const discount = discountMatch ? parseInt(discountMatch[1]) : 0;
+    const discount = variant === 'offers' ? (product.discountPercentage || 0) : 0;
     const originalPrice = product.price;
     const discountedPrice = discount > 0 ? originalPrice * (1 - discount / 100) : originalPrice;
 

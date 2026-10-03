@@ -27,6 +27,8 @@ const Header = () => {
     );
     const [mobileOpen, setMobileOpen] = useState(false);
     const { isAuthenticated, getUsername, logout } = useAuth();
+    const role = localStorage.getItem('role');
+    const isAdmin = role === 'ROLE_ADMIN' || role === 'ADMIN';
 
     const navLinks = [
         { label: 'Fall/Winter 2026/2027', to: '/products?category=5' },
@@ -378,6 +380,21 @@ const Header = () => {
                                                 {getUsername()}
                                             </Typography>
                                         </Box>
+                                        {isAdmin && (
+                                            <Button onClick={() => navigate('/admin/categories')} sx={{
+                                                color: '#8b7355',
+                                                fontSize: '0.95rem',
+                                                fontFamily: '"Cormorant Garamond", serif',
+                                                fontStyle: 'italic',
+                                                letterSpacing: '0.03em',
+                                                minWidth: 'auto',
+                                                p: 0.5,
+                                                whiteSpace: 'nowrap',
+                                                '&:hover': { backgroundColor: 'transparent', color: '#2c2c2c' },
+                                            }}>
+                                                Categories
+                                            </Button>
+                                        )}
                                         <Button onClick={() => {
                                             logout();
                                             localStorage.setItem('cartCount', '0');
@@ -474,6 +491,11 @@ const Header = () => {
                         {isAuthenticated() && (
                             <ListItemButton onClick={() => handleNavigate('/order-history')}>
                                 <ListItemText primary="Order History" primaryTypographyProps={{ fontFamily: '"Lato", sans-serif', fontSize: '0.9rem' }} />
+                            </ListItemButton>
+                        )}
+                        {isAuthenticated() && isAdmin && (
+                            <ListItemButton onClick={() => handleNavigate('/admin/categories')}>
+                                <ListItemText primary="Manage Categories" primaryTypographyProps={{ fontFamily: '"Lato", sans-serif', fontSize: '0.9rem' }} />
                             </ListItemButton>
                         )}
                         {isAuthenticated() ? (

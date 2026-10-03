@@ -3,8 +3,10 @@ package com.example.maisonderenard.service.domain.impl;
 import com.example.maisonderenard.model.domain.Order;
 import com.example.maisonderenard.model.domain.SoldProduct;
 import com.example.maisonderenard.repository.OrderRepository;
+import com.example.maisonderenard.repository.ProductRepository;
 import com.example.maisonderenard.repository.SoldProductRepository;
 import com.example.maisonderenard.service.domain.OrderService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,10 +18,13 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final SoldProductRepository soldProductRepository;
+    private final ProductRepository productRepository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, SoldProductRepository soldProductRepository) {
+    public OrderServiceImpl(OrderRepository orderRepository, SoldProductRepository soldProductRepository,
+                            ProductRepository productRepository) {
         this.orderRepository = orderRepository;
         this.soldProductRepository = soldProductRepository;
+        this.productRepository = productRepository;
     }
 
     @Override
@@ -64,8 +69,16 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.save(order);
     }
 
+    // Stock is reserved when an item is added to the cart (addToOrder decreases
+    // the product's quantity), so cancelling has to give it back - same as
+    // removeFromOrder does per item. Evicts the product caches for the same reason.
     @Override
+    @CacheEvict(cacheNames = { "products", "productsByCategory" }, allEntries = true)
     public Order cancelOrder(Order order) {
+        order.getProducts().forEach(product -> {
+            product.increaseQuantity();
+            productRepository.save(product);
+        });
         order.setStatus("CANCELLED");
         return orderRepository.save(order);
     }

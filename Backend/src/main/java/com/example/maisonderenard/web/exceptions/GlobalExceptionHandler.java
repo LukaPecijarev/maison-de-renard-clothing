@@ -1,6 +1,10 @@
 package com.example.maisonderenard.web.exceptions;
 
+import com.example.maisonderenard.model.exceptions.CategoryNotFoundException;
 import com.example.maisonderenard.model.exceptions.InvalidPasswordException;
+import com.example.maisonderenard.model.exceptions.OrderNotFoundException;
+import com.example.maisonderenard.model.exceptions.ProductNotFoundException;
+import com.example.maisonderenard.model.exceptions.ProductOutOfStockException;
 import com.example.maisonderenard.model.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,5 +29,23 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleLoginFailure(RuntimeException e) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(Map.of("message", "Username or password is incorrect"));
+    }
+
+    @ExceptionHandler({
+            ProductNotFoundException.class,
+            CategoryNotFoundException.class,
+            OrderNotFoundException.class
+    })
+    public ResponseEntity<Map<String, String>> handleNotFound(RuntimeException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("message", e.getMessage()));
+    }
+
+    // 409 rather than 400: the request itself is valid, it just conflicts with
+    // the product's current stock level.
+    @ExceptionHandler(ProductOutOfStockException.class)
+    public ResponseEntity<Map<String, String>> handleOutOfStock(ProductOutOfStockException e) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(Map.of("message", e.getMessage()));
     }
 }

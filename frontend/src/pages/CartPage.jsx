@@ -10,6 +10,13 @@ import {
     Button,
     Divider,
     CircularProgress,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Snackbar,
+    Alert,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -19,7 +26,10 @@ import useAuth from '../hooks/useAuth';
 import Reveal from '../components/Reveal';
 
 const CartPage = () => {
-    const { order, loading, removeFromCart } = useOrder();
+    const { order, loading, removeFromCart, cancelOrder } = useOrder();
+    const [confirmCancelOpen, setConfirmCancelOpen] = React.useState(false);
+    const [cancelling, setCancelling] = React.useState(false);
+    const [snackbar, setSnackbar] = React.useState({ open: false, message: '', severity: 'success' });
     const { isAuthenticated } = useAuth();
     const navigate = useNavigate();
 
@@ -37,6 +47,16 @@ const CartPage = () => {
         navigate('/checkout');
     };
 
+    const handleConfirmCancel = async () => {
+        setConfirmCancelOpen(false);
+        setCancelling(true);
+        const success = await cancelOrder();
+        setCancelling(false);
+        setSnackbar(success
+            ? { open: true, message: 'Your order has been cancelled.', severity: 'success' }
+            : { open: true, message: 'Failed to cancel order. Please try again.', severity: 'error' });
+    };
+
     if (loading) {
         return (
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh', backgroundColor: '#f5f1e8' }}>
@@ -48,21 +68,12 @@ const CartPage = () => {
     const cartItems = order?.products || [];
     const isEmpty = cartItems.length === 0;
 
-    const getDiscountedPrice = (item) => {
-        const discountMatch = item.description?.match(/DISCOUNT:(\d+)/);
-        if (discountMatch) {
-            const discount = parseInt(discountMatch[1]);
-            return item.price * (1 - discount / 100);
-        }
-        return item.price;
-    };
+    // Per-item prices are only for display - the total comes from the backend
+    // (Order.totalPrice), which applies the same discounts server-side.
+    const getDiscount = (item) => item.discountPercentage || 0;
+    const getDiscountedPrice = (item) => item.price * (1 - getDiscount(item) / 100);
 
-    const getDiscount = (item) => {
-        const discountMatch = item.description?.match(/DISCOUNT:(\d+)/);
-        return discountMatch ? parseInt(discountMatch[1]) : 0;
-    };
-
-    const total = cartItems.reduce((sum, item) => sum + getDiscountedPrice(item), 0);
+    const total = order?.totalPrice || 0;
 
     return (
         <Box sx={{ backgroundColor: '#f5f1e8', minHeight: '100vh', py: 8 }}>
@@ -141,7 +152,7 @@ const CartPage = () => {
                                                 {item.name}
                                             </Typography>
                                             <Typography variant="body2" sx={{ color: '#666', mb: 2, fontSize: '0.9rem' }}>
-                                                {item.description?.replace(/DISCOUNT:\d+\s?/, '').substring(0, 100)}...
+                                                {item.description?.substring(0, 100)}...
                                             </Typography>
                                             <Box sx={{ mt: 'auto', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                                 <Box>
@@ -279,11 +290,57 @@ const CartPage = () => {
                                 >
                                     CONTINUE SHOPPING
                                 </Button>
+
+                                <Button
+                                    fullWidth
+                                    onClick={() => setConfirmCancelOpen(true)}
+                                    disabled={cancelling}
+                                    sx={{
+                                        mt: 2, py: 1, color: '#9c4a4a',
+                                        fontSize: '0.8rem', letterSpacing: '0.1em',
+                                        fontFamily: '"Lato", sans-serif',
+                                        '&:hover': { backgroundColor: 'rgba(156, 74, 74, 0.06)' },
+                                    }}
+                                >
+                                    {cancelling ? 'CANCELLING...' : 'CANCEL ORDER'}
+                                </Button>
                             </Card>
                         </Box>
                     </Box>
                 )}
             </Container></Reveal>
+
+            {/* Cancel order confirmation */}
+            <Dialog open={confirmCancelOpen} onClose={() => setConfirmCancelOpen(false)}>
+                <DialogTitle sx={{ fontFamily: '"Cormorant Garamond", serif' }}>
+                    Cancel this order?
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText sx={{ fontFamily: '"Lato", sans-serif' }}>
+                        All {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'} will be removed from your cart. This can't be undone.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setConfirmCancelOpen(false)} sx={{ color: '#8b7355' }}>
+                        Keep Order
+                    </Button>
+                    <Button onClick={handleConfirmCancel} sx={{ color: '#9c4a4a' }}>
+                        Cancel Order
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+            <Snackbar
+                open={snackbar.open}
+                autoHideDuration={3000}
+                onClose={() => setSnackbar({ ...snackbar, open: false })}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+            >
+                <Alert onClose={() => setSnackbar({ ...snackbar, open: false })}
+                       severity={snackbar.severity} sx={{ width: '100%' }}>
+                    {snackbar.message}
+                </Alert>
+            </Snackbar>
         </Box>
     );
 };

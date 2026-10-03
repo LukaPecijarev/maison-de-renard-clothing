@@ -10,6 +10,7 @@ import com.example.maisonderenard.service.application.OrderApplicationService;
 import com.example.maisonderenard.service.domain.OrderService;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,13 +26,22 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
 
     @Override
     public Optional<DisplayOrderDto> findPendingOrder(String username) {
+        // Recompute on read so the cart reflects price/discount changes made to its
+        // products since they were added (the stored value catches up on next save).
         return orderService.findPendingOrderByUsername(username)
-                .map(this::mapToDto);
+                .map(order -> {
+                    order.calculateTotalPrice();
+                    return mapToDto(order);
+                });
     }
 
     @Override
     public List<DisplayOrderDto> findOrderHistory(String username) {
+        // The current (PENDING) order always comes first, then the rest by id.
         return orderService.findOrderHistoryByUsername(username).stream()
+                .sorted(Comparator
+                        .comparing((Order order) -> !"PENDING".equals(order.getStatus()))
+                        .thenComparing(Order::getId))
                 .map(this::mapToDto)
                 .collect(Collectors.toList());
     }
@@ -41,13 +51,8 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
         Order order = orderService.findPendingOrderByUsername(username)
                 .orElseThrow(() -> new OrderNotFoundException(username));
 
-        // Зачувај ги податоците ПРЕД бришење
-        DisplayOrderDto dto = mapToDto(order);
-
-        // Потврди и избриши
-        orderService.confirmOrder(order);
-
-        return dto;
+        Order confirmedOrder = orderService.confirmOrder(order);
+        return mapToDto(confirmedOrder);
     }
 
     @Override
@@ -90,7 +95,8 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
                 product.getMaterial(),
                 product.getGender(),
                 product.getStyle(),
-                product.getSize()
+                product.getSize(),
+                product.getDiscountPercentage()
         );
     }
 }

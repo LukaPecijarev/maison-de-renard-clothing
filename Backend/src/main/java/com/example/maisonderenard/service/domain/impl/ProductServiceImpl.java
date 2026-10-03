@@ -70,6 +70,7 @@ public class ProductServiceImpl implements ProductService {
                     existingProduct.setGender(product.getGender());
                     existingProduct.setStyle(product.getStyle());
                     existingProduct.setSize(product.getSize());
+                    existingProduct.setDiscountPercentage(product.getDiscountPercentage());
                     return productRepository.save(existingProduct);
                 });
     }
@@ -91,6 +92,7 @@ public class ProductServiceImpl implements ProductService {
         product.decreaseQuantity();
         productRepository.save(product);
         order.getProducts().add(product);
+        order.calculateTotalPrice();
         return orderRepository.save(order);
     }
 
@@ -100,6 +102,7 @@ public class ProductServiceImpl implements ProductService {
         product.increaseQuantity();
         productRepository.save(product);
         order.getProducts().remove(product);
+        order.calculateTotalPrice();
         return orderRepository.save(order);
     }
 }

@@ -14,11 +14,12 @@ public class DisplayProductDetailsDto {
     private Double price;
     private Integer quantity;
     private String imageUrl;
-    private DisplayCategoryDto category;
+    private String categoryName;
     private String color;
     private String season;
     private String material;
     private String gender;
     private String style;
     private String size;
+    private Double discountPercentage;
 }

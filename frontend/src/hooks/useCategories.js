@@ -25,25 +25,36 @@ const useCategories = () => {
             });
     }, []);
 
+    // Mutations return their promise (and re-throw on failure) so callers like
+    // ManageCategoriesPage can show success/error feedback.
     const onAdd = useCallback((data) => {
-        categoryRepository
+        return categoryRepository
             .add(data)
             .then(() => { apiCache.clear('categories:'); fetchCategories(); })
-            .catch((error) => console.error('Error adding category:', error));
+            .catch((error) => {
+                console.error('Error adding category:', error);
+                throw error;
+            });
     }, [fetchCategories]);
 
     const onEdit = useCallback((id, data) => {
-        categoryRepository
+        return categoryRepository
             .edit(id, data)
             .then(() => { apiCache.clear('categories:'); fetchCategories(); })
-            .catch((error) => console.error('Error editing category:', error));
+            .catch((error) => {
+                console.error('Error editing category:', error);
+                throw error;
+            });
     }, [fetchCategories]);
 
     const onDelete = useCallback((id) => {
-        categoryRepository
+        return categoryRepository
             .delete(id)
             .then(() => { apiCache.clear('categories:'); fetchCategories(); })
-            .catch((error) => console.error('Error deleting category:', error));
+            .catch((error) => {
+                console.error('Error deleting category:', error);
+                throw error;
+            });
     }, [fetchCategories]);
 
     useEffect(() => {

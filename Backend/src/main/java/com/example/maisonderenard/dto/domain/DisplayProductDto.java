@@ -22,4 +22,5 @@ public class DisplayProductDto {
     private String gender;
     private String style;
     private String size;
+    private Double discountPercentage;
 }

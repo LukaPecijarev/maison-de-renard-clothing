@@ -84,6 +84,7 @@ public class ProductApplicationServiceImpl implements ProductApplicationService 
         product.setGender(createProductDto.getGender());
         product.setStyle(createProductDto.getStyle());
         product.setSize(createProductDto.getSize());
+        product.setDiscountPercentage(createProductDto.getDiscountPercentage());
 
         Product savedProduct = productService.save(product);
         return mapToDisplayDto(savedProduct);
@@ -107,6 +108,7 @@ public class ProductApplicationServiceImpl implements ProductApplicationService 
         product.setGender(createProductDto.getGender());
         product.setStyle(createProductDto.getStyle());
         product.setSize(createProductDto.getSize());
+        product.setDiscountPercentage(createProductDto.getDiscountPercentage());
 
         return productService.update(id, product)
                 .map(this::mapToDisplayDto);
@@ -165,17 +167,12 @@ public class ProductApplicationServiceImpl implements ProductApplicationService 
                 product.getMaterial(),
                 product.getGender(),
                 product.getStyle(),
-                product.getSize()
+                product.getSize(),
+                product.getDiscountPercentage()
         );
     }
 
     private DisplayProductDetailsDto mapToDetailsDto(Product product) {
-        DisplayCategoryDto categoryDto = new DisplayCategoryDto(
-                product.getCategory().getId(),
-                product.getCategory().getName(),
-                product.getCategory().getDescription()
-        );
-
         return new DisplayProductDetailsDto(
                 product.getId(),
                 product.getName(),
@@ -183,13 +180,14 @@ public class ProductApplicationServiceImpl implements ProductApplicationService 
                 product.getPrice(),
                 product.getQuantity(),
                 product.getImageUrl(),
-                categoryDto,
+                product.getCategory().getName(),
                 product.getColor(),
                 product.getSeason(),
                 product.getMaterial(),
                 product.getGender(),
                 product.getStyle(),
-                product.getSize()
+                product.getSize(),
+                product.getDiscountPercentage()
         );
     }
 

@@ -47,7 +47,8 @@ const AddProductPage = () => {
         material: '',
         gender: '',
         style: '',
-        size: ''
+        size: '',
+        discountPercentage: ''
     });
 
     useEffect(() => {
@@ -81,6 +82,7 @@ const AddProductPage = () => {
             gender: formData.gender,
             style: formData.style,
             size: formData.size,
+            discountPercentage: formData.discountPercentage === '' ? null : parseFloat(formData.discountPercentage),
         };
 
         try {
@@ -150,14 +152,18 @@ const AddProductPage = () => {
                                        value={formData.description} onChange={handleChange}
                                        required multiline rows={4} sx={fieldSx} />
 
-                            {/* Price and Quantity */}
-                            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 3 }}>
+                            {/* Price, Quantity and Discount */}
+                            <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr 1fr' }, gap: 3 }}>
                                 <TextField fullWidth label="Price (€)" name="price" type="number"
                                            value={formData.price} onChange={handleChange}
                                            required inputProps={{ step: '0.01', min: '0' }} sx={fieldSx} />
                                 <TextField fullWidth label="Quantity" name="quantity" type="number"
                                            value={formData.quantity} onChange={handleChange}
                                            required inputProps={{ min: '0' }} sx={fieldSx} />
+                                <TextField fullWidth label="Discount (%)" name="discountPercentage" type="number"
+                                           value={formData.discountPercentage} onChange={handleChange}
+                                           inputProps={{ min: '0', max: '100', step: '1' }}
+                                           helperText="Optional - leave empty for no discount" sx={fieldSx} />
                             </Box>
 
                             {/* Category */}

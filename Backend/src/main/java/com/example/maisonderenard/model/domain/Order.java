@@ -53,10 +53,19 @@ public class Order {
         calculateTotalPrice();
     }
 
+    // Only fires when one of the order's own columns changes (e.g. status).
+    // Changing just the products list doesn't make Hibernate treat the order row
+    // as dirty, so add/remove-from-cart also call calculateTotalPrice() explicitly.
+    @PreUpdate
+    protected void onUpdate(){
+        calculateTotalPrice();
+    }
+
     public void calculateTotalPrice(){
-        this.totalPrice = products.stream()
-                .mapToDouble(Product::getPrice)
+        double sum = products.stream()
+                .mapToDouble(Product::getDiscountedPrice)
                 .sum();
+        this.totalPrice = Math.round(sum * 100) / 100.0;
     }
 
     public List<Product> getProducts() {

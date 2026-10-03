@@ -11,8 +11,13 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Component
 public class DataInitializer {
+
+    private static final Pattern LEGACY_DISCOUNT_TAG = Pattern.compile("DISCOUNT:(\\d+)\\s*");
 
     private final CategoryRepository categoryRepository;
     private final ProductRepository productRepository;
@@ -54,6 +59,28 @@ public class DataInitializer {
         seedCatalog();
         seedManOutfitPieces();
         seedWomanOutfitPieces();
+        migrateLegacyDiscountTags();
+    }
+
+    // Discounts used to be encoded as a "DISCOUNT:XX" tag inside the product
+    // description (added by hand through the admin product form). Move any such
+    // tag into the discountPercentage column and strip it from the text. Safe to
+    // run on every startup - once a product is migrated it no longer matches.
+    private void migrateLegacyDiscountTags() {
+        for (Product product : productRepository.findAll()) {
+            if (product.getDescription() == null) {
+                continue;
+            }
+            Matcher matcher = LEGACY_DISCOUNT_TAG.matcher(product.getDescription());
+            if (!matcher.find()) {
+                continue;
+            }
+            if (product.getDiscountPercentage() == null) {
+                product.setDiscountPercentage(Double.valueOf(matcher.group(1)));
+            }
+            product.setDescription(matcher.replaceAll("").trim());
+            productRepository.save(product);
+        }
     }
 
     // Bulk catalog seed - only runs against a genuinely empty database (first

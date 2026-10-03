@@ -57,10 +57,14 @@ public class ChatController {
 
         String productsInfo = products.stream()
                 .map(p -> String.format(
-                        "[ID:%d] %s | €%d | Category:%s | Color:%s | Season:%s | Material:%s | Gender:%s | Style:%s | Sizes:%s | %s",
+                        "[ID:%d] %s | €%d%s | Category:%s | Color:%s | Season:%s | Material:%s | Gender:%s | Style:%s | Sizes:%s | %s",
                         p.getId(),
                         p.getName(),
                         p.getPrice().intValue(),
+                        p.getDiscountPercentage() != null && p.getDiscountPercentage() > 0
+                                ? String.format(" (-%d%%, now €%d)", p.getDiscountPercentage().intValue(),
+                                        (int) Math.round(p.getPrice() * (1 - p.getDiscountPercentage() / 100)))
+                                : "",
                         p.getCategoryName(),
                         p.getColor() != null ? p.getColor() : "N/A",
                         p.getSeason() != null ? p.getSeason() : "N/A",

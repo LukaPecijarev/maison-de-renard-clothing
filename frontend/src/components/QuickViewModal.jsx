@@ -19,7 +19,7 @@ const QuickViewModal = ({ product, open, onClose, onAddedToCart }) => {
 
     const images = product.imageUrl ? product.imageUrl.split(',').map((u) => u.trim()) : [];
     const imageUrl = images[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=600';
-    const description = product.description?.replace(/DISCOUNT:\d+\s?/, '') || '';
+    const description = product.description || '';
 
     const handleAddToCart = async () => {
         if (!isAuthenticated()) {

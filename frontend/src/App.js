@@ -9,6 +9,7 @@ import RegisterPage from './pages/RegisterPage';
 import CartPage from './pages/CartPage';
 import AddProductPage from './pages/AddProductPage';
 import EditProductPage from './pages/EditProductPage';
+import ManageCategoriesPage from './pages/ManageCategoriesPage';
 import SpecialOffersPage from './pages/SpecialOffersPage';
 import CheckoutPage from './pages/CheckoutPage';
 import ChatBot from './components/ChatBot';
@@ -39,6 +40,7 @@ function App() {
               <Route path="/login" element={<LoginPage />} />
                 <Route path="/products/add" element={<AddProductPage />} />
                 <Route path="/products/:id/edit" element={<EditProductPage />} />
+                <Route path="/admin/categories" element={<ManageCategoriesPage />} />
               <Route path="/special-offers" element={<SpecialOffersPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />

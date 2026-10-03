@@ -69,12 +69,7 @@ const CheckoutPage = () => {
         }
     };
 
-    const cartItems = order?.products || [];
-    const orderTotal = cartItems.reduce((sum, item) => {
-        const discountMatch = item.description?.match(/DISCOUNT:(\d+)/);
-        const discount = discountMatch ? parseInt(discountMatch[1]) : 0;
-        return sum + item.price * (1 - discount / 100);
-    }, 0);
+    const orderTotal = order?.totalPrice || 0;
 
     const textFieldSx = {
         '& .MuiOutlinedInput-root': {

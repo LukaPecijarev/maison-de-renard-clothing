@@ -51,6 +51,11 @@ public class Product {
     @Column
     private String size;
 
+    // Percentage off the list price (e.g. 30 = 30% off); null means no discount.
+    // Replaces the old convention of a "DISCOUNT:XX" tag inside the description.
+    @Column
+    private Double discountPercentage;
+
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
@@ -138,4 +143,15 @@ public class Product {
 
     public String getSize() { return size; }
     public void setSize(String size) { this.size = size; }
+
+    public Double getDiscountPercentage() { return discountPercentage; }
+    public void setDiscountPercentage(Double discountPercentage) { this.discountPercentage = discountPercentage; }
+
+    // The price actually charged, rounded to cents - Order totals are built from this.
+    public Double getDiscountedPrice() {
+        if (discountPercentage == null || discountPercentage <= 0) {
+            return price;
+        }
+        return Math.round(price * (1 - discountPercentage / 100) * 100) / 100.0;
+    }
 }
