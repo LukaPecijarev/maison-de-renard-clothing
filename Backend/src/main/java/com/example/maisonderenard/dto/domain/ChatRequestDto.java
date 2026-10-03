@@ -9,7 +9,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatRequestDto {
-    private String message;
+    private String message;//poslednata poraka pratena od korisnikot
     private List<ChatMessageDto> conversationHistory;
     private List<String> viewedProducts;
 
@@ -17,7 +17,7 @@ public class ChatRequestDto {
     @AllArgsConstructor
     @NoArgsConstructor
     public static class ChatMessageDto {
-        private String role;
-        private String content;
+        private String role;//user ili assistant vo zavisnost koj pisuva
+        private String content;//poraki prateni vo chatot{tekstot}
     }
 }
