@@ -2,6 +2,8 @@ package com.example.maisonderenard.repository;
 
 import com.example.maisonderenard.model.domain.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
@@ -12,4 +14,8 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
     Optional<Order> findByUserUsernameAndStatus(String username, String status);
 
     List<Order> findByUserUsername(String username);
+
+    // Every order (cart or past order) that lists this product.
+    @Query("select distinct o from Order o join o.products p where p.id = :productId")
+    List<Order> findAllContainingProduct(@Param("productId") Long productId);
 }

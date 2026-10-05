@@ -64,8 +64,11 @@ public class OrderServiceImpl implements OrderService {
         });
 
         // 2. НЕ бриши - само смени статус на CONFIRMED
-        order.setStatus("CONFIRMED");
         order.calculateTotalPrice();
+        // Snapshot the lines so order history keeps showing them even if a
+        // product is later edited or deleted.
+        order.snapshotItems();
+        order.setStatus("CONFIRMED");
         return orderRepository.save(order);
     }
 
@@ -79,6 +82,7 @@ public class OrderServiceImpl implements OrderService {
             product.increaseQuantity();
             productRepository.save(product);
         });
+        order.snapshotItems(); // cancelled orders stay in the history too
         order.setStatus("CANCELLED");
         return orderRepository.save(order);
     }

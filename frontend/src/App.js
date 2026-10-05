@@ -1,6 +1,5 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { AuthProvider } from './contexts/authContext';
 import Layout from './components/layout/Layout';
 import HomePage from './pages/HomePage';
 import ProductsPage from './pages/ProductsPage';
@@ -10,9 +9,11 @@ import CartPage from './pages/CartPage';
 import AddProductPage from './pages/AddProductPage';
 import EditProductPage from './pages/EditProductPage';
 import ManageCategoriesPage from './pages/ManageCategoriesPage';
+import LooksPage from './pages/LooksPage';
 import SpecialOffersPage from './pages/SpecialOffersPage';
 import CheckoutPage from './pages/CheckoutPage';
 import ChatBot from './components/ChatBot';
+import GlobalToast from './components/GlobalToast';
 import CustomCursor from './components/CustomCursor';
 import ProductDetailsPage from './pages/ProductDetailsPage';
 import OrderHistoryPage from './pages/OrderHistoryPage';
@@ -31,7 +32,6 @@ import PrivacyPage from './pages/PrivacyPage';
 
 function App() {
   return (
-      <AuthProvider>
         <Router>
           <Layout>
             <Routes>
@@ -42,6 +42,7 @@ function App() {
                 <Route path="/products/:id/edit" element={<EditProductPage />} />
                 <Route path="/admin/categories" element={<ManageCategoriesPage />} />
               <Route path="/special-offers" element={<SpecialOffersPage />} />
+              <Route path="/looks" element={<LooksPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/checkout" element={<CheckoutPage />} />
                 <Route path="/cart" element={<CartPage />} />
@@ -62,9 +63,9 @@ function App() {
             </Routes>
           </Layout>
           <ChatBot />
+          <GlobalToast />
           <CustomCursor />
         </Router>
-      </AuthProvider>
   );
 }
 

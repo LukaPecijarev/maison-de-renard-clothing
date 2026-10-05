@@ -88,9 +88,7 @@ public class ChatController {
                                 o.getStatus(),
                                 o.getTotalPrice().intValue(),
                                 o.getCreatedAt().toString(),
-                                o.getProducts().stream()
-                                        .map(p -> p.getName())
-                                        .collect(Collectors.joining(", "))
+                                String.join(", ", o.lineNames())
                         ))
                         .collect(Collectors.joining("\n"));
             }

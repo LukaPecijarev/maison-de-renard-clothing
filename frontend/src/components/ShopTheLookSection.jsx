@@ -2,10 +2,66 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Box, Typography, IconButton, Button } from '@mui/material';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import EastRoundedIcon from '@mui/icons-material/EastRounded';
+import { fillButtonSx } from '../styles/buttons';
+import useSharedImageReturn from '../hooks/useSharedImageReturn';
+import { startProductTransition, hasBackTransition } from '../utils/sharedImageTransition';
 
 const CARD_WIDTH = 240;
 const CARD_GAP = 24;
 const VIEWPORT_WIDTH = CARD_WIDTH + 90; // shows one full card plus a clear peek of the next, hinting it scrolls
+
+// One card in the carousel - its own component so each card can take part in
+// the shared-element transition to/from ProductDetailsPage.
+const LookCard = ({ product, productId, selected, hovered, onClick, onMouseEnter, onMouseLeave }) => {
+    const { ref: imgRef, hidden } = useSharedImageReturn(productId, 'look');
+    const src = hovered && product.hoverImage ? product.hoverImage : product.image;
+
+    return (
+        <Box
+            onClick={() => onClick(imgRef.current, src)}
+            onMouseEnter={onMouseEnter}
+            onMouseLeave={onMouseLeave}
+            sx={{ flex: `0 0 ${CARD_WIDTH}px`, cursor: 'inherit' }}
+        >
+            <Box sx={{
+                width: CARD_WIDTH, aspectRatio: '3/4', overflow: 'hidden',
+                backgroundColor: '#ffffff', mb: 2, p: 1.5,
+                boxShadow: selected ? '0 8px 24px rgba(44, 44, 44, 0.14)' : '0 6px 20px rgba(44, 44, 44, 0.08)',
+                outline: selected ? '1px solid #d4b896' : '1px solid transparent',
+                outlineOffset: '-1px',
+                transition: 'box-shadow 0.3s ease, outline-color 0.3s ease',
+            }}>
+                {/* These are full-figure campaign shots, not isolated flat-lay product
+                    photos, so "contain" (not "cover") keeps each garment whole instead
+                    of cropping it down to an arbitrary center slice. Swap to a second
+                    shot of the same piece on hover, so the carousel surfaces more than
+                    just the first photo out of each item's set. */}
+                <Box component="img"
+                     ref={imgRef}
+                     src={src}
+                     alt={product.name}
+                     draggable={false}
+                     sx={{
+                         width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'top', transition: 'opacity 0.2s ease',
+                         visibility: hidden ? 'hidden' : 'visible',
+                     }} />
+            </Box>
+            <Typography sx={{
+                fontFamily: '"Lato", sans-serif', fontSize: '0.75rem',
+                letterSpacing: '0.1em', color: '#8b7355', textTransform: 'uppercase', mb: 0.5,
+            }}>
+                {product.name}
+            </Typography>
+            <Typography sx={{
+                fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic',
+                fontSize: '1.05rem', color: '#2c2c2c',
+            }}>
+                {product.subtitle}
+            </Typography>
+        </Box>
+    );
+};
 
 // Editorial "Shop the Look" banner: a full-bleed lifestyle photo paired with
 // a peeking, scrollable product carousel - the convention campaign pages
@@ -13,11 +69,20 @@ const VIEWPORT_WIDTH = CARD_WIDTH + 90; // shows one full card plus a clear peek
 // The structure (photo left, scrollable item picker right, progress dots,
 // "view all" CTA) follows that convention closely; the fonts/colors are
 // pulled from this site's own palette (index.css) rather than copied.
+//
+// `getProductId(piece)` (optional) maps a piece to the real product it opens, so
+// the click can use the shared-element transition into ProductDetailsPage.
 const ShopTheLookSection = ({
     title, image, imageAlt, products = [], onImageClick, imageOnRight = false,
-    onViewAllClick, viewAllLabel = 'View all looks', onProductClick,
+    onViewAllClick, viewAllLabel = 'View all looks', onProductClick, getProductId,
 }) => {
-    const [index, setIndex] = useState(0);
+    // Coming back from a piece's details page: open the carousel on that piece,
+    // so the image flying back has a visible card to land on.
+    const [index, setIndex] = useState(() => {
+        if (!getProductId) return 0;
+        const returning = products.findIndex((p) => hasBackTransition(getProductId(p), 'look'));
+        return returning >= 0 ? returning : 0;
+    });
     const [hoveredCard, setHoveredCard] = useState(null);
     const maxIndex = Math.max(0, products.length - 1);
 
@@ -79,10 +144,19 @@ const ShopTheLookSection = ({
     // over a card doesn't also navigate to it), but still fire it for a
     // plain click - dragRef.current.moved only flips true once the pointer
     // has actually traveled a few pixels.
-    const handleCardClick = (product, i) => {
+    const handleCardClick = (product, i, imgEl, src) => {
         if (dragRef.current.moved) return;
-        if (onProductClick) onProductClick(product, i);
-        else setIndex(i);
+        if (onProductClick) {
+            const productId = getProductId ? getProductId(product) : null;
+            if (productId != null) {
+                // The cards show the whole figure ("contain") on white, so the
+                // flying image starts out looking exactly like the card.
+                startProductTransition(productId, imgEl, src, { source: 'look', fit: 'contain', background: '#ffffff' });
+            }
+            onProductClick(product, i);
+        } else {
+            setIndex(i);
+        }
     };
 
     const photo = (
@@ -146,45 +220,16 @@ const ShopTheLookSection = ({
                     transition: isDragging ? 'none' : 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
                 }}>
                     {products.map((product, i) => (
-                        <Box
+                        <LookCard
                             key={i}
-                            onClick={() => handleCardClick(product, i)}
+                            product={product}
+                            productId={getProductId ? getProductId(product) : null}
+                            selected={i === index}
+                            hovered={hoveredCard === i}
+                            onClick={(imgEl, src) => handleCardClick(product, i, imgEl, src)}
                             onMouseEnter={() => setHoveredCard(i)}
                             onMouseLeave={() => setHoveredCard(null)}
-                            sx={{ flex: `0 0 ${CARD_WIDTH}px`, cursor: 'inherit' }}
-                        >
-                            <Box sx={{
-                                width: CARD_WIDTH, aspectRatio: '3/4', overflow: 'hidden',
-                                backgroundColor: '#ffffff', mb: 2, p: 1.5,
-                                boxShadow: i === index ? '0 8px 24px rgba(44, 44, 44, 0.14)' : '0 6px 20px rgba(44, 44, 44, 0.08)',
-                                outline: i === index ? '1px solid #d4b896' : '1px solid transparent',
-                                outlineOffset: '-1px',
-                                transition: 'box-shadow 0.3s ease, outline-color 0.3s ease',
-                            }}>
-                                {/* These are full-figure campaign shots, not isolated flat-lay product
-                                    photos, so "contain" (not "cover") keeps each garment whole instead
-                                    of cropping it down to an arbitrary center slice. Swap to a second
-                                    shot of the same piece on hover, so the carousel surfaces more than
-                                    just the first photo out of each item's set. */}
-                                <Box component="img"
-                                     src={hoveredCard === i && product.hoverImage ? product.hoverImage : product.image}
-                                     alt={product.name}
-                                     draggable={false}
-                                     sx={{ width: '100%', height: '100%', objectFit: 'contain', objectPosition: 'top', transition: 'opacity 0.2s ease' }} />
-                            </Box>
-                            <Typography sx={{
-                                fontFamily: '"Lato", sans-serif', fontSize: '0.75rem',
-                                letterSpacing: '0.1em', color: '#8b7355', textTransform: 'uppercase', mb: 0.5,
-                            }}>
-                                {product.name}
-                            </Typography>
-                            <Typography sx={{
-                                fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic',
-                                fontSize: '1.05rem', color: '#2c2c2c',
-                            }}>
-                                {product.subtitle}
-                            </Typography>
-                        </Box>
+                        />
                     ))}
                 </Box>
 
@@ -241,12 +286,15 @@ const ShopTheLookSection = ({
                 <Button
                     variant="outlined"
                     onClick={onViewAllClick}
+                    endIcon={<EastRoundedIcon />}
                     sx={{
-                        mt: 4, color: '#2c2c2c', borderColor: '#2c2c2c', borderWidth: '1px',
-                        px: 4, py: 1, fontSize: '0.7rem', fontWeight: 400,
-                        letterSpacing: '0.15em', fontFamily: '"Lato", sans-serif',
-                        borderRadius: '4px',
-                        '&:hover': { borderColor: '#8b7355', backgroundColor: 'rgba(139, 115, 85, 0.06)' },
+                        ...fillButtonSx,
+                        mt: 4, px: 4, py: 1.3,
+                        fontSize: '0.72rem', fontWeight: 500,
+                        letterSpacing: '0.18em', fontFamily: '"Lato", sans-serif',
+                        // the arrow slides forward as the fill sweeps in
+                        '& .MuiButton-endIcon': { ml: 1.2, transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)' },
+                        '&:hover .MuiButton-endIcon': { transform: 'translateX(5px)' },
                     }}
                 >
                     {viewAllLabel}

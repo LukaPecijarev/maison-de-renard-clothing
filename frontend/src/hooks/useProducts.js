@@ -68,25 +68,40 @@ const useProducts = (categoryId = null) => {
             });
     };
 
+    // Like onDelete below: return the request and re-throw on failure, so the
+    // Add/Edit pages can tell success from failure (they used to always report
+    // success).
     const onAdd = (data) => {
-        productRepository
+        return productRepository
             .add(data)
             .then(() => { apiCache.clear('products:'); fetchProducts(); })
-            .catch((error) => console.error('Error adding product:', error));
+            .catch((error) => {
+                console.error('Error adding product:', error);
+                throw error;
+            });
     };
 
     const onEdit = (id, data) => {
-        productRepository
+        return productRepository
             .edit(id, data)
             .then(() => { apiCache.clear('products:'); fetchProducts(); })
-            .catch((error) => console.error('Error editing product:', error));
+            .catch((error) => {
+                console.error('Error editing product:', error);
+                throw error;
+            });
     };
 
+    // Returns the request and re-throws on failure - it used to swallow the
+    // error, so the page announced "deleted successfully" even when the server
+    // had refused and the product was still in the database.
     const onDelete = (id) => {
-        productRepository
+        return productRepository
             .delete(id)
             .then(() => { apiCache.clear('products:'); fetchProducts(); })
-            .catch((error) => console.error('Error deleting product:', error));
+            .catch((error) => {
+                console.error('Error deleting product:', error);
+                throw error;
+            });
     };
 
     const addToCart = (id) => {

@@ -4,13 +4,15 @@ import { Box } from '@mui/material';
 // Fades/slides children in the first time they cross into the viewport.
 // No animation library needed - just IntersectionObserver + a CSS transition,
 // so it's cheap to sprinkle across grids for a staggered reveal effect.
-const Reveal = ({ children, delay = 0, sx = {} }) => {
+// `instant` skips the fade-in (e.g. for the card a shared-element transition is
+// landing on, which must already be in place).
+const Reveal = ({ children, delay = 0, sx = {}, instant = false }) => {
     const ref = useRef(null);
-    const [visible, setVisible] = useState(false);
+    const [visible, setVisible] = useState(instant);
 
     useEffect(() => {
         const node = ref.current;
-        if (!node) return undefined;
+        if (!node || visible) return undefined;
 
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -23,7 +25,7 @@ const Reveal = ({ children, delay = 0, sx = {} }) => {
         );
         observer.observe(node);
         return () => observer.disconnect();
-    }, []);
+    }, [visible]);
 
     return (
         <Box

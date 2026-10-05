@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Container, Typography, Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import Reveal from '../components/Reveal';
+import { fillButtonSx } from '../styles/buttons';
 
 // "Our Story" - the one footer destination that's worth a real, designed
 // page rather than the generic InfoPage template, since it's the Maison's
@@ -170,25 +171,11 @@ const AboutPage = () => {
                     <Button
                         variant="outlined"
                         size="large"
-                        onClick={() => navigate('/products')}
+                        onClick={() => navigate('/products', { state: { smoothScrollTop: true } })}
                         sx={{
-                            color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
+                            ...fillButtonSx,
                             px: 8, py: 1.8, fontSize: '0.75rem', fontWeight: 400,
                             letterSpacing: '0.15em', fontFamily: '"Lato", sans-serif',
-                            backgroundColor: 'transparent',
-                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                            position: 'relative', overflow: 'hidden', borderRadius: '6px',
-                            '&::before': {
-                                content: '""', position: 'absolute', top: 0, left: '-100%',
-                                width: '100%', height: '100%', backgroundColor: '#f5ebe0',
-                                transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
-                            },
-                            '&:hover': {
-                                color: '#22223b', borderColor: '#f5ebe0',
-                                transform: 'translateY(-2px)',
-                                boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
-                            },
-                            '&:hover::before': { left: 0 },
                         }}
                     >
                         DISCOVER THE COLLECTION

@@ -1,15 +1,19 @@
 package com.example.maisonderenard.config.initialization;
 
 import com.example.maisonderenard.model.domain.Category;
+import com.example.maisonderenard.model.domain.Order;
 import com.example.maisonderenard.model.domain.Product;
 import com.example.maisonderenard.model.domain.User;
 import com.example.maisonderenard.model.enums.Role;
 import com.example.maisonderenard.repository.CategoryRepository;
+import com.example.maisonderenard.repository.OrderRepository;
 import com.example.maisonderenard.repository.ProductRepository;
 import com.example.maisonderenard.repository.UserRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,43 +27,78 @@ public class DataInitializer {
     private final ProductRepository productRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final OrderRepository orderRepository;
+    private final TransactionTemplate transactionTemplate;
 
     public DataInitializer(
             CategoryRepository categoryRepository,
             ProductRepository productRepository,
             UserRepository userRepository,
-            PasswordEncoder passwordEncoder
+            PasswordEncoder passwordEncoder,
+            OrderRepository orderRepository,
+            PlatformTransactionManager transactionManager
     ) {
         this.categoryRepository = categoryRepository;
         this.productRepository = productRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.orderRepository = orderRepository;
+        this.transactionTemplate = new TransactionTemplate(transactionManager);
     }
 
     @PostConstruct
     public void init() {
-        if (userRepository.findByUsername("admin").isEmpty()) {
-            User admin = new User();
-            admin.setUsername("admin");
-            admin.setPassword(passwordEncoder.encode("admin123"));
-            admin.setEmail("admin@maisonderenard.com");
-            admin.setRole(Role.ADMIN);
-            userRepository.save(admin);
-        }
-
-        if (userRepository.findByUsername("customer").isEmpty()) {
-            User customer = new User();
-            customer.setUsername("customer");
-            customer.setPassword(passwordEncoder.encode("customer123"));
-            customer.setEmail("customer@maisonderenard.com");
-            customer.setRole(Role.CUSTOMER);
-            userRepository.save(customer);
-        }
+        ensureDemoUser("admin", "admin@maisonderenard.com", Role.ADMIN, "admin123");
+        ensureDemoUser("customer", "customer@maisonderenard.com", Role.CUSTOMER, "customer123");
 
         seedCatalog();
         seedManOutfitPieces();
         seedWomanOutfitPieces();
         migrateLegacyDiscountTags();
+        snapshotPastOrderItems();
+    }
+
+    // Order history now displays past orders from an OrderItem snapshot (so a
+    // product deleted later still shows up in them). Orders confirmed/cancelled
+    // before that existed get their snapshot here, from their current products.
+    // Safe to run on every startup - orders that already have one are skipped.
+    // In a transaction because an order's products are loaded lazily.
+    private void snapshotPastOrderItems() {
+        transactionTemplate.executeWithoutResult(status -> {
+            for (Order order : orderRepository.findAll()) {
+                if ("PENDING".equals(order.getStatus()) || !order.getItems().isEmpty() || order.getProducts().isEmpty()) {
+                    continue;
+                }
+                order.snapshotItems();
+                orderRepository.save(order);
+            }
+        });
+    }
+
+    // Demo accounts. Created with DEMO_PASSWORD on a fresh database; an existing
+    // account still on its old default password (admin123 / customer123 - in
+    // public leaked-password lists, so Chrome warned about them on every login)
+    // is moved to DEMO_PASSWORD. An account whose password was changed some
+    // other way is left alone.
+    private static final String DEMO_PASSWORD = "pece1234";
+
+    private void ensureDemoUser(String username, String email, Role role, String oldDefaultPassword) {
+        userRepository.findByUsername(username).ifPresentOrElse(
+                user -> {
+                    if (passwordEncoder.matches(oldDefaultPassword, user.getPassword())) {
+                        user.setPassword(passwordEncoder.encode(DEMO_PASSWORD));
+                        userRepository.save(user);
+                    }
+                },
+                () -> {
+                    User user = new User();
+                    user.setUsername(username);
+                    user.setPassword(passwordEncoder.encode(DEMO_PASSWORD));
+                    user.setEmail(email);
+                    user.setRole(role);
+                    userRepository.save(user);
+                }
+        );
     }
 
     // Discounts used to be encoded as a "DISCOUNT:XX" tag inside the product

@@ -1,6 +1,6 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme, responsiveFontSizes } from '@mui/material/styles';
 
-const theme = createTheme({
+const baseTheme = createTheme({
     palette: {
         primary: {
             main: '#2c2c2c', // Dark charcoal for text and buttons
@@ -75,5 +75,9 @@ const theme = createTheme({
         },
     },
 });
+
+// Headings (h1-h6) scale down on smaller screens, so big one-word page titles
+// ("Craftsmanship", "CHECKOUT", ...) fit on phones instead of overflowing.
+const theme = responsiveFontSizes(baseTheme);
 
 export default theme;

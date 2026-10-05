@@ -2,6 +2,53 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
 import { useNavigate } from 'react-router-dom';
+import useSharedImageReturn from '../hooks/useSharedImageReturn';
+import { startProductTransition } from '../utils/sharedImageTransition';
+import { getProductImages, FALLBACK_PRODUCT_IMAGE } from '../utils/productImages';
+
+// One product in the strip. Its own component so each item can take part in
+// the shared-element transition to/from ProductDetailsPage.
+const RecentlyViewedItem = ({ product, cursor, onOpen }) => {
+    const { ref: frameRef, hidden } = useSharedImageReturn(product.id, 'recent');
+    const images = getProductImages(product);
+    const imageUrl = images[0] || FALLBACK_PRODUCT_IMAGE;
+
+    return (
+        <Box
+            onClick={() => onOpen(frameRef.current, imageUrl)}
+            sx={{ flex: '0 0 auto', width: 220, cursor }}
+        >
+            <Box ref={frameRef} sx={{
+                width: '100%', aspectRatio: '3/4', overflow: 'hidden',
+                backgroundColor: '#f5f1e8', mb: 1.5,
+                visibility: hidden ? 'hidden' : 'visible',
+            }}>
+                <Box
+                    component="img"
+                    src={imageUrl}
+                    alt={product.name}
+                    draggable={false}
+                    sx={{
+                        width: '100%', height: '100%', objectFit: 'cover',
+                        transition: 'transform 0.5s ease',
+                        '&:hover': { transform: 'scale(1.05)' },
+                    }}
+                />
+            </Box>
+            <Typography sx={{
+                fontFamily: '"Lato", sans-serif', fontSize: '0.8rem',
+                color: '#2c2c2c', mb: 0.3,
+            }}>
+                {product.name}
+            </Typography>
+            <Typography sx={{
+                fontFamily: '"Cormorant Garamond", serif', fontSize: '1rem', color: '#8b7355',
+            }}>
+                €{product.price?.toFixed(0)}
+            </Typography>
+        </Box>
+    );
+};
 
 // Renders a horizontal-scroll product carousel. By default it reads the
 // "viewedProducts" trail recorded in localStorage by ProductDetailsPage
@@ -166,46 +213,18 @@ const RecentlyViewed = ({ excludeId, title = 'Recently Viewed', items }) => {
                         '&::-webkit-scrollbar-track': { backgroundColor: 'transparent' },
                         '&::-webkit-scrollbar-thumb': { backgroundColor: 'rgba(212, 184, 150, 0.5)', borderRadius: 3 },
                     }}>
-                    {viewed.map((product) => {
-                        const images = product.imageUrl ? product.imageUrl.split(',').map((u) => u.trim()) : [];
-                        const imageUrl = images[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=400';
-
-                        return (
-                            <Box
-                                key={product.id}
-                                onClick={() => !didDragRef.current && navigate(`/products/${product.id}`)}
-                                sx={{ flex: '0 0 auto', width: 220, cursor: isHovered ? 'none' : 'pointer' }}
-                            >
-                                <Box sx={{
-                                    width: '100%', aspectRatio: '3/4', overflow: 'hidden',
-                                    backgroundColor: '#f5f1e8', mb: 1.5,
-                                }}>
-                                    <Box
-                                        component="img"
-                                        src={imageUrl}
-                                        alt={product.name}
-                                        draggable={false}
-                                        sx={{
-                                            width: '100%', height: '100%', objectFit: 'cover',
-                                            transition: 'transform 0.5s ease',
-                                            '&:hover': { transform: 'scale(1.05)' },
-                                        }}
-                                    />
-                                </Box>
-                                <Typography sx={{
-                                    fontFamily: '"Lato", sans-serif', fontSize: '0.8rem',
-                                    color: '#2c2c2c', mb: 0.3,
-                                }}>
-                                    {product.name}
-                                </Typography>
-                                <Typography sx={{
-                                    fontFamily: '"Cormorant Garamond", serif', fontSize: '1rem', color: '#8b7355',
-                                }}>
-                                    €{product.price?.toFixed(0)}
-                                </Typography>
-                            </Box>
-                        );
-                    })}
+                    {viewed.map((product) => (
+                        <RecentlyViewedItem
+                            key={product.id}
+                            product={product}
+                            cursor={isHovered ? 'none' : 'pointer'}
+                            onOpen={(frameEl, imageUrl) => {
+                                if (didDragRef.current) return;
+                                startProductTransition(product.id, frameEl, imageUrl, { source: 'recent' });
+                                navigate(`/products/${product.id}`, { state: { preview: product, imageIndex: 0 } });
+                            }}
+                        />
+                    ))}
                 </Box>
             </Box>
         </Box>

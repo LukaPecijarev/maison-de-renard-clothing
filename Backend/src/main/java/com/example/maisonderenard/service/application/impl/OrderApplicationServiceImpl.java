@@ -4,6 +4,7 @@ import com.example.maisonderenard.dto.domain.DisplayCategoryDto;
 import com.example.maisonderenard.dto.domain.DisplayOrderDto;
 import com.example.maisonderenard.dto.domain.DisplayProductDto;
 import com.example.maisonderenard.model.domain.Order;
+import com.example.maisonderenard.model.domain.OrderItem;
 import com.example.maisonderenard.model.domain.Product;
 import com.example.maisonderenard.model.exceptions.OrderNotFoundException;
 import com.example.maisonderenard.service.application.OrderApplicationService;
@@ -42,7 +43,12 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
                 .sorted(Comparator
                         .comparing((Order order) -> !"PENDING".equals(order.getStatus()))
                         .thenComparing(Order::getId))
-                .map(this::mapToDto)
+                .map(order -> {
+                    // Same as findPendingOrder: show the cart's current total, not
+                    // a possibly stale stored one.
+                    if ("PENDING".equals(order.getStatus())) order.calculateTotalPrice();
+                    return mapToDto(order);
+                })
                 .collect(Collectors.toList());
     }
 
@@ -66,9 +72,11 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
 
     // Helper methods for mapping
     private DisplayOrderDto mapToDto(Order order) {
-        List<DisplayProductDto> productDtos = order.getProducts().stream()
-                .map(this::mapProductToDto)
-                .collect(Collectors.toList());
+        // Past orders show their snapshot (so deleted/edited products still appear
+        // as bought); a cart - or an old order without a snapshot - the live products.
+        List<DisplayProductDto> productDtos = !"PENDING".equals(order.getStatus()) && !order.getItems().isEmpty()
+                ? order.getItems().stream().map(this::mapItemToDto).collect(Collectors.toList())
+                : order.getProducts().stream().map(this::mapProductToDto).collect(Collectors.toList());
 
         return new DisplayOrderDto(
                 order.getId(),
@@ -77,6 +85,28 @@ public class OrderApplicationServiceImpl implements OrderApplicationService {
                 order.getCreatedAt(),
                 order.getStatus(),
                 order.getTotalPrice()
+        );
+    }
+
+    // id is null once the product has been deleted - the frontend uses that to
+    // show the line without linking to a page that no longer exists.
+    private DisplayProductDto mapItemToDto(OrderItem item) {
+        return new DisplayProductDto(
+                item.getProductId(),
+                item.getName(),
+                null,
+                item.getPrice(),
+                null,
+                item.getImageUrl(),
+                null,
+                item.getCategoryName(),
+                item.getColor(),
+                null,
+                null,
+                null,
+                null,
+                item.getSize(),
+                null
         );
     }
 

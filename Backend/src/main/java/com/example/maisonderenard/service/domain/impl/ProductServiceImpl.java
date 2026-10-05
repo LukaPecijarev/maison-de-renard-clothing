@@ -3,12 +3,14 @@ package com.example.maisonderenard.service.domain.impl;
 import com.example.maisonderenard.model.domain.Order;
 import com.example.maisonderenard.model.domain.Product;
 import com.example.maisonderenard.model.exceptions.ProductOutOfStockException;
+import com.example.maisonderenard.repository.OrderItemRepository;
 import com.example.maisonderenard.repository.OrderRepository;
 import com.example.maisonderenard.repository.ProductRepository;
 import com.example.maisonderenard.service.domain.ProductService;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,10 +26,13 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
 
-    public ProductServiceImpl(ProductRepository productRepository, OrderRepository orderRepository) {
+    public ProductServiceImpl(ProductRepository productRepository, OrderRepository orderRepository,
+                              OrderItemRepository orderItemRepository) {
         this.productRepository = productRepository;
         this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
     }
 
     @Override
@@ -76,10 +81,33 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     @CacheEvict(cacheNames = { PRODUCTS_CACHE, PRODUCTS_BY_CATEGORY_CACHE }, allEntries = true)
     public Optional<Product> deleteById(Long id) {
         Optional<Product> product = findById(id);
-        product.ifPresent(productRepository::delete);
+        product.ifPresent(p -> {
+            // order_products has a foreign key to products, so a product that is in
+            // anyone's cart or in a past order couldn't be deleted at all (the
+            // database rejected it). Take it out of those orders first:
+            //  - carts: the item is removed and the total recalculated;
+            //  - past orders: they're displayed from their OrderItem snapshot (taken
+            //    first here if somehow missing), so they keep showing the product -
+            //    image included - and keep the total that was actually charged.
+            // Sales analytics are unaffected (sold_products is a snapshot too).
+            for (Order order : orderRepository.findAllContainingProduct(p.getId())) {
+                if ("PENDING".equals(order.getStatus())) {
+                    order.getProducts().removeIf(item -> item.getId().equals(p.getId()));
+                    order.calculateTotalPrice();
+                } else {
+                    order.snapshotItems();
+                    order.getProducts().removeIf(item -> item.getId().equals(p.getId()));
+                }
+                orderRepository.save(order);
+            }
+            orderRepository.flush();
+            orderItemRepository.unlinkProduct(p.getId());
+            productRepository.delete(p);
+        });
         return product;
     }
 

@@ -11,7 +11,10 @@ const useOrder = () => {
         return !!token;
     };
 
-    const fetchPendingOrder = useCallback(() => {
+    // `silent` refreshes without flipping `loading` - used after add/remove/
+    // confirm/cancel, so pages like CartPage don't swap to a full-page spinner
+    // (which also cut off the cart's remove animation).
+    const fetchPendingOrder = useCallback(({ silent = false } = {}) => {
         if (!isAuthenticated()) {
             setOrder(null);
             localStorage.setItem('cartCount', '0');
@@ -19,8 +22,8 @@ const useOrder = () => {
             return;
         }
 
-        setLoading(true);
-        orderRepository
+        if (!silent) setLoading(true);
+        return orderRepository
             .findPending()
             .then((response) => {
                 setOrder(response.data);
@@ -42,7 +45,7 @@ const useOrder = () => {
     const addToCart = useCallback(async (productId) => {
         try {
             await productRepository.addToCart(productId);
-            await fetchPendingOrder();
+            await fetchPendingOrder({ silent: true });
             return true;
         } catch (error) {
             console.error('Error adding to cart:', error);
@@ -53,7 +56,7 @@ const useOrder = () => {
     const removeFromCart = useCallback(async (productId) => {
         try {
             await productRepository.removeFromCart(productId);
-            await fetchPendingOrder();
+            await fetchPendingOrder({ silent: true });
             return true;
         } catch (error) {
             console.error('Error removing from cart:', error);
@@ -66,7 +69,7 @@ const useOrder = () => {
             await orderRepository.confirmPendingOrder();
             localStorage.setItem('cartCount', '0');
             window.dispatchEvent(new Event('cartUpdated'));
-            await fetchPendingOrder();
+            await fetchPendingOrder({ silent: true });
             return true;
         } catch (error) {
             console.error('Error confirming order:', error);
@@ -79,7 +82,7 @@ const useOrder = () => {
             await orderRepository.cancelPendingOrder();
             localStorage.setItem('cartCount', '0');
             window.dispatchEvent(new Event('cartUpdated'));
-            await fetchPendingOrder();
+            await fetchPendingOrder({ silent: true });
             return true;
         } catch (error) {
             console.error('Error cancelling order:', error);

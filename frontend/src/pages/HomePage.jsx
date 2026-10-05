@@ -5,7 +5,168 @@ import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
 import RecentlyViewed from '../components/RecentlyViewed';
 import Reveal from '../components/Reveal';
 import ShopTheLookSection from '../components/ShopTheLookSection';
+import { manOutfitPieces, womanOutfitPieces } from '../data/looks';
 import useProducts from '../hooks/useProducts';
+import useSharedImageReturn from '../hooks/useSharedImageReturn';
+import { startProductTransition, hasBackTransition } from '../utils/sharedImageTransition';
+import { fillButtonSx } from '../styles/buttons';
+import { getProductImages } from '../utils/productImages';
+
+// One product tile in the home page's 4-up rows. Defined at module level (it used
+// to live inside HomePage, which made React recreate every tile on each HomePage
+// render) so it can hold state across renders - needed for the shared-element
+// transition to/from ProductDetailsPage (see utils/sharedImageTransition).
+const ImageWithHover = ({ product, images, alt, name, price, categoryUrl }) => {
+    const navigate = useNavigate();
+    const { ref: tileRef, hidden } = useSharedImageReturn(product.id, 'home');
+    const [isHovered, setIsHovered] = React.useState(false);
+    const [cursorPos, setCursorPos] = React.useState({ x: 0, y: 0 });
+    const [overIcon, setOverIcon] = React.useState(false);
+    const showCursorHint = isHovered && !overIcon;
+
+    // Tell the global CustomCursor to stand down while this tile's own
+    // VIEW bubble is showing, so the two don't draw on top of each other.
+    React.useEffect(() => {
+        window.dispatchEvent(new CustomEvent('customCursor:localHint', { detail: { active: showCursorHint } }));
+        return () => window.dispatchEvent(new CustomEvent('customCursor:localHint', { detail: { active: false } }));
+    }, [showCursorHint]);
+
+    const openDetails = () => {
+        // Open on whichever image is showing (the second one while hovered), so
+        // the transition doesn't swap pictures mid-flight.
+        const showingHoverImage = isHovered && images[1] && images[1] !== images[0];
+        startProductTransition(product.id, tileRef.current, showingHoverImage ? images[1] : images[0], { source: 'home' });
+        navigate(`/products/${product.id}`, {
+            state: { preview: product.raw, imageIndex: showingHoverImage ? 1 : 0 },
+        });
+    };
+
+    return (
+        <Box
+            ref={tileRef}
+            sx={{
+                width: '100%',
+                aspectRatio: '3/4',
+                overflow: 'hidden',
+                cursor: showCursorHint ? 'none' : 'pointer',
+                position: 'relative',
+                backgroundColor: '#f5f1e8',
+                visibility: hidden ? 'hidden' : 'visible',
+            }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+            onMouseMove={(e) => {
+                const rect = e.currentTarget.getBoundingClientRect();
+                setCursorPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+            }}
+            onClick={openDetails}
+        >
+            {/* Custom cursor-follow "VIEW" hint, replacing the system pointer while hovering -
+                hidden over the shopping bag icon so the real cursor shows through instead */}
+            <Box
+                sx={{
+                    position: 'absolute',
+                    left: cursorPos.x, top: cursorPos.y,
+                    transform: `translate(-50%, -50%) scale(${showCursorHint ? 1 : 0.4})`,
+                    opacity: showCursorHint ? 1 : 0,
+                    transition: 'opacity 0.2s ease, transform 0.2s ease',
+                    pointerEvents: 'none',
+                    width: 62, height: 62, borderRadius: '50%',
+                    backgroundColor: 'rgba(230, 204, 178, 0.55)',
+                    backdropFilter: 'blur(2px)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    zIndex: 3,
+                }}
+            >
+                <Typography sx={{
+                    fontFamily: '"Lato", sans-serif', fontSize: '0.65rem',
+                    color: '#2c2c2c', letterSpacing: '0.1em',
+                }}>
+                    VIEW
+                </Typography>
+            </Box>
+            <Box
+                component="img"
+                src={isHovered ? images[1] : images[0]}
+                alt={alt}
+                sx={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    transition: 'all 0.6s ease',
+                    transform: isHovered ? 'scale(1.03)' : 'scale(1)',
+                    display: 'block',
+                    filter: 'brightness(0.98) contrast(1.02)',
+                    mixBlendMode: 'multiply',
+                }}
+            />
+
+            <IconButton
+                onMouseEnter={() => setOverIcon(true)}
+                onMouseLeave={() => setOverIcon(false)}
+                sx={{
+                    position: 'absolute',
+                    top: { xs: 6, sm: 12 },
+                    right: { xs: 6, sm: 12 },
+                    backgroundColor: 'transparent',
+                    width: { xs: 28, sm: 36 },
+                    height: { xs: 28, sm: 36 },
+                    cursor: 'pointer',
+                    opacity: isHovered ? 1 : 0,
+                    transition: 'opacity 0.3s ease',
+                    '@media (hover: none)': { opacity: 1 },
+                    '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
+                }}
+                onClick={(e) => {
+                    e.stopPropagation();
+                    navigate(categoryUrl);
+                }}
+            >
+                <ShoppingBagOutlinedIcon sx={{ fontSize: { xs: 15, sm: 20 }, color: '#ffffff' }} />
+            </IconButton>
+
+            <Box
+                sx={{
+                    position: 'absolute',
+                    bottom: { xs: 8, sm: 16 },
+                    left: '50%',
+                    transform: { xs: 'translate(-50%, 0)', sm: isHovered ? 'translate(-50%, 0)' : 'translate(-50%, 20px)' },
+                    opacity: isHovered ? 1 : 0,
+                    transition: 'all 0.4s ease',
+                    '@media (hover: none)': { opacity: 1 },
+                    backgroundColor: '#f5ebe0',
+                    padding: { xs: '5px 10px', sm: '8px 20px' },
+                    borderRadius: '4px',
+                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
+                    pointerEvents: 'none',
+                    minWidth: { xs: '100px', sm: '140px' },
+                    maxWidth: { xs: '90%', sm: 'none' },
+                    textAlign: 'center',
+                }}
+            >
+                <Typography sx={{
+                    fontFamily: '"Lato", sans-serif',
+                    fontSize: { xs: '0.55rem', sm: '0.7rem' }, fontWeight: 400,
+                    color: 'rgba(44, 44, 44, 0.7)',
+                    letterSpacing: '0.05em', mb: 0.3,
+                    textTransform: 'uppercase',
+                    whiteSpace: { xs: 'nowrap', sm: 'normal' },
+                    overflow: 'hidden',
+                    textOverflow: 'ellipsis',
+                }}>
+                    {name}
+                </Typography>
+                <Typography sx={{
+                    fontFamily: '"Cormorant Garamond", serif',
+                    fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 500,
+                    color: '#2c2c2c', letterSpacing: '0.05em',
+                }}>
+                    {price}
+                </Typography>
+            </Box>
+        </Box>
+    );
+};
 
 const HomePage = () => {
     const navigate = useNavigate();
@@ -20,10 +181,14 @@ const HomePage = () => {
     const { products: menCategoryProducts } = useProducts(2);
     const { products: womenCategoryProducts } = useProducts(1);
     const { products: giftsCategoryProducts } = useProducts(3);
+    const findOutfitPiece = (categoryProducts, productName) =>
+        categoryProducts.find((p) => p.name === productName);
     const goToOutfitPiece = (categoryProducts, productName) => {
-        const match = categoryProducts.find((p) => p.name === productName);
+        const match = findOutfitPiece(categoryProducts, productName);
         if (match) {
-            navigate(`/products/${match.id}`);
+            // `preview` lets the details page show the hero immediately, for the
+            // shared-element transition from the Shop the Look card.
+            navigate(`/products/${match.id}`, { state: { preview: match, imageIndex: 0 } });
         }
     };
 
@@ -59,143 +224,6 @@ const HomePage = () => {
         return () => window.removeEventListener('scroll', handleScroll);
     }, []);
 
-    const ImageWithHover = ({ images, alt, name, price, onClick, categoryUrl }) => {
-        const [isHovered, setIsHovered] = React.useState(false);
-        const [cursorPos, setCursorPos] = React.useState({ x: 0, y: 0 });
-        const [overIcon, setOverIcon] = React.useState(false);
-        const showCursorHint = isHovered && !overIcon;
-
-        // Tell the global CustomCursor to stand down while this tile's own
-        // VIEW bubble is showing, so the two don't draw on top of each other.
-        React.useEffect(() => {
-            window.dispatchEvent(new CustomEvent('customCursor:localHint', { detail: { active: showCursorHint } }));
-            return () => window.dispatchEvent(new CustomEvent('customCursor:localHint', { detail: { active: false } }));
-        }, [showCursorHint]);
-
-        return (
-            <Box
-                sx={{
-                    width: '100%',
-                    aspectRatio: '3/4',
-                    overflow: 'hidden',
-                    cursor: showCursorHint ? 'none' : 'pointer',
-                    position: 'relative',
-                    backgroundColor: '#f5f1e8',
-                }}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-                onMouseMove={(e) => {
-                    const rect = e.currentTarget.getBoundingClientRect();
-                    setCursorPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
-                }}
-                onClick={onClick}
-            >
-                {/* Custom cursor-follow "VIEW" hint, replacing the system pointer while hovering -
-                    hidden over the shopping bag icon so the real cursor shows through instead */}
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        left: cursorPos.x, top: cursorPos.y,
-                        transform: `translate(-50%, -50%) scale(${showCursorHint ? 1 : 0.4})`,
-                        opacity: showCursorHint ? 1 : 0,
-                        transition: 'opacity 0.2s ease, transform 0.2s ease',
-                        pointerEvents: 'none',
-                        width: 62, height: 62, borderRadius: '50%',
-                        backgroundColor: 'rgba(230, 204, 178, 0.55)',
-                        backdropFilter: 'blur(2px)',
-                        display: 'flex', alignItems: 'center', justifyContent: 'center',
-                        zIndex: 3,
-                    }}
-                >
-                    <Typography sx={{
-                        fontFamily: '"Lato", sans-serif', fontSize: '0.65rem',
-                        color: '#2c2c2c', letterSpacing: '0.1em',
-                    }}>
-                        VIEW
-                    </Typography>
-                </Box>
-                <Box
-                    component="img"
-                    src={isHovered ? images[1] : images[0]}
-                    alt={alt}
-                    sx={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        transition: 'all 0.6s ease',
-                        transform: isHovered ? 'scale(1.03)' : 'scale(1)',
-                        display: 'block',
-                        filter: 'brightness(0.98) contrast(1.02)',
-                        mixBlendMode: 'multiply',
-                    }}
-                />
-
-                <IconButton
-                    onMouseEnter={() => setOverIcon(true)}
-                    onMouseLeave={() => setOverIcon(false)}
-                    sx={{
-                        position: 'absolute',
-                        top: { xs: 6, sm: 12 },
-                        right: { xs: 6, sm: 12 },
-                        backgroundColor: 'transparent',
-                        width: { xs: 28, sm: 36 },
-                        height: { xs: 28, sm: 36 },
-                        cursor: 'pointer',
-                        opacity: isHovered ? 1 : 0,
-                        transition: 'opacity 0.3s ease',
-                        '@media (hover: none)': { opacity: 1 },
-                        '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
-                    }}
-                    onClick={(e) => {
-                        e.stopPropagation();
-                        navigate(categoryUrl);
-                    }}
-                >
-                    <ShoppingBagOutlinedIcon sx={{ fontSize: { xs: 15, sm: 20 }, color: '#ffffff' }} />
-                </IconButton>
-
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        bottom: { xs: 8, sm: 16 },
-                        left: '50%',
-                        transform: { xs: 'translate(-50%, 0)', sm: isHovered ? 'translate(-50%, 0)' : 'translate(-50%, 20px)' },
-                        opacity: isHovered ? 1 : 0,
-                        transition: 'all 0.4s ease',
-                        '@media (hover: none)': { opacity: 1 },
-                        backgroundColor: '#f5ebe0',
-                        padding: { xs: '5px 10px', sm: '8px 20px' },
-                        borderRadius: '4px',
-                        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.08)',
-                        pointerEvents: 'none',
-                        minWidth: { xs: '100px', sm: '140px' },
-                        maxWidth: { xs: '90%', sm: 'none' },
-                        textAlign: 'center',
-                    }}
-                >
-                    <Typography sx={{
-                        fontFamily: '"Lato", sans-serif',
-                        fontSize: { xs: '0.55rem', sm: '0.7rem' }, fontWeight: 400,
-                        color: 'rgba(44, 44, 44, 0.7)',
-                        letterSpacing: '0.05em', mb: 0.3,
-                        textTransform: 'uppercase',
-                        whiteSpace: { xs: 'nowrap', sm: 'normal' },
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                    }}>
-                        {name}
-                    </Typography>
-                    <Typography sx={{
-                        fontFamily: '"Cormorant Garamond", serif',
-                        fontSize: { xs: '0.85rem', sm: '1rem' }, fontWeight: 500,
-                        color: '#2c2c2c', letterSpacing: '0.05em',
-                    }}>
-                        {price}
-                    </Typography>
-                </Box>
-            </Box>
-        );
-    };
 
     // The 4-tile grids below show real catalog products pulled from each
     // category (fetched above via useProducts), rather than placeholder
@@ -210,12 +238,13 @@ const HomePage = () => {
         'Wide-Leg Checked Wool Trousers', 'Leopard Print Bow Loafers',
     ]);
     const toTile = (product) => {
-        const images = product.imageUrl ? product.imageUrl.split(',').map((u) => u.trim()) : [];
+        const images = getProductImages(product);
         return {
             id: product.id,
             images: [images[0], images[1] || images[0]],
             name: product.name,
             price: `€${Math.round(product.price)}`,
+            raw: product,
         };
     };
     const menProducts = menCategoryProducts
@@ -228,33 +257,6 @@ const HomePage = () => {
         .map(toTile);
     const giftsProducts = giftsCategoryProducts.slice(0, 4).map(toTile);
 
-    // Carousel content for the Men "Shop the Look" banner - these 5 pieces
-    // from the photographed outfit. A person wearing the piece should only
-    // ever appear in the full banner photo (ManOutfit.jpg) - every card here,
-    // default AND hover, uses a plain, isolated shot of the item alone (the
-    // same defaults the product grid/detail pages use, plus a second
-    // isolated angle for the hover swap). `name` is the shortened display
-    // label; `productName` is the exact DataInitializer product name (they
-    // differ for a few pieces) and is what goToOutfitPiece() matches on to
-    // find the real product and route to it.
-    const manOutfitPieces = [
-        { image: '/products/men/ManCoat5.jpg', hoverImage: '/products/men/ManCoat6.jpg', name: 'Navy Wool Overcoat', productName: 'Navy Wool Overcoat', subtitle: 'Virgin Wool' },
-        { image: '/products/men/ManCardigan5.jpg', hoverImage: '/products/men/ManCardigan6.jpg', name: 'Cable Knit Cardigan', productName: 'Cable Knit Wool Cardigan', subtitle: 'Wool' },
-        { image: '/products/men/ManShirt5.jpg', hoverImage: '/products/men/ManShirt6.jpg', name: 'Classic Cotton Shirt', productName: 'Classic Cotton Shirt', subtitle: 'Cotton' },
-        { image: '/products/men/ManTrousers5.jpg', hoverImage: '/products/men/ManTrousers6.jpg', name: 'Pleated Trousers', productName: 'Pleated Wool Trousers', subtitle: 'Wool' },
-        { image: '/products/men/ManHat2.jpg', hoverImage: '/products/men/ManHat4.jpg', name: 'Wool Flat Cap', productName: 'Wool Flat Cap', subtitle: 'Wool' },
-    ];
-
-    // Carousel content for the Women "Shop the Look" banner - same
-    // convention as manOutfitPieces above: plain isolated shots only, a
-    // person only ever shows up in the WomenFullLook.jpg banner photo.
-    // See manOutfitPieces above for why `productName` is separate from `name`.
-    const womanOutfitPieces = [
-        { image: '/products/women/WomanCoat5.jpg', hoverImage: '/products/women/WomanCoat6.jpg', name: 'Tweed Stand-Collar Jacket', productName: 'Tweed Stand-Collar Jacket', subtitle: 'Wool Tweed' },
-        { image: '/products/women/WomanHat2.jpg', hoverImage: '/products/women/WomanHat3.jpg', name: 'Wide-Brim Wool Hat', productName: 'Wide-Brim Wool Hat', subtitle: 'Wool Felt' },
-        { image: '/products/women/WomanTrousers5.jpg', hoverImage: '/products/women/WomanTrousers6.jpg', name: 'Wide-Leg Trousers', productName: 'Wide-Leg Checked Wool Trousers', subtitle: 'Wool' },
-        { image: '/products/women/WomanShoes4.jpg', hoverImage: '/products/women/WomanShoes6.jpg', name: 'Leopard Bow Loafers', productName: 'Leopard Print Bow Loafers', subtitle: 'Silk' },
-    ];
 
 
     return (
@@ -287,8 +289,9 @@ const HomePage = () => {
                             imageAlt="Men's look"
                             imageOnRight
                             onImageClick={() => navigate('/products?category=2')}
-                            onViewAllClick={() => navigate('/products?category=2')}
+                            onViewAllClick={() => navigate('/looks')}
                             onProductClick={(product) => goToOutfitPiece(menCategoryProducts, product.productName)}
+                            getProductId={(product) => findOutfitPiece(menCategoryProducts, product.productName)?.id}
                             products={manOutfitPieces}
                         />
                     </Box>
@@ -310,14 +313,14 @@ const HomePage = () => {
                     </Typography>
                     <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: { xs: 1.5, sm: 3 } }}>
                         {menProducts.map((product, index) => (
-                            <Reveal key={product.id} delay={index * 0.08}>
+                            <Reveal key={product.id} delay={index * 0.08} instant={hasBackTransition(product.id, 'home')}>
                                 <ImageWithHover
+                                    product={product}
                                     images={product.images}
                                     name={product.name}
                                     price={product.price}
                                     alt={product.name}
                                     categoryUrl={`/products/${product.id}`}
-                                    onClick={() => navigate(`/products/${product.id}`)}
                                 />
                             </Reveal>
                         ))}
@@ -354,8 +357,9 @@ const HomePage = () => {
                             image="/products/women/WomenFullLook.jpg"
                             imageAlt="Women's look"
                             onImageClick={() => navigate('/products?category=1')}
-                            onViewAllClick={() => navigate('/products?category=1')}
+                            onViewAllClick={() => navigate('/looks')}
                             onProductClick={(product) => goToOutfitPiece(womenCategoryProducts, product.productName)}
+                            getProductId={(product) => findOutfitPiece(womenCategoryProducts, product.productName)?.id}
                             products={womanOutfitPieces}
                         />
                     </Box>
@@ -377,14 +381,14 @@ const HomePage = () => {
                     </Typography>
                     <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: { xs: 1.5, sm: 3 } }}>
                         {womenProducts.map((product, index) => (
-                            <Reveal key={product.id} delay={index * 0.08}>
+                            <Reveal key={product.id} delay={index * 0.08} instant={hasBackTransition(product.id, 'home')}>
                                 <ImageWithHover
+                                    product={product}
                                     images={product.images}
                                     name={product.name}
                                     price={product.price}
                                     alt={product.name}
                                     categoryUrl={`/products/${product.id}`}
-                                    onClick={() => navigate(`/products/${product.id}`)}
                                 />
                             </Reveal>
                         ))}
@@ -433,14 +437,14 @@ const HomePage = () => {
                     </Typography>
                     <Box sx={{ display: 'grid', gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' }, gap: { xs: 1.5, sm: 3 } }}>
                         {giftsProducts.map((product, index) => (
-                            <Reveal key={product.id} delay={index * 0.08}>
+                            <Reveal key={product.id} delay={index * 0.08} instant={hasBackTransition(product.id, 'home')}>
                                 <ImageWithHover
+                                    product={product}
                                     images={product.images}
                                     name={product.name}
                                     price={product.price}
                                     alt={product.name}
                                     categoryUrl={`/products/${product.id}`}
-                                    onClick={() => navigate(`/products/${product.id}`)}
                                 />
                             </Reveal>
                         ))}
@@ -458,25 +462,11 @@ const HomePage = () => {
                     <Button
                         variant="outlined"
                         size="large"
-                        onClick={() => navigate('/products')}
+                        onClick={() => navigate('/products', { state: { smoothScrollTop: true } })}
                         sx={{
-                            color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
+                            ...fillButtonSx,
                             px: 8, py: 1.8, fontSize: '0.75rem', fontWeight: 400,
                             letterSpacing: '0.15em', fontFamily: '"Lato", sans-serif',
-                            backgroundColor: 'transparent',
-                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                            position: 'relative', overflow: 'hidden', borderRadius: '6px',
-                            '&::before': {
-                                content: '""', position: 'absolute', top: 0, left: '-100%',
-                                width: '100%', height: '100%', backgroundColor: '#f5ebe0',
-                                transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
-                            },
-                            '&:hover': {
-                                color: '#22223b', borderColor: '#f5ebe0',
-                                transform: 'translateY(-2px)',
-                                boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
-                            },
-                            '&:hover::before': { left: 0 },
                         }}
                     >
                         SHOP NOW

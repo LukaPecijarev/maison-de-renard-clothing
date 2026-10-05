@@ -48,7 +48,7 @@ Standard Spring Boot layering under `com.example.maisonderenard`:
 - `model/domain` — JPA entities (`Product`, `Category`, `Order`, `User`, `SoldProduct`).
 - `dto/domain` — request/response DTOs; controllers and application services never expose entities directly.
 - `config/security` + `web/filters/JwtFilter` + `helpers/JwtHelper` — stateless JWT auth (`Authorization: Bearer <token>`), validated once per request in `JwtFilter`, wired in before `UsernamePasswordAuthenticationFilter`.
-- `config/initialization/DataInitializer` — `@PostConstruct` seed data: creates `admin`/`admin123` and `customer`/`customer123` accounts and a full product/category catalog on first run (skips if data already exists).
+- `config/initialization/DataInitializer` — `@PostConstruct` seed data: creates `admin`/`pece1234` and `customer`/`pece1234` accounts and a full product/category catalog on first run (skips if data already exists). Existing accounts still on the old defaults (`admin123`/`customer123`) are moved to the new password on startup.
 
 Roles: `ADMIN` and `CUSTOMER`, with a role hierarchy (`config/security/JwtSecurityWebConfig`) where `ADMIN` implies `CUSTOMER`. Route authorization is declared centrally in `JwtSecurityWebConfig.securityFilterChain` (e.g. product/category mutations require `ADMIN`, `/api/orders/**` requires `CUSTOMER`, product/category GETs and `/api/chat` are public).
 
@@ -62,7 +62,14 @@ Calls the Anthropic Messages API directly from the backend (via `RestTemplate`, 
 ### Frontend
 - `axios/axios.js` — the shared axios instance; a request interceptor attaches `Authorization: Bearer <jwtToken>` from `localStorage`, and a response interceptor force-logs-out and redirects to `/login` on 401/403 (except for `/chat` calls, which fail silently).
 - `hooks/useAuth.js` — the actual auth mechanism in use: reads/writes `jwtToken`/`username`/`role` in `localStorage`. This is what pages and components use.
-- `contexts/authContext.js` (`AuthContext`/`AuthProvider`) — a second, **unused** auth implementation (stores its token under a different `localStorage` key, `token`, not `jwtToken`). It's dead code, not wired into `App.js`; don't assume it's the source of truth for auth state.
+- `utils/auth.js` (`isAdminUser`) decides what admin-only UI to show (the backend enforces the real permissions). The old unused `contexts/authContext.js` has been removed.
+- Shared building blocks — reuse these instead of copying styles/markup:
+  - `styles/buttons.js` — `fillButtonSx` (the site's "Shop Now" sliding-fill button) and `fillEffectSx` for colour variants.
+  - `components/AdminUi.jsx` — header, numbered sections, fields and buttons for the admin pages; `components/ProductForm.jsx` is the shared Add/Edit Product page.
+  - `components/AppSnackbar.jsx` (status messages), `components/ConfirmDialog.jsx` (confirmations), `utils/toast.js` + `components/GlobalToast.jsx` (app-wide notifications that survive navigation).
+  - `utils/productImages.js` (`getProductImages`, `FALLBACK_PRODUCT_IMAGE`), `utils/motion.js` (`prefersReducedMotion`).
+  - Animations: `utils/sharedImageTransition.js` + `hooks/useSharedImageReturn.js` (product image zoom between pages), `utils/animateRemoval.js`, `utils/flyToCart.js`, `utils/pageEnter.js`.
+- `theme.js` uses `responsiveFontSizes`, so headings shrink on small screens; layouts are checked for no horizontal overflow from 320px up.
 - `repository/*` — thin per-resource API wrappers (`productRepository`, `categoryRepository`, `orderRepository`, `userRepository`) around the shared axios instance; `hooks/*` wrap these for components.
 - `pages/*` are route-level components wired up in `App.js`; `components/layout/` holds the persistent `Header`/`Footer`/`Layout` shell. `ChatBot` is mounted globally in `App.js` (outside `Layout`) so it's available on every route.
 

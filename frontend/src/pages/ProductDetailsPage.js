@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { Container, Typography, Box, Button, IconButton, Skeleton, Snackbar, Alert } from '@mui/material';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { Container, Typography, Box, Button, IconButton, Skeleton } from '@mui/material';
+import { useParams, useNavigate, useLocation, useNavigationType } from 'react-router-dom';
 import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import ChevronLeftRoundedIcon from '@mui/icons-material/ChevronLeftRounded';
+import ChevronRightRoundedIcon from '@mui/icons-material/ChevronRightRounded';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import useProductDetails from '../hooks/useProductDetails';
@@ -10,7 +12,23 @@ import useAuth from '../hooks/useAuth';
 import useWishlist from '../hooks/useWishlist';
 import RecentlyViewed from '../components/RecentlyViewed';
 import ProductImageZoom from '../components/ProductImageZoom';
+import { fillButtonSx } from '../styles/buttons';
+import { getProductImages, FALLBACK_PRODUCT_IMAGE } from '../utils/productImages';
+import AppSnackbar from '../components/AppSnackbar';
+import {
+    hasForwardTransition, takeForwardTransition, flyImage,
+    registerHero, updateHeroScroll, releaseHero,
+} from '../utils/sharedImageTransition';
 
+
+
+// The big product photo: full column width on desktop, but smaller on phones
+// (at most 84% of the width / 60% of the screen height) and tablets (460px
+// wide) - in the single-column layout a full-width 3:4 photo was too tall.
+const HERO_SIZE_SX = {
+    width: { xs: 'min(84%, calc(60vh * 0.75))', sm: 'min(100%, 460px)', md: '100%' },
+    mx: 'auto',
+};
 
 const ProductDetailsPage = () => {
     const { id } = useParams();
@@ -19,9 +37,152 @@ const ProductDetailsPage = () => {
     const { addToCart } = useOrder();
     const { isInWishlist, toggleWishlist } = useWishlist();
     const { product, loading } = useProductDetails(id);
-    const [selectedImage, setSelectedImage] = useState(0);
+    const location = useLocation();
+    const navigationType = useNavigationType();
+    // The clicked ProductCard passes its (list) product along, so the hero image
+    // can render on the very first frame - before the details request finishes -
+    // giving the shared-element transition something to land on.
+    const preview = location.state?.preview && String(location.state.preview.id) === String(id)
+        ? location.state.preview
+        : null;
+    const [selectedImage, setSelectedImage] = useState(() => (preview && location.state?.imageIndex) || 0);
     const [selectedSize, setSelectedSize] = useState(null);
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+
+    const heroSource = product || preview;
+    const heroImages = getProductImages(heroSource);
+    const heroSrc = heroImages[selectedImage] || FALLBACK_PRODUCT_IMAGE;
+
+    // Shared-element transition from the grid (see utils/sharedImageTransition):
+    // the hero stays hidden while a ghost of the card image flies into its place.
+    const heroRef = useRef(null);
+    const transitionStartedForRef = useRef(null);
+    const [heroHidden, setHeroHidden] = useState(() => hasForwardTransition(id));
+
+    useLayoutEffect(() => {
+        if (transitionStartedForRef.current === id) return; // StrictMode re-runs effects
+        transitionStartedForRef.current = id;
+        // Every new visit to a product starts at the top - whichever link led
+        // here (grid, home page rows, wishlist, order history, quick view...).
+        // Without this the page kept the previous page's scroll offset and could
+        // open near the bottom. Back/Forward (POP) keep the browser's restored
+        // position instead.
+        if (navigationType !== 'POP') {
+            window.scrollTo(0, 0);
+        }
+        const transition = takeForwardTransition(id);
+        if (!transition || !heroRef.current) {
+            setHeroHidden(false);
+            return;
+        }
+        // Arriving from a clicked product image: fly it into the hero.
+        // setHeroHidden(true) matters when this page stays mounted and only the
+        // id changes (clicking a Recently Viewed item from another product).
+        setHeroHidden(true);
+        flyImage({
+            fromRect: transition.rect,
+            src: transition.src,
+            fit: transition.fit,
+            background: transition.background,
+            getTargetElement: () => heroRef.current,
+            onDone: () => setHeroHidden(false),
+        });
+    }, [id, navigationType]);
+
+    // Keep the hero's position recorded while this page is open, for the reverse
+    // transition when going back to the grid.
+    useEffect(() => {
+        if (heroHidden || !heroRef.current) return undefined;
+        registerHero(id, heroRef.current, heroSrc);
+        const onScroll = () => updateHeroScroll(id);
+        const onResize = () => heroRef.current && registerHero(id, heroRef.current, heroSrc);
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onResize);
+        return () => {
+            window.removeEventListener('scroll', onScroll);
+            window.removeEventListener('resize', onResize);
+            releaseHero(id);
+        };
+    }, [id, heroSrc, heroHidden, loading]);
+
+    // Gallery: which way the last image change went, so the new image slides in
+    // from that side (arrows wrap around; thumbnails go left/right by position).
+    const [galleryDirection, setGalleryDirection] = useState(0);
+    const goToImage = (index, direction) => {
+        if (index === selectedImage) return;
+        setGalleryDirection(direction ?? Math.sign(index - selectedImage));
+        setSelectedImage(index);
+    };
+    const stepImage = (step) => {
+        if (heroImages.length < 2) return;
+        goToImage((selectedImage + step + heroImages.length) % heroImages.length, step);
+    };
+
+    // Left/right arrow keys cycle the images (not while typing in a field).
+    useEffect(() => {
+        const onKey = (e) => {
+            if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+            if (['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) return;
+            stepImage(e.key === 'ArrowRight' ? 1 : -1);
+        };
+        window.addEventListener('keydown', onKey);
+        return () => window.removeEventListener('keydown', onKey);
+    });
+
+    const arrowSx = (side) => ({
+        position: 'absolute', top: '50%', [side]: { xs: 10, md: 16 }, zIndex: 2,
+        width: { xs: 38, md: 46 }, height: { xs: 38, md: 46 },
+        backgroundColor: 'rgba(253, 251, 245, 0.82)',
+        backdropFilter: 'blur(6px)',
+        border: '1px solid rgba(212, 184, 150, 0.5)',
+        color: '#6b5640',
+        boxShadow: '0 6px 18px rgba(44, 44, 44, 0.12)',
+        opacity: 0,
+        transform: `translateY(-50%) translateX(${side === 'left' ? -8 : 8}px)`,
+        transition: 'opacity 0.35s ease, transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s ease, box-shadow 0.25s ease',
+        '& svg': { transition: 'transform 0.25s ease' },
+        '&:hover': {
+            backgroundColor: '#fdfbf5',
+            boxShadow: '0 8px 24px rgba(44, 44, 44, 0.18)',
+            transform: 'translateY(-50%) scale(1.08)',
+            '& svg': { transform: `translateX(${side === 'left' ? -2 : 2}px)` },
+        },
+        '&:active': { transform: 'translateY(-50%) scale(0.94)' },
+        // Always shown on touch screens (no hover there).
+        '@media (hover: none)': { opacity: 1, transform: 'translateY(-50%)' },
+    });
+
+    const renderHero = (src, alt) => (
+        <Box ref={heroRef} sx={{
+            position: 'relative',
+            ...HERO_SIZE_SX, aspectRatio: '3/4',
+            overflow: 'hidden', mb: 2, backgroundColor: '#faf6ee',
+            visibility: heroHidden ? 'hidden' : 'visible',
+            // Arrows glide in when the image is hovered.
+            '&:hover .gallery-arrow': { opacity: 1, transform: 'translateY(-50%)' },
+        }}>
+            <ProductImageZoom src={src} alt={alt} direction={galleryDirection} />
+            {heroImages.length > 1 && (
+                <>
+                    <IconButton className="gallery-arrow" aria-label="Previous image" onClick={() => stepImage(-1)} sx={arrowSx('left')}>
+                        <ChevronLeftRoundedIcon />
+                    </IconButton>
+                    <IconButton className="gallery-arrow" aria-label="Next image" onClick={() => stepImage(1)} sx={arrowSx('right')}>
+                        <ChevronRightRoundedIcon />
+                    </IconButton>
+                    <Box sx={{
+                        position: 'absolute', bottom: 14, left: '50%', transform: 'translateX(-50%)', zIndex: 2,
+                        px: 1.4, py: 0.4, borderRadius: '999px',
+                        backgroundColor: 'rgba(253, 251, 245, 0.8)', backdropFilter: 'blur(6px)',
+                        fontFamily: '"Lato", sans-serif', fontSize: '0.7rem', letterSpacing: '0.12em', color: '#6b5640',
+                        pointerEvents: 'none',
+                    }}>
+                        {selectedImage + 1} / {heroImages.length}
+                    </Box>
+                </>
+            )}
+        </Box>
+    );
 
     useEffect(() => {
         if (product) {
@@ -46,7 +207,9 @@ const ProductDetailsPage = () => {
             <Box sx={{ backgroundColor: '#f5f1e8', minHeight: '100vh', py: 6 }}>
                 <Container maxWidth="lg">
                     <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' }, gap: 6 }}>
-                        <Skeleton variant="rectangular" sx={{ width: '100%', aspectRatio: '3/4', ...skeletonSx }} />
+                        {preview
+                            ? <Box>{renderHero(heroSrc, preview.name)}</Box>
+                            : <Skeleton variant="rectangular" sx={{ ...HERO_SIZE_SX, aspectRatio: '3/4', ...skeletonSx }} />}
                         <Box>
                             <Skeleton variant="text" width="30%" sx={{ mb: 2, ...skeletonSx }} />
                             <Skeleton variant="text" width="65%" height={56} sx={{ mb: 3, ...skeletonSx }} />
@@ -70,8 +233,7 @@ const ProductDetailsPage = () => {
         );
     }
 
-    const images = product.imageUrl ? product.imageUrl.split(',').map(url => url.trim()) : [];
-    const mainImage = images[selectedImage] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=800';
+    const images = heroImages;
 
     const availableSizes = product.size
         ? product.size.split(',').map(s => s.trim().toUpperCase())
@@ -118,24 +280,20 @@ const ProductDetailsPage = () => {
 
                     {/* Images Section */}
                     <Box>
-                        <Box sx={{
-                            width: '100%', aspectRatio: '3/4',
-                            overflow: 'hidden', mb: 2, backgroundColor: '#faf6ee',
-                        }}>
-                            <ProductImageZoom src={mainImage} alt={product.name} />
-                        </Box>
+                        {renderHero(heroSrc, product.name)}
 
                         {images.length > 1 && (
-                            <Box sx={{ display: 'flex', gap: 2 }}>
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, justifyContent: { xs: 'center', md: 'flex-start' } }}>
                                 {images.map((image, index) => (
                                     <Box
                                         key={index}
-                                        onClick={() => setSelectedImage(index)}
+                                        onClick={() => goToImage(index)}
                                         sx={{
                                             width: 80, height: 100, cursor: 'pointer',
                                             border: selectedImage === index ? '2px solid #d4b896' : '2px solid transparent',
-                                            transition: 'border 0.3s ease', overflow: 'hidden',
-                                            '&:hover': { border: '2px solid #d4b896' },
+                                            opacity: selectedImage === index ? 1 : 0.65,
+                                            transition: 'border 0.3s ease, opacity 0.3s ease, transform 0.3s ease', overflow: 'hidden',
+                                            '&:hover': { border: '2px solid #d4b896', opacity: 1, transform: 'translateY(-2px)' },
                                         }}
                                     >
                                         <Box component="img" src={image} alt={`${product.name} ${index + 1}`}
@@ -200,27 +358,9 @@ const ProductDetailsPage = () => {
                                 onClick={handleAddToCart}
                                 disabled={availableSizes.length > 0 && !selectedSize}
                                 sx={{
-                                    color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
+                                    ...fillButtonSx,
                                     py: 1.8, fontSize: '0.9rem', fontWeight: 400,
                                     letterSpacing: '0.12em', fontFamily: '"Lato", sans-serif',
-                                    backgroundColor: 'transparent',
-                                    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                                    position: 'relative', overflow: 'hidden', borderRadius: '6px',
-                                    '&::before': {
-                                        content: '""', position: 'absolute', top: 0, left: '-100%',
-                                        width: '100%', height: '100%', backgroundColor: '#f5ebe0',
-                                        transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
-                                    },
-                                    '&:hover': {
-                                        color: '#22223b', borderColor: '#f5ebe0',
-                                        transform: 'translateY(-2px)',
-                                        boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
-                                    },
-                                    '&:hover::before': { left: 0 },
-                                    '&.Mui-disabled': {
-                                        color: 'rgba(34, 34, 59, 0.35)',
-                                        borderColor: 'rgba(230, 184, 162, 0.4)',
-                                    },
                                 }}
                             >
                                 {availableSizes.length > 0 && !selectedSize ? 'SELECT A SIZE' : 'ADD TO CART'}
@@ -363,17 +503,7 @@ const ProductDetailsPage = () => {
                 <RecentlyViewed excludeId={product.id} />
             </Container>
 
-            <Snackbar
-                open={snackbar.open}
-                autoHideDuration={3000}
-                onClose={() => setSnackbar({ ...snackbar, open: false })}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            >
-                <Alert onClose={() => setSnackbar({ ...snackbar, open: false })}
-                       severity={snackbar.severity} sx={{ width: '100%' }}>
-                    {snackbar.message}
-                </Alert>
-            </Snackbar>
+            <AppSnackbar snackbar={snackbar} onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))} />
         </Box>
     );
 };

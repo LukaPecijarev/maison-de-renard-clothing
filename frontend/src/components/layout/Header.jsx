@@ -5,19 +5,40 @@ import {
     useMediaQuery,
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import PersonIcon from '@mui/icons-material/Person';
 import SearchIcon from '@mui/icons-material/Search';
 import MenuIcon from '@mui/icons-material/Menu';
 import useAuth from '../../hooks/useAuth';
+import { isAdminUser } from '../../utils/auth';
+
+// Rotating messages in the banner above the header.
+const QUOTES = [
+    "Book a Private Appointment in Our Exclusive Store in Italy",
+    "Timeless Elegance, Crafted with Passion and Dedication to Excellence",
+    "Experience the Art of Quiet Luxury and Refined Sophistication",
+    "Where Heritage Meets Modern Sophistication in Every Detail"
+];
 
 const Header = () => {
     const navigate = useNavigate();
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [searchParams, setSearchParams] = useSearchParams();
+    const location = useLocation();
+
+    // Is this nav link the page we're on? (Same path, and the same ?category=
+    // when the link has one.) Drives the persistent underline / drawer highlight.
+    const isActive = (to) => {
+        const [path, query] = to.split('?');
+        if (location.pathname.replace(/\/+$/, '') !== path) return false;
+        if (!query) return true;
+        const wanted = new URLSearchParams(query).get('category');
+        return wanted === null || searchParams.get('category') === wanted;
+    };
+    const activeProps = (to) => (isActive(to) ? { className: 'nav-active', 'aria-current': 'page' } : {});
     const [searchQuery, setSearchQuery] = useState(searchParams.get('search') || '');
     const [cartCount, setCartCount] = useState(
         parseInt(localStorage.getItem('cartCount') || '0')
@@ -27,8 +48,7 @@ const Header = () => {
     );
     const [mobileOpen, setMobileOpen] = useState(false);
     const { isAuthenticated, getUsername, logout } = useAuth();
-    const role = localStorage.getItem('role');
-    const isAdmin = role === 'ROLE_ADMIN' || role === 'ADMIN';
+    const isAdmin = isAdminUser();
 
     const navLinks = [
         { label: 'Fall/Winter 2026/2027', to: '/products?category=5' },
@@ -45,13 +65,6 @@ const Header = () => {
     };
 
     const [currentQuote, setCurrentQuote] = useState(0);
-    const quotes = [
-        "Book a Private Appointment in Our Exclusive Store in Italy",
-        "Timeless Elegance, Crafted with Passion and Dedication to Excellence",
-        "Experience the Art of Quiet Luxury and Refined Sophistication",
-        "Where Heritage Meets Modern Sophistication in Every Detail"
-    ];
-
     useEffect(() => {
         const updateCount = () => {
             setCartCount(parseInt(localStorage.getItem('cartCount') || '0'));
@@ -70,12 +83,17 @@ const Header = () => {
 
     useEffect(() => {
         const interval = setInterval(() => {
-            setCurrentQuote((prev) => (prev + 1) % quotes.length);
+            setCurrentQuote((prev) => (prev + 1) % QUOTES.length);
         }, 4000);
         return () => clearInterval(interval);
     }, []);
 
     useEffect(() => {
+        // Nothing to sync when the URL already matches the search box. Without this
+        // check the effect re-wrote the URL (with identical params) after every
+        // navigation, pushing a duplicate history entry - so Back had to be
+        // pressed twice to actually leave a page.
+        if ((searchParams.get('search') || '') === searchQuery) return undefined;
         const timer = setTimeout(() => {
             if (searchQuery) {
                 const currentParams = Object.fromEntries(searchParams.entries());
@@ -89,12 +107,13 @@ const Header = () => {
         return () => clearTimeout(timer);
     }, [searchQuery, searchParams, setSearchParams]);
 
+    // Keep the search box in step with the URL (e.g. after Back/Forward).
     useEffect(() => {
-        const urlSearch = searchParams.get('search');
-        if (urlSearch !== searchQuery) {
-            setSearchQuery(urlSearch || '');
-        }
+        setSearchQuery(searchParams.get('search') || '');
     }, [searchParams]);
+
+    // Header icon buttons on phones/tablets - a little tighter on the smallest screens.
+    const mobileIconSx = { color: '#2c2c2c', p: { xs: 0.75, sm: 1 } };
 
     const navButtonSx = {
         color: '#2c2c2c',
@@ -117,6 +136,8 @@ const Header = () => {
         },
         '&:hover': { backgroundColor: 'transparent' },
         '&:hover::after': { width: '80%' },
+        // The current category keeps its underline, not just on hover.
+        '&.nav-active::after': { width: '80%' },
     };
 
     // Shared count-badge look for the wishlist/cart icons: a muted wine tone
@@ -125,14 +146,19 @@ const Header = () => {
     const countBadgeSx = {
         '& .MuiBadge-badge': {
             backgroundColor: '#9c4a4a',
-            color: '#f5f1e8',
-            fontFamily: '"Cormorant Garamond", serif',
-            fontStyle: 'italic',
+            color: '#ffffff',
+            // Playfair Display (already loaded in index.css): a high-contrast
+            // serif that reads as luxe but, unlike the thin italic Cormorant used
+            // before, stays crisp at badge size. Upright, lining (full-height) digits.
+            fontFamily: '"Playfair Display", serif',
             fontSize: '0.62rem',
-            fontWeight: 700,
-            minWidth: '14px',
-            height: '14px',
-            border: '1.5px solid #f5f1e8',
+            fontWeight: 600,
+            lineHeight: 1,
+            fontVariantNumeric: 'lining-nums tabular-nums',
+            minWidth: '16px',
+            height: '16px',
+            padding: '0 3px',
+            border: '1px solid #f5f1e8',
             boxShadow: '0 2px 5px rgba(156, 74, 74, 0.45)',
         },
     };
@@ -157,9 +183,9 @@ const Header = () => {
                     alignItems: 'center',
                     justifyContent: 'center',
                 }}>
-                    {quotes.map((quote, index) => {
+                    {QUOTES.map((quote, index) => {
                         const isActive = currentQuote === index;
-                        const isPrevious = currentQuote === (index + 1) % quotes.length;
+                        const isPrevious = currentQuote === (index + 1) % QUOTES.length;
                         return (
                             <Typography key={index} sx={{
                                 position: 'absolute',
@@ -201,10 +227,10 @@ const Header = () => {
                     justifyContent: isMobile ? 'space-between' : 'center',
                     alignItems: 'center',
                     py: 2,
-                    px: { xs: 2, md: 3 },
+                    px: { xs: 1, sm: 2, md: 3 },
                 }}>
                     {isMobile && (
-                        <IconButton onClick={() => setMobileOpen(true)} sx={{ color: '#2c2c2c' }} aria-label="Open menu">
+                        <IconButton onClick={() => setMobileOpen(true)} sx={mobileIconSx} aria-label="Open menu">
                             <MenuIcon />
                         </IconButton>
                     )}
@@ -212,14 +238,16 @@ const Header = () => {
                     <Box sx={{
                         display: 'flex',
                         alignItems: 'center',
-                        gap: { xs: 1, md: 2 },
+                        gap: { xs: 0.6, sm: 1, md: 2 },
                         cursor: 'pointer',
+                        minWidth: 0,
                     }} onClick={() => navigate('/')}>
                         <Box component="img" src="/logo.png" alt="Maison de Renard"
-                             sx={{ height: { xs: 36, md: 50 }, width: 'auto' }} />
+                             sx={{ height: { xs: 30, sm: 36, md: 50 }, width: 'auto' }} />
                         <Typography variant="h5" sx={{
                             fontFamily: '"Tangerine", cursive',
-                            fontSize: { xs: '1.6rem', md: '2.5rem' },
+                            // Smaller on the narrowest phones so logo + name + icons fit in 360px.
+                            fontSize: { xs: '1.35rem', sm: '1.6rem', md: '2.5rem' },
                             color: '#2c2c2c',
                             fontWeight: 400,
                             whiteSpace: 'nowrap',
@@ -229,20 +257,21 @@ const Header = () => {
                     </Box>
 
                     {isMobile && (
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-                            <IconButton onClick={() => navigate('/wishlist')} sx={{ color: '#2c2c2c' }}>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: { xs: 0, sm: 0.5 } }}>
+                            <IconButton onClick={() => navigate('/wishlist')} sx={mobileIconSx} aria-label="Wishlist">
                                 <Badge badgeContent={wishlistCount} sx={countBadgeSx}>
                                     <FavoriteBorderIcon />
                                 </Badge>
                             </IconButton>
-                            <IconButton onClick={() => navigate('/cart')} sx={{ color: '#2c2c2c' }}>
+                            <IconButton data-cart-icon onClick={() => navigate('/cart')} sx={mobileIconSx} aria-label="Cart">
                                 <Badge badgeContent={cartCount} sx={countBadgeSx}>
                                     <ShoppingCartIcon />
                                 </Badge>
                             </IconButton>
                             <IconButton
                                 onClick={() => navigate(isAuthenticated() ? '/order-history' : '/login')}
-                                sx={{ color: '#2c2c2c' }}
+                                sx={mobileIconSx}
+                                aria-label="Account"
                             >
                                 <PersonIcon />
                             </IconButton>
@@ -290,7 +319,7 @@ const Header = () => {
 
                             {/* Navigation Links */}
                             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 0 }}>
-                                <Button onClick={() => navigate('/products?category=5')} sx={{
+                                <Button {...activeProps('/products?category=5')} onClick={() => navigate('/products?category=5')} sx={{
                                     ...navButtonSx,
                                     color: '#8b6f47',
                                     fontWeight: 500,
@@ -299,19 +328,19 @@ const Header = () => {
                                 }}>
                                     Fall/Winter 2026/2027
                                 </Button>
-                                <Button onClick={() => navigate('/products?category=4')} sx={navButtonSx}>
+                                <Button {...activeProps('/products?category=4')} onClick={() => navigate('/products?category=4')} sx={navButtonSx}>
                                     Essentials
                                 </Button>
-                                <Button onClick={() => navigate('/products?category=1')} sx={navButtonSx}>
+                                <Button {...activeProps('/products?category=1')} onClick={() => navigate('/products?category=1')} sx={navButtonSx}>
                                     Women
                                 </Button>
-                                <Button onClick={() => navigate('/products?category=2')} sx={navButtonSx}>
+                                <Button {...activeProps('/products?category=2')} onClick={() => navigate('/products?category=2')} sx={navButtonSx}>
                                     Men
                                 </Button>
-                                <Button onClick={() => navigate('/products?category=3')} sx={navButtonSx}>
+                                <Button {...activeProps('/products?category=3')} onClick={() => navigate('/products?category=3')} sx={navButtonSx}>
                                     Gifts
                                 </Button>
-                                <Button onClick={() => navigate('/special-offers')} sx={{
+                                <Button {...activeProps('/special-offers')} onClick={() => navigate('/special-offers')} sx={{
                                     ...navButtonSx,
                                     color: '#c62828',
                                     fontWeight: 500,
@@ -335,7 +364,7 @@ const Header = () => {
                                 </Button>
 
                                 {/* Cart */}
-                                <Button onClick={() => navigate('/cart')} sx={{
+                                <Button data-cart-icon onClick={() => navigate('/cart')} sx={{
                                     color: '#2c2c2c', minWidth: 'auto', p: 0.5,
                                     '&:hover': { backgroundColor: 'transparent' },
                                 }}>
@@ -355,10 +384,10 @@ const Header = () => {
                                         </Button>
                                         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', lineHeight: 1 }}>
                                             <Typography sx={{
-                                                color: '#a0826d',
-                                                fontSize: '0.6rem',
+                                                color: '#8b7355',
+                                                fontSize: '0.62rem',
                                                 fontFamily: '"Lato", sans-serif',
-                                                fontWeight: 500,
+                                                fontWeight: 700,
                                                 textTransform: 'uppercase',
                                                 letterSpacing: '0.18em',
                                                 whiteSpace: 'nowrap',
@@ -368,10 +397,10 @@ const Header = () => {
                                             </Typography>
                                             <Typography sx={{
                                                 color: '#2c2c2c',
-                                                fontSize: '0.7rem',
+                                                fontSize: '0.82rem',
                                                 fontFamily: '"Cormorant Garamond", serif',
                                                 fontStyle: 'italic',
-                                                fontWeight: 500,
+                                                fontWeight: 600,
                                                 letterSpacing: '0.02em',
                                                 whiteSpace: 'nowrap',
                                                 textAlign: 'center',
@@ -380,31 +409,17 @@ const Header = () => {
                                                 {getUsername()}
                                             </Typography>
                                         </Box>
-                                        {isAdmin && (
-                                            <Button onClick={() => navigate('/admin/categories')} sx={{
-                                                color: '#8b7355',
-                                                fontSize: '0.95rem',
-                                                fontFamily: '"Cormorant Garamond", serif',
-                                                fontStyle: 'italic',
-                                                letterSpacing: '0.03em',
-                                                minWidth: 'auto',
-                                                p: 0.5,
-                                                whiteSpace: 'nowrap',
-                                                '&:hover': { backgroundColor: 'transparent', color: '#2c2c2c' },
-                                            }}>
-                                                Categories
-                                            </Button>
-                                        )}
                                         <Button onClick={() => {
                                             logout();
                                             localStorage.setItem('cartCount', '0');
                                             window.dispatchEvent(new Event('cartUpdated'));
                                             navigate('/');
                                         }} sx={{
-                                            color: '#8b7355',
-                                            fontSize: '0.95rem',
+                                            color: '#6b5640',
+                                            fontSize: '1rem',
                                             fontFamily: '"Cormorant Garamond", serif',
                                             fontStyle: 'italic',
+                                            fontWeight: 600,
                                             letterSpacing: '0.03em',
                                             minWidth: 'auto',
                                             p: 0.5,
@@ -422,10 +437,11 @@ const Header = () => {
                                             <PersonIcon />
                                         </Button>
                                         <Button onClick={() => navigate('/login')} sx={{
-                                            color: '#8b7355',
-                                            fontSize: '0.95rem',
+                                            color: '#6b5640',
+                                            fontSize: '1rem',
                                             fontFamily: '"Cormorant Garamond", serif',
                                             fontStyle: 'italic',
+                                            fontWeight: 600,
                                             letterSpacing: '0.03em',
                                             minWidth: 'auto',
                                             p: 0.5,
@@ -469,7 +485,16 @@ const Header = () => {
                     <Divider sx={{ borderColor: '#e0d5c7', mb: 1 }} />
                     <List>
                         {navLinks.map((link) => (
-                            <ListItemButton key={link.to} onClick={() => handleNavigate(link.to)}>
+                            <ListItemButton
+                                key={link.to}
+                                selected={isActive(link.to)}
+                                onClick={() => handleNavigate(link.to)}
+                                sx={{
+                                    borderLeft: '2px solid transparent',
+                                    '&.Mui-selected': { backgroundColor: 'rgba(212, 184, 150, 0.16)', borderLeftColor: '#d4b896' },
+                                    '&.Mui-selected:hover': { backgroundColor: 'rgba(212, 184, 150, 0.22)' },
+                                }}
+                            >
                                 <ListItemText
                                     primary={link.label}
                                     primaryTypographyProps={{
@@ -509,13 +534,13 @@ const Header = () => {
                                 <ListItemText
                                     primary="Logout"
                                     secondary={getUsername()}
-                                    primaryTypographyProps={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic', fontSize: '1.05rem', color: '#8b7355' }}
-                                    secondaryTypographyProps={{ fontFamily: '"Lato", sans-serif', fontSize: '0.75rem', color: '#8b7355' }}
+                                    primaryTypographyProps={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic', fontSize: '1.1rem', fontWeight: 600, color: '#6b5640' }}
+                                    secondaryTypographyProps={{ fontFamily: '"Lato", sans-serif', fontSize: '0.78rem', color: '#6b5640' }}
                                 />
                             </ListItemButton>
                         ) : (
                             <ListItemButton onClick={() => handleNavigate('/login')}>
-                                <ListItemText primary="Login" primaryTypographyProps={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic', fontSize: '1.05rem', color: '#8b7355' }} />
+                                <ListItemText primary="Login" primaryTypographyProps={{ fontFamily: '"Cormorant Garamond", serif', fontStyle: 'italic', fontSize: '1.1rem', fontWeight: 600, color: '#6b5640' }} />
                             </ListItemButton>
                         )}
                     </List>

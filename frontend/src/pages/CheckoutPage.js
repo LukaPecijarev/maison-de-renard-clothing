@@ -6,6 +6,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import useOrder from '../hooks/useOrder';
 import WalletCard from '../components/WalletCard';
 import Reveal from '../components/Reveal';
+import { showToast } from '../utils/toast';
+import { fillButtonSx } from '../styles/buttons';
 
 const CheckoutPage = () => {
     const navigate = useNavigate();
@@ -57,13 +59,13 @@ const CheckoutPage = () => {
             try {
                 const success = await confirmOrder();
                 if (success) {
-                    alert('Order confirmed successfully! Thank you for your purchase.');
+                    showToast({ variant: 'success', title: 'Order confirmed', message: 'Thank you for your purchase - we’re preparing it with care.', duration: 5000 });
                     navigate('/');
                 } else {
-                    alert('Failed to process order. Please try again.');
+                    showToast({ variant: 'error', title: 'Something went wrong', message: 'Your order could not be processed. Please try again.' });
                 }
             } catch (error) {
-                alert('Failed to process order. Please try again.');
+                showToast({ variant: 'error', title: 'Something went wrong', message: 'Your order could not be processed. Please try again.' });
                 console.error('Order confirmation error:', error);
             }
         }
@@ -222,23 +224,10 @@ const CheckoutPage = () => {
                             Back to Cart
                         </Button>
                         <Button type="submit" variant="outlined" sx={{
+                            ...fillButtonSx,
                             fontFamily: '"Lato", sans-serif', fontSize: '0.85rem',
                             fontWeight: 500, letterSpacing: '0.15em', textTransform: 'uppercase',
-                            color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
-                            backgroundColor: 'transparent', padding: '12px 50px',
-                            position: 'relative', overflow: 'hidden', borderRadius: '6px',
-                            transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                            '&::before': {
-                                content: '""', position: 'absolute', top: 0, left: '-100%',
-                                width: '100%', height: '100%', backgroundColor: '#f5ebe0',
-                                transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
-                            },
-                            '&:hover': {
-                                color: '#22223b', borderColor: '#f5ebe0',
-                                transform: 'translateY(-2px)',
-                                boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
-                            },
-                            '&:hover::before': { left: 0 },
+                            padding: '12px 50px',
                         }}>
                             Complete Purchase
                         </Button>

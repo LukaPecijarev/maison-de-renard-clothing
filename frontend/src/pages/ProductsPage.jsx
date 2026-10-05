@@ -1,19 +1,43 @@
 import React, { useState, useEffect } from 'react';
 import {
-    Container, Typography, Box, Snackbar, Alert, Fab,
-    FormControl, InputLabel, Select, MenuItem, Button, IconButton,
+    Container, Typography, Box, Button,
 } from '@mui/material';
+import { keyframes } from '@mui/material/styles';
 import ProductGridSkeleton from '../components/ProductGridSkeleton';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import AddIcon from '@mui/icons-material/Add';
-import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
-import ViewAgendaOutlinedIcon from '@mui/icons-material/ViewAgendaOutlined';
+import { useNavigate, useSearchParams, useLocation, useNavigationType } from 'react-router-dom';
+import { AddProductFab } from '../components/AdminActionButton';
 import useProducts from '../hooks/useProducts';
 import categoryRepository from '../repository/categoryRepository';
+import apiCache from '../utils/apiCache';
+import { materialFamilies, colorFamilies, materialOptions, colorOptions, COLOR_SWATCHES } from '../utils/productFacets';
+import FilterSelect from '../components/FilterSelect';
 import ProductCard from '../components/ProductCard';
 import QuickViewModal from '../components/QuickViewModal';
 import Reveal from '../components/Reveal';
+import { hasBackTransition } from '../utils/sharedImageTransition';
 import RecentlyViewed from '../components/RecentlyViewed';
+import { isAdminUser } from '../utils/auth';
+import { prefersReducedMotion } from '../utils/motion';
+import AppSnackbar from '../components/AppSnackbar';
+import useGridView from '../hooks/useGridView';
+import GridViewToggle from '../components/GridViewToggle';
+
+// Category switch (e.g. Men -> Women from the nav): the old grid fades out, the
+// new one is swapped in while invisible, then fades/slides in.
+const CATEGORY_FADE_OUT_MS = 250;
+const categoryFadeIn = keyframes`
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: none; }
+`;
+const SEASON_CATEGORY_DATA = {
+    name: 'Fall/Winter 2026/2027',
+    description: 'Discover our latest Fall/Winter collection featuring timeless pieces crafted from the finest materials.'
+};
+// Title/description for a category, as far as it's known without a request.
+const knownCategoryData = ({ category, season }) => {
+    if (category) return apiCache.getFresh(`categories:byId:${category}`, 5 * 60_000) || null;
+    return season ? SEASON_CATEGORY_DATA : null;
+};
 
 const ProductsPage = () => {
     const navigate = useNavigate();
@@ -21,56 +45,110 @@ const ProductsPage = () => {
     const categoryParam = searchParams.get('category');
     const seasonParam = searchParams.get('season'); // ✅ Add season parameter
     const searchQuery = searchParams.get('search') || ''; // ✅ Get search query from URL
-    const [selectedCategory, setSelectedCategory] = useState(categoryParam ? parseInt(categoryParam) : null);
-    const [categoryData, setCategoryData] = useState(null);
+    const location = useLocation();
+    const navigationType = useNavigationType();
+
+    // "Shop Now" (and similar buttons) land here from far down another page;
+    // glide up to the top instead of opening wherever that page was scrolled.
+    useEffect(() => {
+        if (navigationType !== 'POP' && location.state?.smoothScrollTop && window.scrollY > 0) {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        // only on arrival
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [location.key]);
+
+    // The category actually on screen. It lags the URL by the fade-out when
+    // switching categories, so the old grid can fade out before it's replaced.
+    const urlCategoryKey = `${categoryParam || ''}|${seasonParam || ''}`;
+    const [shownCategory, setShownCategory] = useState({ key: urlCategoryKey, category: categoryParam, season: seasonParam });
+    const [categoryFadingOut, setCategoryFadingOut] = useState(false);
+    const [hasSwitchedCategory, setHasSwitchedCategory] = useState(false); // no fade-in on first load / coming back from a product
+
+    useEffect(() => {
+        if (urlCategoryKey === shownCategory.key) return undefined;
+        const next = { key: urlCategoryKey, category: categoryParam, season: seasonParam };
+        // Swap the category and its title in one update, so the new content never
+        // renders - even for a frame - with the previous category's title.
+        // Color/material options differ per category - a filter kept from the
+        // previous one could leave an empty grid with nothing visibly selected.
+        const swap = () => {
+            setShownCategory(next);
+            setCategoryData(knownCategoryData(next));
+            setFilterColor('');
+            setFilterMaterial('');
+        };
+        if (prefersReducedMotion()) {
+            swap();
+            return undefined;
+        }
+        setCategoryFadingOut(true);
+        const timer = setTimeout(() => {
+            setHasSwitchedCategory(true);
+            swap();
+            setCategoryFadingOut(false);
+        }, CATEGORY_FADE_OUT_MS);
+        return () => clearTimeout(timer);
+    }, [urlCategoryKey, shownCategory.key, categoryParam, seasonParam]);
+
+    // Applied to the page content (not the outer Box, whose fixed-position Fab a
+    // transform would break). Keyed by category so a switch remounts it and the
+    // fade-in plays.
+    const categoryTransitionSx = {
+        opacity: categoryFadingOut ? 0 : 1,
+        transform: categoryFadingOut ? 'translateY(8px)' : 'none',
+        transition: `opacity ${CATEGORY_FADE_OUT_MS}ms ease, transform ${CATEGORY_FADE_OUT_MS}ms ease`,
+        animation: hasSwitchedCategory ? `${categoryFadeIn} 0.45s cubic-bezier(0.25, 0.8, 0.25, 1)` : 'none',
+    };
+    const selectedCategory = shownCategory.category ? parseInt(shownCategory.category) : null;
+    // Seeded from cache so returning to a category (e.g. back from a product)
+    // renders its title/description/video immediately instead of popping them in
+    // after the fetch and shifting the grid down. Lives under the 'categories:'
+    // prefix so useCategories' invalidation on edit/delete clears it too.
+    const [categoryData, setCategoryData] = useState(() => knownCategoryData({ category: categoryParam, season: seasonParam }));
     const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
     const [quickViewProduct, setQuickViewProduct] = useState(null);
     const [sortBy, setSortBy] = useState('default');
     const [filterColor, setFilterColor] = useState('');
     const [filterMaterial, setFilterMaterial] = useState('');
-    // Mobile-only grid density: 2-per-row (default) or 1-per-row/bigger. Doesn't
-    // affect sm/md+ layouts, which always show 4 across regardless.
-    const [mobileSingleColumn, setMobileSingleColumn] = useState(false);
-    const mobileColumns = mobileSingleColumn ? '1fr' : 'repeat(2, 1fr)';
+    // Products per row (1 / 2 / 4) - chosen with the VIEW selector, remembered across pages.
+    const { columns, options: gridOptions, setColumns, gridSx } = useGridView();
 
-    // Check if user is admin
-    const isAdmin = () => {
-        const role = localStorage.getItem('role');
-        return role === 'ROLE_ADMIN' || role === 'ADMIN';
-    };
 
     const notify = (message, severity) => setSnackbar({ open: true, message, severity });
 
-    // Update selected category when URL changes
+    // Update selected category when the shown category changes (see above)
     useEffect(() => {
-        setSelectedCategory(categoryParam ? parseInt(categoryParam) : null);
+        const { category: shownCategoryParam, season: shownSeasonParam } = shownCategory;
 
         // Fetch category details only if category parameter exists
-        if (categoryParam) {
-            categoryRepository.findById(categoryParam)
-                .then(response => setCategoryData(response.data))
+        if (shownCategoryParam) {
+            categoryRepository.findById(shownCategoryParam)
+                .then(response => {
+                    apiCache.set(`categories:byId:${shownCategoryParam}`, response.data);
+                    setCategoryData(response.data);
+                })
                 .catch(error => console.error('Error fetching category:', error));
-        } else if (seasonParam) {
+        } else if (shownSeasonParam) {
             // Set default category data for season
-            setCategoryData({
-                name: 'Fall/Winter 2026/2027',
-                description: 'Discover our latest Fall/Winter collection featuring timeless pieces crafted from the finest materials.'
-            });
+            setCategoryData(SEASON_CATEGORY_DATA);
         }
-    }, [categoryParam, seasonParam]);
+    }, [shownCategory]);
 
     const { products, loading, onDelete } = useProducts(selectedCategory);
 
     // Distinct filter options, derived from whatever is actually in this category
-    const uniqueColors = [...new Set(products.map((p) => p.color).filter(Boolean))].sort();
-    const uniqueMaterials = [...new Set(products.map((p) => p.material).filter(Boolean))].sort();
+    // Grouped into simple families ("Wool" covers Wool Felt, Merino Wool, ...) -
+    // see utils/productFacets.
+    const uniqueColors = colorOptions(products);
+    const uniqueMaterials = materialOptions(products);
 
     // ✅ Filter products by search query, color and material
     let filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(searchQuery.toLowerCase())
     );
-    if (filterColor) filteredProducts = filteredProducts.filter((p) => p.color === filterColor);
-    if (filterMaterial) filteredProducts = filteredProducts.filter((p) => p.material === filterMaterial);
+    if (filterColor) filteredProducts = filteredProducts.filter((p) => colorFamilies(p.color).includes(filterColor));
+    if (filterMaterial) filteredProducts = filteredProducts.filter((p) => materialFamilies(p.material).includes(filterMaterial));
     if (sortBy === 'price-asc') filteredProducts = [...filteredProducts].sort((a, b) => a.price - b.price);
     if (sortBy === 'price-desc') filteredProducts = [...filteredProducts].sort((a, b) => b.price - a.price);
 
@@ -81,45 +159,7 @@ const ProductsPage = () => {
         setFilterMaterial('');
     };
 
-    const filterFieldSx = {
-        minWidth: 160,
-        '& .MuiOutlinedInput-root': {
-            fontFamily: '"Lato", sans-serif', fontSize: '0.85rem',
-            borderRadius: '6px',
-            backgroundColor: '#faf5ea',
-            transition: 'background-color 0.25s ease',
-            '& fieldset': { borderColor: 'rgba(212, 184, 150, 0.4)' },
-            '&:hover': { backgroundColor: '#f5ebe0' },
-            '&:hover fieldset': { borderColor: '#d4b896' },
-            '&.Mui-focused': { backgroundColor: '#f5ebe0' },
-            '&.Mui-focused fieldset': { borderColor: '#c4a886', borderWidth: '1px' },
-        },
-        '& .MuiInputLabel-root': { fontFamily: '"Lato", sans-serif', fontSize: '0.85rem' },
-        '& .MuiInputLabel-root.Mui-focused': { color: '#8b7355' },
-        '& .MuiSvgIcon-root': { color: '#8b7355' },
-    };
 
-    const filterMenuProps = {
-        PaperProps: {
-            sx: {
-                mt: 0.5,
-                backgroundColor: '#faf5ea',
-                border: '1px solid rgba(212, 184, 150, 0.35)',
-                borderRadius: '6px',
-                boxShadow: '0 10px 28px rgba(44, 44, 44, 0.14)',
-                '& .MuiMenuItem-root': {
-                    fontFamily: '"Lato", sans-serif',
-                    fontSize: '0.85rem',
-                    color: '#2c2c2c',
-                    '&:hover': { backgroundColor: 'rgba(212, 184, 150, 0.15)' },
-                    '&.Mui-selected': {
-                        backgroundColor: 'rgba(212, 184, 150, 0.25)',
-                        '&:hover': { backgroundColor: 'rgba(212, 184, 150, 0.32)' },
-                    },
-                },
-            },
-        },
-    };
 
     // Get category-specific video
     const getCategoryVideo = () => {
@@ -135,7 +175,7 @@ const ProductsPage = () => {
     if (loading) {
         return (
             <Box sx={{ backgroundColor: '#f5f1e8', minHeight: '100vh' }}>
-                <Container maxWidth="xl" sx={{ pt: 4, pb: 3 }}>
+                <Container key={shownCategory.key} maxWidth="xl" sx={{ pt: 4, pb: 3, ...categoryTransitionSx }}>
                     <ProductGridSkeleton />
                 </Container>
             </Box>
@@ -144,7 +184,7 @@ const ProductsPage = () => {
 
     return (
         <Box sx={{ backgroundColor: '#f5f1e8', minHeight: '100vh', position: 'relative' }}>
-            <Container maxWidth="xl" sx={{ pt: 4, pb: 3 }}>
+            <Container key={shownCategory.key} maxWidth="xl" sx={{ pt: 4, pb: 3, ...categoryTransitionSx }}>
                 {/* Category Section */}
                 <Box sx={{ mb: 6 }}>
                     {/* Category Title */}
@@ -158,7 +198,9 @@ const ProductsPage = () => {
                             mb: 2,
                         }}
                     >
-                        {searchQuery ? `Search Results for "${searchQuery}"` : (categoryData?.name || 'Products')}
+                        {searchQuery
+                            ? `Search Results for "${searchQuery}"`
+                            : (categoryData?.name || (shownCategory.category || shownCategory.season ? ' ' : 'All Products'))}
                     </Typography>
 
                     {/* Category Description right bellow the title for category */}
@@ -184,33 +226,35 @@ const ProductsPage = () => {
                         display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
                         alignItems: 'center', gap: 2, mb: 5,
                     }}>
-                        <FormControl size="small" sx={filterFieldSx}>
-                            <InputLabel>Sort By</InputLabel>
-                            <Select value={sortBy} label="Sort By" onChange={(e) => setSortBy(e.target.value)} MenuProps={filterMenuProps}>
-                                <MenuItem value="default">Featured</MenuItem>
-                                <MenuItem value="price-asc">Price: Low to High</MenuItem>
-                                <MenuItem value="price-desc">Price: High to Low</MenuItem>
-                            </Select>
-                        </FormControl>
+                        <FilterSelect
+                            label="Sort"
+                            value={sortBy}
+                            onChange={setSortBy}
+                            options={[
+                                { value: 'default', label: 'Featured' },
+                                { value: 'price-asc', label: 'Price: Low to High' },
+                                { value: 'price-desc', label: 'Price: High to Low' },
+                            ]}
+                        />
 
                         {uniqueColors.length > 0 && (
-                            <FormControl size="small" sx={filterFieldSx}>
-                                <InputLabel>Color</InputLabel>
-                                <Select value={filterColor} label="Color" onChange={(e) => setFilterColor(e.target.value)} MenuProps={filterMenuProps}>
-                                    <MenuItem value="">All Colors</MenuItem>
-                                    {uniqueColors.map((c) => <MenuItem key={c} value={c}>{c}</MenuItem>)}
-                                </Select>
-                            </FormControl>
+                            <FilterSelect
+                                label="Color"
+                                value={filterColor}
+                                onChange={setFilterColor}
+                                allLabel="All"
+                                options={uniqueColors.map((c) => ({ value: c, label: c, swatch: COLOR_SWATCHES[c] }))}
+                            />
                         )}
 
                         {uniqueMaterials.length > 0 && (
-                            <FormControl size="small" sx={filterFieldSx}>
-                                <InputLabel>Material</InputLabel>
-                                <Select value={filterMaterial} label="Material" onChange={(e) => setFilterMaterial(e.target.value)} MenuProps={filterMenuProps}>
-                                    <MenuItem value="">All Materials</MenuItem>
-                                    {uniqueMaterials.map((m) => <MenuItem key={m} value={m}>{m}</MenuItem>)}
-                                </Select>
-                            </FormControl>
+                            <FilterSelect
+                                label="Material"
+                                value={filterMaterial}
+                                onChange={setFilterMaterial}
+                                allLabel="All"
+                                options={uniqueMaterials.map((m) => ({ value: m, label: m }))}
+                            />
                         )}
 
                         {hasActiveFilters && (
@@ -223,30 +267,20 @@ const ProductsPage = () => {
                             </Button>
                         )}
                     </Box>
+                    {/* Products per row: 1 / 2 / 4, on every screen size */}
+                    <GridViewToggle columns={columns} options={gridOptions} onChange={setColumns} sx={{ mb: 2.5 }} />
 
-                    {/* Mobile view-mode toggle: 2-per-row <-> 1-per-row/bigger. Hidden on
-                        sm+ where the grid is always 4 across regardless. */}
-                    <Box sx={{ display: { xs: 'flex', md: 'none' }, justifyContent: 'flex-end', mb: 2 }}>
-                        <IconButton
-                            onClick={() => setMobileSingleColumn((prev) => !prev)}
-                            aria-label={mobileSingleColumn ? 'Show 2 products per row' : 'Show 1 product per row'}
-                            sx={{ color: '#8b7355', '&:hover': { backgroundColor: 'rgba(212, 184, 150, 0.12)' } }}
-                        >
-                            {mobileSingleColumn ? <GridViewOutlinedIcon /> : <ViewAgendaOutlinedIcon />}
-                        </IconButton>
-                    </Box>
-
-                    {/* Products Grid - 2 per row on mobile (toggleable), 4 columns from md up */}
+                    {/* Products Grid - products per row from the VIEW selector */}
                     <Box
                         sx={{
                             display: 'grid',
-                            gridTemplateColumns: { xs: mobileColumns, md: 'repeat(4, 1fr)' },
+                            ...gridSx,
                             gap: { xs: 1.5, sm: 3 },
                             mb: 6,
                         }}
                     >
                         {filteredProducts.slice(0, 4).map((product, index) => (
-                            <Reveal key={product.id} delay={index * 0.08}>
+                            <Reveal key={product.id} delay={index * 0.08} instant={hasBackTransition(product.id)}>
                                 <ProductCard
                                     product={product}
                                     variant="grid"
@@ -294,12 +328,12 @@ const ProductsPage = () => {
                         <Box
                             sx={{
                                 display: 'grid',
-                                gridTemplateColumns: { xs: mobileColumns, md: 'repeat(4, 1fr)' },
+                                ...gridSx,
                                 gap: 3,
                             }}
                         >
                             {filteredProducts.slice(4).map((product, index) => (
-                                <Reveal key={product.id} delay={(index % 4) * 0.08}>
+                                <Reveal key={product.id} delay={(index % 4) * 0.08} instant={hasBackTransition(product.id)}>
                                     <ProductCard
                                         product={product}
                                         variant="grid"
@@ -335,28 +369,11 @@ const ProductsPage = () => {
             </Container>
 
             {/* Floating Add Product Button - Admin Only */}
-            {isAdmin() && (
-                <Fab
-                    color="primary"
-                    aria-label="add product"
-                    sx={{
-                        position: 'fixed',
-                        bottom: 27,
-                        left: 32,
-                        backgroundColor: '#d4b896',
-                        color: '#2c2c2c',
-                        width: 64,
-                        height: 64,
-                        boxShadow: 'none',
-                        '&:hover': {
-                            backgroundColor: '#c4a886',
-                            boxShadow: 'none',
-                        },
-                    }}
-                    onClick={() => navigate('/products/add')}
-                >
-                    <AddIcon sx={{ fontSize: 32 }} />
-                </Fab>
+            {isAdminUser() && (
+                <AddProductFab
+                    onAddProduct={() => navigate('/products/add')}
+                    onManageCategories={() => navigate('/admin/categories')}
+                />
             )}
 
             <QuickViewModal
@@ -369,21 +386,7 @@ const ProductsPage = () => {
                 }}
             />
 
-            {/* Snackbar for notifications */}
-            <Snackbar
-                open={snackbar.open}
-                autoHideDuration={3000}
-                onClose={() => setSnackbar({ ...snackbar, open: false })}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            >
-                <Alert
-                    onClose={() => setSnackbar({ ...snackbar, open: false })}
-                    severity={snackbar.severity}
-                    sx={{ width: '100%' }}
-                >
-                    {snackbar.message}
-                </Alert>
-            </Snackbar>
+            <AppSnackbar snackbar={snackbar} onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))} />
         </Box>
     );
 };

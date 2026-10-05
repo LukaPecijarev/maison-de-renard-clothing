@@ -1,21 +1,15 @@
 import React, { useState } from 'react';
-import { Container, Paper, TextField, Button, Typography, Box, Alert } from '@mui/material';
-import { useNavigate, Link } from 'react-router-dom';
+import { TextField, Box, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import userRepository from '../repository/userRepository';
-
-const fieldSx = {
-    '& .MuiOutlinedInput-root': {
-        '& fieldset': { borderColor: 'rgba(212, 184, 150, 0.3)' },
-        '&:hover fieldset': { borderColor: '#d4b896' },
-        '&.Mui-focused fieldset': { borderColor: '#c4a886', borderWidth: '2px' },
-    },
-    '& .MuiInputLabel-root.Mui-focused': { color: '#8b7355' },
-};
+import AuthLayout, { authFieldSx, PasswordField, AuthError, AuthSubmitButton, AuthSwitch } from '../components/AuthLayout';
+import { showToast } from '../utils/toast';
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState({ username: '', email: '', password: '', confirmPassword: '' });
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -31,103 +25,61 @@ const RegisterPage = () => {
             return;
         }
 
+        setLoading(true);
         try {
             await userRepository.register({
                 username: formData.username,
                 email: formData.email,
                 password: formData.password,
             });
-            setSuccess('Account created successfully! Redirecting to login...');
-            setTimeout(() => navigate('/login'), 2000);
+            showToast({ variant: 'success', title: 'Welcome to the Maison', message: 'Your account is ready - please sign in.' });
+            setTimeout(() => navigate('/login'), 1200);
         } catch (err) {
             setError(err.response?.data?.message || 'Registration failed. Please try again.');
+            setLoading(false);
         }
     };
 
+    // Live hint under "Confirm password" once something has been typed there.
+    const showMatch = formData.confirmPassword.length > 0;
+    const passwordsMatch = formData.password === formData.confirmPassword;
+
     return (
-        <Box sx={{ backgroundColor: '#f5f1e8', minHeight: '100vh', py: 8 }}>
-            <Container maxWidth="sm">
-                <Typography variant="h3" align="center" sx={{
-                    fontFamily: '"Cormorant Garamond", serif',
-                    fontWeight: 300, letterSpacing: '0.15em', mb: 1, color: '#2c2c2c',
-                }}>
-                    CREATE ACCOUNT
-                </Typography>
-                <Typography align="center" sx={{
-                    color: '#8b7355', mb: 5, fontSize: '0.9rem',
-                    fontFamily: '"Lato", sans-serif', letterSpacing: '0.05em',
-                }}>
-                    Join Maison de Renard
-                </Typography>
-
-                <Paper elevation={0} sx={{
-                    p: { xs: 3, md: 6 },
-                    backgroundColor: '#ffffff',
-                    borderRadius: '2px',
-                    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
-                    border: '1px solid rgba(212, 184, 150, 0.2)',
-                }}>
-                    {error && <Alert severity="error" sx={{ mb: 3 }}>{error}</Alert>}
-                    {success && <Alert severity="success" sx={{ mb: 3 }}>{success}</Alert>}
-
-                    <Box component="form" onSubmit={handleSubmit}>
-                        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-                            <TextField fullWidth label="Username" name="username"
-                                       value={formData.username} onChange={handleChange}
-                                       required sx={fieldSx} />
-
-                            <TextField fullWidth label="Email" name="email" type="email"
-                                       value={formData.email} onChange={handleChange}
-                                       required sx={fieldSx} />
-
-                            <TextField fullWidth label="Password" name="password" type="password"
-                                       value={formData.password} onChange={handleChange}
-                                       required sx={fieldSx} />
-
-                            <TextField fullWidth label="Confirm Password" name="confirmPassword" type="password"
-                                       value={formData.confirmPassword} onChange={handleChange}
-                                       required sx={fieldSx} />
-
-                            <Button type="submit" fullWidth variant="outlined"
-                                    sx={{
-                                        color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
-                                        backgroundColor: 'transparent',
-                                        py: 1.8, fontSize: '0.85rem', fontWeight: 500,
-                                        letterSpacing: '0.15em', textTransform: 'uppercase',
-                                        fontFamily: '"Lato", sans-serif', mt: 1,
-                                        position: 'relative', overflow: 'hidden', borderRadius: '6px',
-                                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                                        '&::before': {
-                                            content: '""', position: 'absolute', top: 0, left: '-100%',
-                                            width: '100%', height: '100%', backgroundColor: '#f5ebe0',
-                                            transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
-                                        },
-                                        '&:hover': {
-                                            color: '#22223b', borderColor: '#f5ebe0',
-                                            transform: 'translateY(-2px)',
-                                            boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
-                                        },
-                                        '&:hover::before': { left: 0 },
-                                    }}>
-                                CREATE ACCOUNT
-                            </Button>
-
-                            <Typography align="center" sx={{
-                                fontFamily: '"Lato", sans-serif',
-                                fontSize: '0.9rem', color: '#666',
-                            }}>
-                                Already have an account?{' '}
-                                <Link to="/login" style={{
-                                    color: '#8b7355', textDecoration: 'none', fontWeight: 500,
-                                }}>
-                                    Sign In
-                                </Link>
-                            </Typography>
-                        </Box>
-                    </Box>
-                </Paper>
-            </Container>
-        </Box>
+        <AuthLayout
+            image="/products/men/ManOutfit.jpg"
+            imageAlt="Maison de Renard - men's look"
+            quote="Quiet luxury, made to last - begin your story with the Maison."
+            eyebrow="JOIN THE MAISON"
+            titleStart="Create an "
+            titleAccent="account"
+            subtitle="Save your favourites, check out faster and follow your orders."
+        >
+            <Box component="form" onSubmit={handleSubmit} sx={{ display: 'flex', flexDirection: 'column', gap: 2.5 }}>
+                {error && <AuthError key={error} message={error} />}
+                <TextField fullWidth label="Username" name="username" autoComplete="username"
+                           value={formData.username} onChange={handleChange} required sx={authFieldSx} />
+                <TextField fullWidth label="Email" name="email" type="email" autoComplete="email"
+                           value={formData.email} onChange={handleChange} required sx={authFieldSx} />
+                <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2.5 }}>
+                    <PasswordField fullWidth label="Password" name="password" autoComplete="new-password"
+                                   value={formData.password} onChange={handleChange} required />
+                    <PasswordField fullWidth label="Confirm password" name="confirmPassword" autoComplete="new-password"
+                                   value={formData.confirmPassword} onChange={handleChange} required />
+                </Box>
+                {showMatch && (
+                    <Typography sx={{
+                        display: 'flex', alignItems: 'center', gap: 0.6, mt: -1,
+                        fontFamily: '"Lato", sans-serif', fontSize: '0.8rem',
+                        color: passwordsMatch ? '#2e7d32' : '#9c4a4a',
+                    }}>
+                        {passwordsMatch && <CheckRoundedIcon sx={{ fontSize: 16 }} />}
+                        {passwordsMatch ? 'Passwords match' : 'Passwords do not match yet'}
+                    </Typography>
+                )}
+                <AuthSubmitButton loading={loading}>CREATE ACCOUNT</AuthSubmitButton>
+                <AuthSwitch question="Already have an account?" linkLabel="Sign in" to="/login" />
+            </Box>
+        </AuthLayout>
     );
 };
 

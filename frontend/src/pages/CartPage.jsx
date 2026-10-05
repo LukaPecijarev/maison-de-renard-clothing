@@ -10,20 +10,19 @@ import {
     Button,
     Divider,
     CircularProgress,
-    Dialog,
-    DialogTitle,
-    DialogContent,
-    DialogContentText,
-    DialogActions,
-    Snackbar,
-    Alert,
-} from '@mui/material';
+    } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import { useNavigate } from 'react-router-dom';
 import useOrder from '../hooks/useOrder';
 import useAuth from '../hooks/useAuth';
 import Reveal from '../components/Reveal';
+import ConfirmDialog from '../components/ConfirmDialog';
+import RemoveShoppingCartOutlinedIcon from '@mui/icons-material/RemoveShoppingCartOutlined';
+import animateRemoval, { resetRemoval } from '../utils/animateRemoval';
+import { fillButtonSx } from '../styles/buttons';
+import { getProductImages, FALLBACK_PRODUCT_IMAGE } from '../utils/productImages';
+import AppSnackbar from '../components/AppSnackbar';
 
 const CartPage = () => {
     const { order, loading, removeFromCart, cancelOrder } = useOrder();
@@ -39,8 +38,18 @@ const CartPage = () => {
         }
     }, [isAuthenticated, navigate]);
 
-    const handleRemoveItem = async (productId) => {
-        await removeFromCart(productId);
+    // Slide the item off to the left first, then remove it.
+    const handleRemoveItem = async (productId, cardElement) => {
+        await animateRemoval(cardElement);
+        const success = await removeFromCart(productId);
+        if (!success) {
+            resetRemoval(cardElement);
+            setSnackbar({ open: true, message: 'Failed to remove item. Please try again.', severity: 'error' });
+        } else if (cardElement?.isConnected) {
+            // Same product in the cart twice: React keeps this element for the
+            // remaining copy, so it must not stay collapsed.
+            resetRemoval(cardElement);
+        }
     };
 
     const handleCheckout = () => {
@@ -101,23 +110,9 @@ const CartPage = () => {
                             variant="outlined"
                             onClick={() => navigate('/')}
                             sx={{
-                                color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
+                                ...fillButtonSx,
                                 px: 6, py: 1.5, fontSize: '0.9rem', fontWeight: 400,
                                 letterSpacing: '0.15em', fontFamily: '"Lato", sans-serif',
-                                backgroundColor: 'transparent',
-                                transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                                position: 'relative', overflow: 'hidden', borderRadius: '6px',
-                                '&::before': {
-                                    content: '""', position: 'absolute', top: 0, left: '-100%',
-                                    width: '100%', height: '100%', backgroundColor: '#f5ebe0',
-                                    transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
-                                },
-                                '&:hover': {
-                                    color: '#22223b', borderColor: '#f5ebe0',
-                                    transform: 'translateY(-2px)',
-                                    boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
-                                },
-                                '&:hover::before': { left: 0 },
                             }}
                         >
                             CONTINUE SHOPPING
@@ -128,8 +123,8 @@ const CartPage = () => {
                         {/* Cart Items */}
                         <Box>
                             {cartItems.map((item) => {
-                                const images = item.imageUrl ? item.imageUrl.split(',').map(url => url.trim()) : [];
-                                const imageUrl = images[0] || 'https://images.unsplash.com/photo-1434389677669-e08b4cac3105?w=500';
+                                const images = getProductImages(item);
+                                const imageUrl = images[0] || FALLBACK_PRODUCT_IMAGE;
                                 const discount = getDiscount(item);
                                 const discountedPrice = getDiscountedPrice(item);
 
@@ -174,7 +169,7 @@ const CartPage = () => {
                                                     </Typography>
                                                 </Box>
                                                 <IconButton
-                                                    onClick={() => handleRemoveItem(item.id)}
+                                                    onClick={(e) => handleRemoveItem(item.id, e.currentTarget.closest('.MuiCard-root'))}
                                                     sx={{
                                                         color: '#666',
                                                         '&:hover': { color: '#d32f2f', backgroundColor: 'rgba(211, 47, 47, 0.08)' },
@@ -243,23 +238,9 @@ const CartPage = () => {
                                     variant="outlined" fullWidth size="large"
                                     onClick={handleCheckout}
                                     sx={{
-                                        color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
-                                        backgroundColor: 'transparent',
+                                        ...fillButtonSx,
                                         py: 1.5, mb: 2, fontSize: '0.85rem', fontWeight: 500,
                                         letterSpacing: '0.15em', fontFamily: '"Lato", sans-serif',
-                                        position: 'relative', overflow: 'hidden', borderRadius: '6px',
-                                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                                        '&::before': {
-                                            content: '""', position: 'absolute', top: 0, left: '-100%',
-                                            width: '100%', height: '100%', backgroundColor: '#f5ebe0',
-                                            transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
-                                        },
-                                        '&:hover': {
-                                            color: '#22223b', borderColor: '#f5ebe0',
-                                            transform: 'translateY(-2px)',
-                                            boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
-                                        },
-                                        '&:hover::before': { left: 0 },
                                     }}
                                 >
                                     PROCEED TO CHECKOUT
@@ -269,23 +250,9 @@ const CartPage = () => {
                                     variant="outlined" fullWidth
                                     onClick={() => navigate('/')}
                                     sx={{
-                                        color: '#22223b', borderColor: '#e6b8a2', borderWidth: '1px',
+                                        ...fillButtonSx,
                                         py: 1.5, fontSize: '0.9rem', fontWeight: 400,
                                         letterSpacing: '0.1em', fontFamily: '"Lato", sans-serif',
-                                        backgroundColor: 'transparent',
-                                        transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
-                                        position: 'relative', overflow: 'hidden', borderRadius: '6px',
-                                        '&::before': {
-                                            content: '""', position: 'absolute', top: 0, left: '-100%',
-                                            width: '100%', height: '100%', backgroundColor: '#f5ebe0',
-                                            transition: 'left 0.4s cubic-bezier(0.4, 0, 0.2, 1)', zIndex: -1,
-                                        },
-                                        '&:hover': {
-                                            color: '#22223b', borderColor: '#f5ebe0',
-                                            transform: 'translateY(-2px)',
-                                            boxShadow: '0 4px 12px rgba(193, 154, 107, 0.3)',
-                                        },
-                                        '&:hover::before': { left: 0 },
                                     }}
                                 >
                                     CONTINUE SHOPPING
@@ -311,36 +278,18 @@ const CartPage = () => {
             </Container></Reveal>
 
             {/* Cancel order confirmation */}
-            <Dialog open={confirmCancelOpen} onClose={() => setConfirmCancelOpen(false)}>
-                <DialogTitle sx={{ fontFamily: '"Cormorant Garamond", serif' }}>
-                    Cancel this order?
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText sx={{ fontFamily: '"Lato", sans-serif' }}>
-                        All {cartItems.length} {cartItems.length === 1 ? 'item' : 'items'} will be removed from your cart. This can't be undone.
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={() => setConfirmCancelOpen(false)} sx={{ color: '#8b7355' }}>
-                        Keep Order
-                    </Button>
-                    <Button onClick={handleConfirmCancel} sx={{ color: '#9c4a4a' }}>
-                        Cancel Order
-                    </Button>
-                </DialogActions>
-            </Dialog>
+            <ConfirmDialog
+                open={confirmCancelOpen}
+                title="Cancel this order?"
+                message={`All ${cartItems.length} ${cartItems.length === 1 ? 'item' : 'items'} will be removed from your cart. This can't be undone.`}
+                confirmLabel="Cancel order"
+                cancelLabel="Keep order"
+                icon={<RemoveShoppingCartOutlinedIcon sx={{ fontSize: 24, color: '#9c4a4a' }} />}
+                onConfirm={handleConfirmCancel}
+                onCancel={() => setConfirmCancelOpen(false)}
+            />
 
-            <Snackbar
-                open={snackbar.open}
-                autoHideDuration={3000}
-                onClose={() => setSnackbar({ ...snackbar, open: false })}
-                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
-            >
-                <Alert onClose={() => setSnackbar({ ...snackbar, open: false })}
-                       severity={snackbar.severity} sx={{ width: '100%' }}>
-                    {snackbar.message}
-                </Alert>
-            </Snackbar>
+            <AppSnackbar snackbar={snackbar} onClose={() => setSnackbar((prev) => ({ ...prev, open: false }))} />
         </Box>
     );
 };
