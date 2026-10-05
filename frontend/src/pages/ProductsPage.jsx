@@ -112,7 +112,7 @@ const ProductsPage = () => {
     const [filterColor, setFilterColor] = useState('');
     const [filterMaterial, setFilterMaterial] = useState('');
     // Products per row (1 / 2 / 4) - chosen with the VIEW selector, remembered across pages.
-    const { columns, options: gridOptions, setColumns, gridSx } = useGridView();
+    const { columns, options: gridOptions, setColumns, gridSx, gridRef } = useGridView();
 
 
     const notify = (message, severity) => setSnackbar({ open: true, message, severity });
@@ -272,6 +272,7 @@ const ProductsPage = () => {
 
                     {/* Products Grid - products per row from the VIEW selector */}
                     <Box
+                        ref={gridRef}
                         sx={{
                             display: 'grid',
                             ...gridSx,
@@ -326,6 +327,7 @@ const ProductsPage = () => {
                     {/* Remaining Products Grid */}
                     {filteredProducts.length > 4 && (
                         <Box
+                            ref={gridRef}
                             sx={{
                                 display: 'grid',
                                 ...gridSx,

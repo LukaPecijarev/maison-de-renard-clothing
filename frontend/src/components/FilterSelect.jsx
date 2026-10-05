@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Box, Select, MenuItem, Typography } from '@mui/material';
+import { keyframes } from '@mui/material/styles';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
+import { prefersReducedMotion } from '../utils/motion';
 
 // Pill-shaped filter/sort select for the shop: the label sits inside the pill
 // ("COLOR | ● Blue"), an active filter gets a soft tan fill, and the menu is a
@@ -9,6 +11,32 @@ import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 //
 // options: [{ value, label, swatch? }] - `swatch` is any CSS background
 // (a colour or a gradient). `allLabel` is shown for the empty value.
+//
+// Opening, the options drop in one after another; closing, they leave in
+// reverse order before the card fades. The stagger is capped so long lists
+// (all the colours) still open quickly.
+//
+// The page isn't scroll-locked while the menu is open (the lock hides the
+// scrollbar, which shifts the page and the fixed chatbot sideways); scrolling
+// closes the menu instead, so it never floats away from its pill.
+
+const ITEM_IN_MS = 360;
+const ITEM_OUT_MS = 240;
+const STAGGER_IN_MS = 55;
+const STAGGER_OUT_MS = 35;
+const MAX_STAGGER_MS = 440;
+
+const itemIn = keyframes`
+    from { opacity: 0; transform: translateY(-6px); }
+    to { opacity: 1; transform: translateY(0); }
+`;
+const itemOut = keyframes`
+    from { opacity: 1; transform: translateY(0); }
+    to { opacity: 0; transform: translateY(-6px); }
+`;
+
+const staggerIn = (index) => Math.min(index * STAGGER_IN_MS, MAX_STAGGER_MS);
+const staggerOut = (index, count) => Math.min((count - 1 - index) * STAGGER_OUT_MS, MAX_STAGGER_MS / 2);
 
 const Swatch = ({ background, size = 12 }) => (
     <Box component="span" sx={{
@@ -20,11 +48,48 @@ const Swatch = ({ background, size = 12 }) => (
 const FilterSelect = ({ label, value, onChange, options, allLabel }) => {
     const selected = options.find((o) => o.value === value);
     const isActive = allLabel !== undefined && value !== '';
+    const [open, setOpen] = useState(false);
+    const [closing, setClosing] = useState(false);
+    const closeTimer = useRef(null);
+    useEffect(() => () => clearTimeout(closeTimer.current), []);
+
+    const itemCount = options.length + (allLabel !== undefined ? 1 : 0);
+    // Last item's delay + its animation: the card waits this long before fading.
+    const closeMs = staggerOut(0, itemCount) + ITEM_OUT_MS;
+
+    const handleOpen = () => {
+        clearTimeout(closeTimer.current);
+        setClosing(false);
+        setOpen(true);
+    };
+    const handleClose = () => {
+        if (closing) return;
+        if (prefersReducedMotion()) { setOpen(false); return; }
+        setClosing(true);
+        closeTimer.current = setTimeout(() => { setOpen(false); setClosing(false); }, closeMs);
+    };
+    // Close on page scroll (see the note at the top).
+    const closeRef = useRef(handleClose);
+    closeRef.current = handleClose;
+    useEffect(() => {
+        if (!open) return undefined;
+        const onScroll = () => closeRef.current();
+        window.addEventListener('scroll', onScroll, { passive: true });
+        return () => window.removeEventListener('scroll', onScroll);
+    }, [open]);
+
+    const itemStyle = (index) => ({
+        animationDelay: `${closing ? staggerOut(index, itemCount) : staggerIn(index)}ms`,
+    });
+    const offset = allLabel !== undefined ? 1 : 0;
 
     return (
         <Select
             value={value}
             onChange={(e) => onChange(e.target.value)}
+            open={open}
+            onOpen={handleOpen}
+            onClose={handleClose}
             displayEmpty
             size="small"
             IconComponent={KeyboardArrowDownRoundedIcon}
@@ -46,6 +111,8 @@ const FilterSelect = ({ label, value, onChange, options, allLabel }) => {
             MenuProps={{
                 anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
                 transformOrigin: { vertical: 'top', horizontal: 'left' },
+                transitionDuration: { enter: 220, exit: 180 },
+                disableScrollLock: true,
                 PaperProps: {
                     sx: {
                         mt: 1, p: 0.75, minWidth: 200,
@@ -54,7 +121,13 @@ const FilterSelect = ({ label, value, onChange, options, allLabel }) => {
                         borderRadius: '14px',
                         boxShadow: '0 16px 40px rgba(44, 44, 44, 0.14)',
                         '& .MuiMenu-list': { py: 0 },
+                        // Closing: options leave (in reverse) while the card stays put.
+                        pointerEvents: closing ? 'none' : undefined,
                         '& .MuiMenuItem-root': {
+                            animation: closing
+                                ? `${itemOut} ${ITEM_OUT_MS}ms ease-in both`
+                                : `${itemIn} ${ITEM_IN_MS}ms cubic-bezier(0.25, 0.8, 0.25, 1) both`,
+                            '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
                             borderRadius: '8px', gap: 1.2, py: 1, px: 1.5,
                             fontFamily: '"Lato", sans-serif', fontSize: '0.84rem', color: '#2c2c2c',
                             transition: 'background-color 0.2s ease',
@@ -83,13 +156,13 @@ const FilterSelect = ({ label, value, onChange, options, allLabel }) => {
             }}
         >
             {allLabel !== undefined && (
-                <MenuItem value="">
+                <MenuItem value="" style={itemStyle(0)}>
                     <Box component="span" sx={{ flex: 1 }}>{allLabel}</Box>
                     {value === '' && <CheckRoundedIcon sx={{ fontSize: 16, color: '#8b7355' }} />}
                 </MenuItem>
             )}
-            {options.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
+            {options.map((option, index) => (
+                <MenuItem key={option.value} value={option.value} style={itemStyle(index + offset)}>
                     {option.swatch && <Swatch background={option.swatch} size={14} />}
                     <Box component="span" sx={{ flex: 1 }}>{option.label}</Box>
                     {value === option.value && <CheckRoundedIcon sx={{ fontSize: 16, color: '#8b7355' }} />}

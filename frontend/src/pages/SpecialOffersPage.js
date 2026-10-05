@@ -23,7 +23,7 @@ const SpecialOffersPage = () => {
 
     const { products, loading, onDelete } = useProducts(6);
     // Products per row (1 / 2 / 4) - chosen with the VIEW selector, remembered across pages.
-    const { columns, options: gridOptions, setColumns, gridSx } = useGridView();
+    const { columns, options: gridOptions, setColumns, gridSx, gridRef } = useGridView();
 
 
     const filteredProducts = products.filter(product =>
@@ -60,7 +60,7 @@ const SpecialOffersPage = () => {
                     {/* Products per row: 1 / 2 / 4, on every screen size */}
                     <GridViewToggle columns={columns} options={gridOptions} onChange={setColumns} sx={{ mb: 2.5 }} />
 
-                    <Box sx={{
+                    <Box ref={gridRef} sx={{
                         display: 'grid',
                         ...gridSx,
                         gap: { xs: 1.5, sm: 3 },
